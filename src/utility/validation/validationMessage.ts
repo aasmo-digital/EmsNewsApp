@@ -1,0 +1,16 @@
+export default {
+  invalidEmail: 'Please enter valid email/email ID/email address',
+  invalidPhone: 'Please enter valid Phone Number.',
+  invalidPassword: 'Please enter strong password (Ex. Abcd@123)',
+  invalidOldPassword: 'Please enter valid old password (Ex. Abcd@123)',
+  invalidNewPass: 'Please enter strong new password (Ex. Abcd@123)',
+  invalidOtp: `The code you've entered is incorrect`,
+  invalidFirstName: 'Please use only Alphabets characters',
+  invalidNumber: 'Please enter valid Number.',
+  invalidClient: 'Please enter valid Clents Number.',
+  invalidAddress: 'Please enter valid Address.',
+  invalidCompanyName: 'Please enter valid Company Name.',
+  invalidName: 'Please enter valid Name.',  
+  invalidBName: 'Please enter valid Business Name.',  
+  invalidCity: 'Please enter valid City Name.',
+};

@@ -1,0 +1,35 @@
+import React, {createContext, useContext, useState} from 'react';
+import color from '../theme/color';
+
+type ThemeMode = 'light' | 'dark';
+
+const ThemeContext = createContext<any>(null);
+
+export const ThemeProvider = ({children}: any) => {
+  const [mode, setMode] = useState<ThemeMode>('light');
+
+  const toggleTheme = () => {
+    setMode(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  const colors = {
+    background: mode === 'light' ? '#fff' : '#121212',
+    text: mode === 'light' ? '#000' : '#fff',
+    card: mode === 'light' ? '#f5f5f5' : '#1e1e1e',
+    primary: mode === 'light' ? color.appColor : color.warning,
+    btntext: mode === 'light' ? color.white : color.white,
+    btnbg: mode === 'light' ? color.appColor : color.warning,
+  };
+
+  return (
+    <ThemeContext.Provider value={{mode, toggleTheme, colors}}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error('useTheme must be used within provider');
+  return context;
+};

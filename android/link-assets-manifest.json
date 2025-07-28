@@ -1,0 +1,45 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Khand-Bold.ttf",
+      "sha1": "71f2bfb1bfad8b8e9d5ad889424b31adbdae3174"
+    },
+    {
+      "path": "src/assets/fonts/Khand-Light.ttf",
+      "sha1": "f6558c89783934d7f147ce4dce9ed05cc774ad4f"
+    },
+    {
+      "path": "src/assets/fonts/Khand-Medium.ttf",
+      "sha1": "9c874f99cf1fc8e46b5216c08a0c50003bee9e7b"
+    },
+    {
+      "path": "src/assets/fonts/Khand-Regular.ttf",
+      "sha1": "5d53de29556b062e808f10afaaf02b483157da20"
+    },
+    {
+      "path": "src/assets/fonts/Khand-SemiBold.ttf",
+      "sha1": "17a59e7f4fd694d9a8ec5bc24d33d01fcba2f568"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Bold.ttf",
+      "sha1": "875cf0cecd647bcf22e79d633d868c1b1ec98dfa"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Light.ttf",
+      "sha1": "e247a92158e112f8bf7b638c8d95381d66b00dbb"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Medium.ttf",
+      "sha1": "283f21b44efbdbf276ba802be2d949a36bbc4233"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Regular.ttf",
+      "sha1": "fdd3002e7d814ee47c1c1b8487c72c6bbb3a2d00"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-SemiBold.ttf",
+      "sha1": "8a4ace9392d06bcb7f8ea2f5169b07e4c383a90d"
+    }
+  ]
+}

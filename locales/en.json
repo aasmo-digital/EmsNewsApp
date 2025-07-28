@@ -1,0 +1,68 @@
+{
+  "appName": "Express Media Service",
+  "or": "or",
+  "next": "Next",
+  "continue": "Continue",
+
+  "phonePlaceholder": "Phone no.",
+  "emailPlaceholder": "Email Address",
+  "usernamePlaceholder": "Username",
+  "passwordPlaceholder": "Password",
+  "repeatPasswordPlaceholder": "Repeat Password",
+  "newPasswordPlaceholder": "New Password",
+
+  "chooseLanguageTitle": "Choose Language",
+  "languageEnglish": "English",
+  "languageHindi": "Hindi",
+
+  "signInTitle": "Welcome Back 👋",
+  "signInSubtitle": "I am happy to see you again. You can continue where you left off by logging in.",
+  "forgotPasswordLink": "Forgot Password?",
+  "getOtpButton": "Get OTP",
+  "signInWithGoogleButton": "Sign In with Google",
+  "signInWithFacebookButton": "Sign In with Facebook",
+  "noAccountPrompt": "Don't have an account? Sign Up",
+  "signInButton": "Sign In",
+
+  "signUpTitle": "Welcome to EMS 👋",
+  "signUpSubtitle": "Hello, I guess you are new around here. You can start using the application after sign up.",
+  "hasAccountPrompt": "Already have an account? Sign in",
+
+  "forgotPasswordTitle": "Forgot Password 🤔",
+  "forgotPasswordSubtitle": "We need your email address so we can send you the password reset code.",
+  "rememberPasswordPrompt": "Remember the password? Try again",
+
+  "verificationTitle": "Verification Code ✅",
+  "verificationSubtitle": "You need to enter the 4-digit code we sent to your email address.",
+  "resendCodePrompt": "Didn't receive an email? Send again",
+
+  "createNewPasswordTitle": "Create New Password 🔒",
+  "createNewPasswordSubtitle": "You can create a new password, please don't forget it too.",
+
+  "phone_number": "Phone Number",
+  "enter_phone_number": "Enter phone number",
+  "error_phone_required": "Phone number is required",
+  "error_phone_digits_only": "Phone number must contain only digits",
+  "error_phone_exact_length": "Phone number must be exactly 10 digits",
+  "error_phone_invalid": "Enter a valid Indian phone number",
+
+  "error_username_required": "Username is required",
+  "error_email_required": "Email is required",
+  "error_email_invalid": "Enter a valid email address",
+  "error_password_required": "Password is required",
+  "error_repeat_password_required": "Repeat password is required",
+  "error_password_mismatch": "Passwords do not match",
+  "error_password_short": "Password must be at least 6 characters",
+
+   "notifications": "Notifications",
+  "dark_mode": "Dark Mode",
+  "language": "Language",
+  "change_password": "Change Password",
+  "ems_news": "EMS News",
+  "privacy": "Privacy",
+  "font_settings": "Font Settings",
+  "font_family": "Font Family",
+  "logout": "Logout",
+
+    "id": "ID"
+}
