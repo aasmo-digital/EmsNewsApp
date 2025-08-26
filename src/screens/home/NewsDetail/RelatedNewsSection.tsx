@@ -8,79 +8,64 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {NewsCard} from '../../../components/cardIndex';
-
-// --- स्टेप 1: डेटा का स्ट्रक्चर (यह आपके API से आएगा) ---
-const mockRelatedNews = [
-  {
-    id: '1',
-    title: 'ग्राइंड रिपोर्ट: धर्म जानने के लिए होटल कर्मचारियों...',
-    category: 'भारत',
-    time: '4min ago',
-    imageUrl: 'https://images.unsplash.com/photo-1542314831-068cd1dbb5eb?w=500',
-    description: `In a major announcement today, the Prime Minister unveiled a new agricultural scheme designed to double the income of farmers by 2027. The scheme will focus on direct subsidy transfers, smart irrigation, access to premium seeds, and AI-driven crop advisory services.`,
-  },
-  {
-    id: '2',
-    title: 'Tokyo Paralympics: Avani Lekhara wins gold',
-    category: 'BBC Sport',
-    time: '1h ago',
-    imageUrl:
-      'https://images.unsplash.com/photo-1599586120429-48281b6f0ece?w=500',
-    description: `In a major announcement today, the Prime Minister unveiled a new agricultural scheme designed to double the income of farmers by 2027. The scheme will focus on direct subsidy transfers, smart irrigation, access to premium seeds, and AI-driven crop advisory services.`,
-  },
-  {
-    id: '3',
-    title: 'नया ग्राफिक कार्ड हुआ लॉन्च, जानें कीमत और फीचर्स',
-    category: 'टेक न्यूज़',
-    time: '3h ago',
-    imageUrl:
-      'https://images.unsplash.com/photo-1591444691157-12497d31a700?w=500',
-    description: `In a major announcement today, the Prime Minister unveiled a new agricultural scheme designed to double the income of farmers by 2027. The scheme will focus on direct subsidy transfers, smart irrigation, access to premium seeds, and AI-driven crop advisory services.`,
-  },
-];
+import {ViewAllCompt} from '../../../components/componentsIndex';
+import {useFontSize} from '../../../context/FontSizeContext';
+import {useTheme} from '../../../context/ThemeContext';
+import {useLanguage} from '../../../context/LanguageContext';
+import HomeController from '../../bottomtabs/HomeScreen/HomeController';
+import {NewsCardLoading} from '../../../components/skelotonindex';
+import color from '../../../theme/color';
 
 const {width} = Dimensions.get('window');
 const CARD_WIDTH = width * 0.45;
 
-const RelatedNewsSection = () => {
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
+const RelatedNewsSection = ({categoryId}) => {
+  console.log('-----categotyId', categoryId);
+  const {t} = useLanguage();
+  const {sizes, fontFamily} = useFontSize();
+  const {colors} = useTheme();
 
-  useEffect(() => {
-    setTimeout(() => {
-      setNews(mockRelatedNews);
-      setLoading(false);
-    }, 1000);
-  }, []);
+  const {allNeewsLoading, allNeews} = HomeController();
 
-  if (loading) {
-    return (
-      <ActivityIndicator
-        size="small"
-        color="#B81F24"
-        style={{marginVertical: 20}}
-      />
-    );
-  }
+  console.log(
+    '-------------111-----',
+    allNeews.filter(item => item?.category?.id == categoryId),
+  );
 
+  const allRelatedNews = allNeews.filter(
+    item => item?.category?.id == categoryId?.id,
+  );
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.sectionTitle}>Recommendation Topic</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewAll}>View All</Text>
-        </TouchableOpacity>
-      </View>
-
-      <FlatList
-        data={news}
-        renderItem={({item}) => <NewsCard item={item} />}
-        keyExtractor={item => item.id}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.listContainer}
+      <ViewAllCompt
+        title={t('related_news_text')}
+        onPress={() => Alert.alert('Working on this.')}
       />
+      {allNeewsLoading ? (
+        <NewsCardLoading />
+      ) : (
+        <FlatList
+          data={allRelatedNews}
+          renderItem={({item}) => <NewsCard item={item} />}
+          keyExtractor={item => item?.id}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.listContainer}
+          ListEmptyComponent={() => (
+            <Text
+              style={{
+                textAlign: 'center',
+                fontFamily: fontFamily.medium,
+                fontSize: sizes.subheading,
+                color: colors.text,
+              }}>
+              No Related News Found.
+            </Text>
+          )}
+        />
+      )}
     </View>
   );
 };
@@ -88,25 +73,8 @@ const RelatedNewsSection = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 24,
-    backgroundColor: '#fff',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  viewAll: {
-    fontSize: 14,
-    color: '#B81F24',
-    fontWeight: '600',
-  },
+
   listContainer: {
     paddingHorizontal: 16,
     paddingVertical: 10,

@@ -10,6 +10,15 @@ import HeaderCompt from './common/HeaderCompt';
 import CustomSwitchButton from './common/CustomSwitchButton';
 import FontSizeModal from './common/FontSizeModal';
 import FontFamilyModal from './common/FontFamilyModal';
+import ViewAllCompt from './common/ViewAllCompt';
+import SearchBarCompt from './common/SearchBarCompt';
+import SingleReel from './common/SingleReel';
+import LikeCompt from './common/LikeCompt';
+import CommentsSheet from './common/CommentsSheet';
+import Image from './common/Image';
+import PollCompt from './common/PollCompt';
+import HorizontalNewsList from './common/HorizontalNewsList';
+import MediaRenderer from './common/MediaRenderer';
 export {
   InternetCheck,
   TextCustom,
@@ -22,5 +31,14 @@ export {
   HeaderCompt,
   CustomSwitchButton,
   FontSizeModal,
-  FontFamilyModal
+  FontFamilyModal,
+  ViewAllCompt,
+  SearchBarCompt,
+  SingleReel,
+  LikeCompt,
+  CommentsSheet,
+  Image,
+  PollCompt,
+  HorizontalNewsList,
+  MediaRenderer
 };

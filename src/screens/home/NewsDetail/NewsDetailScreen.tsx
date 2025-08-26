@@ -4,11 +4,14 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Image,
+  Share,
 } from 'react-native';
 import React from 'react';
 import {
   CustomSlider,
   HeaderCompt,
+  LikeCompt,
   PageContainer,
 } from '../../../components/componentsIndex';
 import {Marquee} from '@animatereactnative/marquee';
@@ -16,26 +19,24 @@ import color from '../../../theme/color';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Make sure you have this library
 import LiveUpdatesSection from './LiveUpdatesSection';
 import RelatedNewsSection from './RelatedNewsSection';
+import {useLanguage} from '../../../context/LanguageContext';
+import {useFontSize} from '../../../context/FontSizeContext';
+import {useTheme} from '../../../context/ThemeContext';
+import {useRoute} from '@react-navigation/native';
+import HomeController from '../../bottomtabs/HomeScreen/HomeController';
 const {width} = Dimensions.get('window');
 
 const NewsDetailScreen = ({navigation}) => {
-  const article = {
-    title: '15 दिनों में एक हजार से ज्यादा भूकंप, नींद में भी लगता है डर',
-    category: 'News Cat.',
-    author: 'Aman Sanodiya',
-    authorImage: 'https://i.pravatar.cc/150?u=aman', // Placeholder author image
-    imageUrl:
-      'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070',
-    imageUrls: [
-      'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070',
-      'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070',
-      'https://images.unsplash.com/photo-1495020689067-958852a7765e?q=80&w=2070',
-    ], // Placeholder article image
-    likes: 800,
-    comments: 201,
-    bookmarks: 122,
-    body: `July 5 Japan Manga Warning: जापान में पिछले दो हफ्तों में 1000 से ज्यादा भूकंप आ चुके हैं, जिससे लोगों में डर का माहौल है. इस बीच, एक मंगा कॉमिक बुक ने और भी दहशत फैला दी है, जिसमें 5 जुलाई यानी आज के दिन को कयामत का दिन बताया गया है. कॉमिक बुक की इस भविष्यवाणी को लेकर सोशल मीडिया पर अफवाहें फैल गई हैं. कॉमिक बुक की इस भविष्यवाणी से लोग हैरान हैं.\n\nकई लोगों का मानना है कि जापान में कोई बड़ी आपदा आने वाली है. डेटा के अंदर ही नहीं, दुनिया भर के लोग भी जापान आने के प्लान को लेकर डर में हैं. टूरिज्म में गिरावट देखी जा रही है क्योंकि लोग 5 जुलाई को लेकर खौफ में हैं.\n\nजापान में रहने वाले लोग भी सोच में पड़ गए हैं कि आगे क्या होगा. हालांकि, अभी तक किसी भी आधिकारिक एजेंसी ने कॉमिक बुक की भविष्यवाणी को गंभीर नहीं माना है, लेकिन लोगों में चिंता बनी हुई है.`,
-  };
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
+
+  const route = useRoute();
+  const newsData = route?.params?.news;
+
+  console.log('--->>>--', newsData);
+
+  const {allHeadings} = HomeController();
 
   const Headlines = () => {
     return (
@@ -56,7 +57,15 @@ const NewsDetailScreen = ({navigation}) => {
             borderRadius: 5,
             zIndex: 2, // ensures it stays above
           }}>
-          <Text style={{color: 'white', fontWeight: 'bold'}}>Headlines</Text>
+          <Text
+            style={{
+              color: 'white',
+              fontFamily: fontFamily.semiBold,
+              letterSpacing: 0.5,
+              fontSize: sizes.body,
+            }}>
+            {t('headlines_text')}
+          </Text>
         </View>
 
         {/* Right: Scrolling Marquee */}
@@ -68,23 +77,47 @@ const NewsDetailScreen = ({navigation}) => {
             overflow: 'hidden',
           }}>
           <Marquee speed={1} style={{paddingVertical: 5}}>
-            <Text style={{color: 'white'}}>
-              20 साल बाद ठाकरे परिवार एक साथ: उद्धव बोले- मराठी ने दूरियां खत्म
-              कीं 20 साल बाद ठाकरे परिवार एक साथ: उद्धव बोले- मराठी ने दूरियां
-              खत्म कीं
+            <Text
+              style={{
+                color: 'white',
+                fontFamily: fontFamily.medium,
+                fontSize: sizes.subheading,
+              }}>
+              {allHeadings.map(item => item?.headlineText + '   ')}
             </Text>
           </Marquee>
         </View>
       </View>
     );
   };
+
+  const handleShareNews = async news => {
+    try {
+      const shareContent = `
+${news.title}
+
+${news.summary?.slice(0, 150)}...
+
+Read more: https://yourapp.com/news/${news.id}
+    `.trim();
+
+      await Share.share({
+        message: shareContent,
+        url: news.media?.[0]?.url || '', // Optional image link
+        title: news.title,
+      });
+    } catch (error) {
+      console.log('Error sharing news:', error);
+    }
+  };
+
   return (
-    <PageContainer scroll>
-      <HeaderCompt title="News Details" />
+    <PageContainer scroll style={{paddingTop: 25}}>
+      <HeaderCompt title={t('news_details_text')} />
       {Headlines()}
       <View>
         <CustomSlider
-          images={article?.imageUrls}
+          images={newsData?.media}
           sliderHeight={300}
           dotColor="#ff6347"
           inactiveDotColor="#ccc"
@@ -94,39 +127,133 @@ const NewsDetailScreen = ({navigation}) => {
       </View>
 
       <View style={styles.interactionBar}>
-        <View style={styles.interactionItem}>
-          <Icon name="heart-o" size={20} color="#555" />
-          <Text style={styles.interactionText}>{article.likes}</Text>
-        </View>
+        {/* <View style={styles.interactionItem}>
+          <Icon name="heart-o" size={20} color={colors.text} />
+          <Text
+            style={[
+              styles.interactionText,
+              {
+                fontSize: sizes.body,
+                color: colors.text,
+                fontFamily: fontFamily.regular,
+              },
+            ]}>
+            {article.likes}
+          </Text>
+        </View> */}
+
+        <LikeCompt item={newsData} />
         <TouchableOpacity
-          onPress={() => navigation.navigate('Comments')}
+          onPress={() =>
+            navigation.navigate('Comments', {comments: newsData?.comments})
+          }
           style={styles.interactionItem}>
-          <Icon name="comment-o" size={20} color="#555" />
-          <Text style={styles.interactionText}>{article.comments}</Text>
+          <Icon name="comment-o" size={20} color={colors.text} />
+          <Text
+            style={[
+              styles.interactionText,
+              {
+                fontSize: sizes.body,
+                color: colors.text,
+                fontFamily: fontFamily.regular,
+              },
+            ]}>
+            {newsData?.commentsCount}
+          </Text>
         </TouchableOpacity>
-        <View style={styles.interactionItem}>
-          <Icon name="bookmark-o" size={20} color="#555" />
-          <Text style={styles.interactionText}>{article.bookmarks}</Text>
-        </View>
+
+        <TouchableOpacity
+          onPress={() => handleShareNews(newsData)}
+          style={styles.interactionItem}>
+          <Icon name="share" size={20} color={colors.text} />
+        </TouchableOpacity>
+
+        {/* <View style={styles.interactionItem}>
+          <Icon name="bookmark-o" size={20} color={colors.text} />
+          <Text
+            style={[
+              styles.interactionText,
+              {
+                fontSize: sizes.body,
+                color: colors.text,
+                fontFamily: fontFamily.regular,
+              },
+            ]}>
+        {article.bookmarks}
+          </Text>
+        </View> */}
       </View>
 
       {/* Content Section */}
       <View style={styles.contentContainer}>
-        <Text style={styles.title}>{article.title}</Text>
+        <Text
+          style={[
+            styles.title,
+            {
+              fontSize: sizes.subheading,
+              color: colors.text,
+              fontFamily: fontFamily.semiBold,
+            },
+          ]}>
+          {newsData?.title}
+        </Text>
 
         {/* Author Bar */}
         <View style={styles.authorBar}>
-          <Text style={styles.categoryText}>{article.category}</Text>
+          <Text
+            style={{
+              color: colors.primary, // Red color for category
+              fontSize: sizes.body,
+              fontFamily: fontFamily.semiBold,
+              letterSpacing: 0.5,
+            }}>
+            {newsData?.category?.name}
+          </Text>
           <View style={styles.authorInfo}>
-            <Text style={styles.byText}>By </Text>
-            <Text style={styles.authorName}>{article.author}</Text>
+            {/* <Text
+              style={{fontSize: sizes.body, color: colors.text, opacity: 0.8}}>
+              
+            </Text> */}
+            <Image
+              style={{height: 25, width: 25, borderRadius: 50, marginRight: 5}}
+              source={{uri: newsData?.createdBy?.profileImage}}
+            />
+            <Text
+              style={{
+                fontSize: sizes.body,
+                color: colors.text,
+                fontFamily: fontFamily.medium,
+                opacity: 0.5,
+                textTransform: 'capitalize',
+              }}>
+              By {newsData?.createdBy?.name}
+            </Text>
           </View>
         </View>
 
         {/* Article Body */}
-        <Text style={styles.bodyText}>{article.body}</Text>
-        <LiveUpdatesSection />
-        <RelatedNewsSection />
+        <Text
+          style={{
+            fontSize: sizes.body,
+            color: colors.text,
+            fontFamily: fontFamily.regular,
+            letterSpacing: 0.5,
+          }}>
+          {newsData?.content}
+        </Text>
+
+        <Text
+          style={{
+            fontSize: sizes.body,
+            color: colors.text,
+            fontFamily: fontFamily.regular,
+            letterSpacing: 0.5,
+            marginTop: 20,
+          }}>
+          {newsData?.summary}
+        </Text>
+        {/* <LiveUpdatesSection /> */}
+        <RelatedNewsSection categoryId={newsData?.category} />
       </View>
     </PageContainer>
   );
@@ -149,18 +276,13 @@ const styles = StyleSheet.create({
   },
   interactionText: {
     marginLeft: 6,
-    fontSize: 14,
-    color: '#555',
+    letterSpacing: 1,
   },
   contentContainer: {
     padding: 16,
   },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#111',
     marginBottom: 12,
-    lineHeight: 30,
   },
   authorBar: {
     flexDirection: 'row',
@@ -168,27 +290,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 20,
   },
-  categoryText: {
-    color: '#e53935', // Red color for category
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
+
   authorInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  byText: {
-    fontSize: 14,
-    color: '#555',
-  },
-  authorName: {
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '500',
-  },
-  bodyText: {
-    fontSize: 16,
-    lineHeight: 26,
-    color: '#333',
   },
 });

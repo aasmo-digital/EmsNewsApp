@@ -7,6 +7,9 @@ import {
   Image,
   Modal,
   StyleSheet,
+  Share,
+  Linking,
+  Pressable,
 } from 'react-native';
 import FontSizeModal from '../../../components/common/FontSizeModal';
 
@@ -50,38 +53,43 @@ const ProfileScreen = () => {
 
   console.log('colors======================', colors);
 
+  const handleShareApp = async () => {
+    try {
+      const result = await Share.share({
+        title: 'MyApp Name',
+        message:
+          'Check out this awesome app called MyApp! Download it now from:\nhttps://play.google.com/store/apps/details?id=com.myapp',
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      console.error('Error sharing the app:', error);
+    }
+  };
+
   return (
-    <View style={{flex: 1, backgroundColor: colors.background}}>
+    <View style={{flex: 1, backgroundColor: colors.background, paddingTop: 25}}>
       <HeaderCompt
-        title="Profile"
+        title={t('more_text')}
         titleStyle={{fontFamily: fontFamily.semiBold}}
       />
 
       <PageContainer scroll>
         <View style={{flex: 1, padding: 16}}>
-          {/* Sample News UI */}
-          {/* <Text
+          <Pressable
+            onPress={() => navigation.navigate('EditProfile')}
             style={{
-              fontSize: sizes.heading,
-              fontWeight: 'bold',
-              color: 'black',
+              flexDirection: 'row',
+              alignItems: 'center',
             }}>
-            News Headline
-          </Text>
-          <Text
-            style={{
-              fontSize: sizes.subheading,
-              fontWeight: '600',
-              color: 'black',
-            }}>
-            Subheading Text
-          </Text>
-          <Text style={{fontSize: sizes.body, color: 'black'}}>
-            This is the body of the news content where font size adjusts based
-            on settings.
-          </Text> */}
-
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Image
               source={{
                 uri: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
@@ -118,13 +126,13 @@ const ProfileScreen = () => {
                 {t('id')}: EGOL5246F
               </Text>
             </View>
-          </View>
+          </Pressable>
           <ButtonCompt
             title={t('notifications')}
             style={{
               marginTop: 10,
-              backgroundColor: color.whiteLight,
-              borderWidth: 0.3,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
             }}
             isOutline={true}
             rightImage={
@@ -133,14 +141,14 @@ const ProfileScreen = () => {
                 onToggle={val => setNotificationsEnabled(val)}
               />
             }
-            textStyle={{color: color.black}}
+            textStyle={{color: colors.text}}
           />
           <ButtonCompt
             title={t('dark_mode')}
             style={{
               marginTop: 10,
-              backgroundColor: color.whiteLight,
-              borderWidth: 0.3,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
             }}
             isOutline={true}
             rightImage={
@@ -149,60 +157,140 @@ const ProfileScreen = () => {
                 onToggle={toggleTheme}
               />
             }
-            textStyle={{color: color.black}}
+            textStyle={{color: colors.text}}
           />
           <ButtonCompt
             title={t('language')}
             onPress={() => setLanguageModalVisible(true)}
             style={{
               marginTop: 10,
-              backgroundColor: color.whiteLight,
-              borderWidth: 0.3,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
             }}
             isOutline={true}
             rightImage={
-              <Ionicons name="chevron-forward" size={20} color={color.black} />
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
             }
-            textStyle={{color: color.black}}
+            textStyle={{color: colors.text}}
           />
           <ButtonCompt
             title={t('change_password')}
+            onPress={() => navigation.navigate('ChanegPassword')}
             style={{
               marginTop: 10,
-              backgroundColor: color.whiteLight,
-              borderWidth: 0.3,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
             }}
             isOutline={true}
             rightImage={
-              <Ionicons name="chevron-forward" size={20} color={color.black} />
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
             }
-            textStyle={{color: color.black}}
+            textStyle={{color: colors.text}}
           />
           <ButtonCompt
             title={t('ems_news')}
             style={{
               marginTop: 10,
-              backgroundColor: color.whiteLight,
-              borderWidth: 0.3,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
             }}
             isOutline={true}
             rightImage={
-              <Ionicons name="chevron-forward" size={20} color={color.black} />
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
             }
-            textStyle={{color: color.black}}
+            textStyle={{color: colors.text}}
           />
           <ButtonCompt
             title={t('privacy')}
+            onPress={() => navigation.navigate('Privacy')}
             style={{
               marginTop: 10,
-              backgroundColor: color.whiteLight,
-              borderWidth: 0.3,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
             }}
             isOutline={true}
             rightImage={
-              <Ionicons name="chevron-forward" size={20} color={color.black} />
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
             }
-            textStyle={{color: color.black}}
+            textStyle={{color: colors.text}}
+          />
+          <ButtonCompt
+            title={t('terms_and_conditions')}
+            onPress={() => navigation.navigate('TermsConditon')}
+            style={{
+              marginTop: 10,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
+            }}
+            isOutline={true}
+            rightImage={
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
+            }
+            textStyle={{color: colors.text}}
+          />
+
+          <ButtonCompt
+            title={t('invite_friend')}
+            onPress={handleShareApp}
+            style={{
+              marginTop: 10,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
+            }}
+            isOutline={true}
+            rightImage={
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
+            }
+            textStyle={{color: colors.text}}
+          />
+
+          <ButtonCompt
+            title={t('rate_app')}
+            onPress={() =>
+              Linking.openURL(
+                'https://play.google.com/store/apps/details?id=com.instagram.android',
+              )
+            }
+            style={{
+              marginTop: 10,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
+            }}
+            isOutline={true}
+            rightImage={
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
+            }
+            textStyle={{color: colors.text}}
+          />
+
+          <ButtonCompt
+            title={t('favorite_topics')}
+            onPress={() => navigation.navigate('InterestsScreen')}
+            style={{
+              marginTop: 10,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
+            }}
+            isOutline={true}
+            rightImage={
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
+            }
+            textStyle={{color: colors.text}}
+          />
+
+          <ButtonCompt
+            title={t('select_state_city')}
+            onPress={() => navigation.navigate('PickYourState')}
+            style={{
+              marginTop: 10,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
+            }}
+            isOutline={true}
+            rightImage={
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
+            }
+            textStyle={{color: colors.text}}
           />
 
           <ButtonCompt
@@ -210,28 +298,28 @@ const ProfileScreen = () => {
             onPress={() => setModalVisible(true)}
             style={{
               marginTop: 10,
-              backgroundColor: color.whiteLight,
-              borderWidth: 0.3,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
             }}
             isOutline={true}
             rightImage={
-              <Ionicons name="chevron-forward" size={20} color={color.black} />
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
             }
-            textStyle={{color: color.black}}
+            textStyle={{color: colors.text}}
           />
           <ButtonCompt
-            title={t('font_settings')}
+            title={t('font_family')}
             onPress={() => setFontFamilyModalVisible(true)} // Create this state handler
             style={{
               marginTop: 10,
-              backgroundColor: color.whiteLight,
-              borderWidth: 0.3,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
             }}
             isOutline={true}
             rightImage={
-              <Ionicons name="chevron-forward" size={20} color={color.black} />
+              <Ionicons name="chevron-forward" size={20} color={colors.text} />
             }
-            textStyle={{color: color.black}}
+            textStyle={{color: colors.text}}
           />
 
           <ButtonCompt

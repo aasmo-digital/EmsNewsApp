@@ -38,7 +38,7 @@ const CreateNewPasswordScreen = ({navigation}: any) => {
           <Text style={styles.subtitle}>{t('createNewPasswordSubtitle')}</Text>
 
           <InputCompt
-            label="New Password"
+            label={t('newPasswordPlaceholder')}
             placeholder={t('newPasswordPlaceholder')}
             value={newPassword}
             onChangeText={setNewPassword}
@@ -47,7 +47,7 @@ const CreateNewPasswordScreen = ({navigation}: any) => {
           />
 
           <InputCompt
-            label="Repeat Password"
+            label={t('repeatPasswordPlaceholder')}
             placeholder={t('repeatPasswordPlaceholder')}
             value={repeatPassword}
             onChangeText={setRepeatPassword}

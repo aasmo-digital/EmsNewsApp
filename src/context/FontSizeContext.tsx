@@ -37,6 +37,7 @@ interface FontContextType {
   baseSize: number;
   setBaseSize: (size: number) => void;
   fontFamily: FontVariants;
+  fontName:any;
   setFontName: (name: FontName) => void;
   sizes: {
     body: number;
@@ -78,7 +79,7 @@ export const FontSizeProvider = ({children}: any) => {
 
   return (
     <FontSizeContext.Provider
-      value={{baseSize, setBaseSize, fontFamily, setFontName, sizes}}>
+      value={{baseSize, setBaseSize, fontFamily, setFontName, sizes,fontName}}>
       {children}
     </FontSizeContext.Provider>
   );

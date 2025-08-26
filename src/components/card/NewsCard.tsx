@@ -1,27 +1,115 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {memo} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useFontSize} from '../../context/FontSizeContext';
+import {useTheme} from '../../context/ThemeContext';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Make sure you have this library
+import {Image, LikeCompt} from '../componentsIndex';
 import color from '../../theme/color';
 
-const NewsCard = ({item}) => {
+const NewsCard = ({item, location, onPressLocation}: any) => {
   const navigation = useNavigation();
+  const {sizes, fontFamily} = useFontSize();
+  const {colors} = useTheme();
+
+  // console.log('------item--', item);
 
   return (
     <Pressable
-      style={styles.card}
-      onPress={() => navigation.navigate('NewsDetail')}>
+      style={[
+        styles.card,
+        {shadowColor: colors.text, backgroundColor: colors.background},
+      ]}
+      onPress={() => navigation.navigate('NewsDetail', {news: item})}>
       <View style={{flex: 1, marginRight: 8}}>
-        <Text style={styles.title} numberOfLines={1}>
-          {item.title}
+        <Text
+          style={[
+            styles.title,
+            {
+              color: colors.text,
+              fontFamily: fontFamily.semiBold,
+              fontSize: sizes.subheading,
+            },
+          ]}
+          numberOfLines={1}>
+          {item?.title}
         </Text>
-        <Text style={styles.meta} numberOfLines={2}>
-          {item?.description}
+        <Text
+          style={{
+            color: colors.text,
+            fontSize: sizes.body,
+            fontFamily: fontFamily.regular,
+            letterSpacing: 0.5,
+          }}
+          numberOfLines={2}>
+          {item?.summary}
         </Text>
+        <View style={styles.interactionBar}>
+          <LikeCompt item={item} />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Comments', {comments: item?.comments})
+            }
+            style={styles.interactionItem}>
+            <Icon name="comment-o" size={20} color={colors.text} />
+            <Text
+              style={[
+                styles.interactionText,
+                {
+                  fontSize: sizes.body,
+                  color: colors.text,
+                  fontFamily: fontFamily.regular,
+                },
+              ]}>
+              {item?.commentsCount}
+            </Text>
+          </TouchableOpacity>
+          <View style={styles.interactionItem}>
+            <Icon name="bookmark-o" size={20} color={colors.text} />
+            <Text
+              style={[
+                styles.interactionText,
+                {
+                  fontSize: sizes.body,
+                  color: colors.text,
+                  fontFamily: fontFamily.regular,
+                },
+              ]}>
+              {/* {item?.bookmarks} */}
+            </Text>
+          </View>
+        </View>
+
+        {location && (
+          <Pressable onPress={onPressLocation}>
+            <Text
+              style={{
+                alignSelf: 'flex-start',
+                color: colors.text,
+                fontFamily: fontFamily.medium,
+                fontSize: sizes.body,
+                borderWidth: 1,
+                borderColor: color.lightgray,
+                paddingHorizontal: 10,
+                paddingVertical: 5,
+                borderRadius: 50,
+                textTransform: 'capitalize',
+              }}>
+              {location?.length > 25 ? location.slice(0, 25) + '...' : location}
+            </Text>
+          </Pressable>
+        )}
       </View>
 
       <Image
         source={{
-          uri: 'https://www.hindustantimes.com/ht-img/img/2025/07/22/550x309/Mumbai_train_blast_accused_1753162784155_1753162784325.jpg',
+          uri: item?.media[0].url,
         }}
         style={styles.image}
       />
@@ -36,10 +124,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 10,
     padding: 10,
-    backgroundColor: color.white,
     flexDirection: 'row',
     flex: 1,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -60,13 +146,22 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    color: color.black,
-    fontWeight: 'bold',
-    fontSize: 16,
     opacity: 0.8,
   },
-  meta: {
-    color: '#ccc',
-    fontSize: 12,
+  interactionBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  interactionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 24,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    // backgroundColor: 'red',
+  },
+  interactionText: {
+    marginLeft: 6,
+    letterSpacing: 1,
   },
 });

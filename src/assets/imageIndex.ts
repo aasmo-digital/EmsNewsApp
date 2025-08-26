@@ -6,4 +6,7 @@ export default {
   notification: require('./image/notification.png'),
   success: require('./image/success.png'),
   error: require('./image/error.png'),
+  google: require('./image/google.png'),
+  facebook: require('./image/facebook.png'),
+  live: require('./image/live.png'),
 };

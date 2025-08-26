@@ -40,7 +40,7 @@ const SplashScreen = ({navigation}: any) => {
         <ImageBackground
           resizeMode="cover"
           style={{flex: 1, height: '100%', width: '100%'}}
-          source={imageIndex.splash}
+          source={imageIndex?.splash}
         />
       </View>
     </PageContainer>

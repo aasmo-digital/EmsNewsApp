@@ -10,6 +10,7 @@
   "passwordPlaceholder": "Password",
   "repeatPasswordPlaceholder": "Repeat Password",
   "newPasswordPlaceholder": "New Password",
+  "old_password_text": "Old Password",
 
   "chooseLanguageTitle": "Choose Language",
   "languageEnglish": "English",
@@ -54,7 +55,7 @@
   "error_password_mismatch": "Passwords do not match",
   "error_password_short": "Password must be at least 6 characters",
 
-   "notifications": "Notifications",
+  "notifications": "Notifications",
   "dark_mode": "Dark Mode",
   "language": "Language",
   "change_password": "Change Password",
@@ -64,5 +65,56 @@
   "font_family": "Font Family",
   "logout": "Logout",
 
-    "id": "ID"
+  "id": "ID",
+
+  "profile_text": "Profile",
+  "home_text": "Home",
+  "explore_text": "Explore",
+  "coverage_text": "Coverage",
+  "saved_text": "Saved",
+  "more_text": "More",
+
+  "epaper_text": "e-Paper",
+  "news_details_text": "News Details",
+  "headlines_text": "Headlines",
+  "view_all_text": "View All",
+  "live_updates_text": "Live Updates",
+  "related_news_text": "Related News",
+  "search_placeholder_text": "Search...",
+  "popular_tags_text": "Popular Tags",
+  "saved_news_text": "Saved News",
+  "edit_profile_text": "Edit Profile",
+  "update_text": "Update",
+  "select_profile_picture_text": "Select Profile Picture",
+  "choose_an_option_text": "Choose an option",
+  "camera_text": "Camera",
+  "gallery_text": "Gallery",
+  "cancel_text": "Cancel",
+
+  "error_old_password_required": "Old password is required.",
+  "error_new_password_required": "New password is required.",
+  "error_invalid_email": "Invalid email address.",
+  "invite_friend": "Invite Friend",
+  "rate_app": "Rate the App",
+  "favorite_topics": "My Favorite Topics",
+  "select_state_city": "Select Your State and City",
+
+  "close": "Close",
+  "select_language": "Select Language",
+  "select_text_size": "Select Text Size",
+  "select_font_family": "Select Font Family",
+
+  "small": "Small",
+  "medium": "Medium",
+  "large": "Large",
+  "extra_large": "Extra Large",
+  "body": "Body",
+  "heading": "Heading",
+  "terms_and_conditions": "Terms and Conditions",
+
+  "email_address": "Email Address",
+  "enter_email_address": "Enter your email address",
+  "password": "Password",
+  "enter_password": "Enter your password",
+  "error_password_min_length": "Password must be at least 6 characters long."
 }

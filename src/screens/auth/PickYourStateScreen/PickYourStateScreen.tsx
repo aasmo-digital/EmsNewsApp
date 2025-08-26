@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,10 +7,17 @@ import {
   TouchableOpacity,
   StatusBar,
   ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
 import {PageContainer} from '../../../components/componentsIndex';
 import imageIndex from '../../../assets/imageIndex';
 import color from '../../../theme/color';
+import {useFontSize} from '../../../context/FontSizeContext';
+import {useTheme} from '../../../context/ThemeContext';
+import {useLanguage} from '../../../context/LanguageContext';
+import ApiRequest from '../../../services/api/ApiRequest';
+import ApiRoutes from '../../../services/config/ApiRoutes';
+import {StateLoading} from '../../../components/skelotonindex';
 
 // --- Data for Indian States (you can modify/translate as needed) ---
 const statesData = [
@@ -29,7 +36,13 @@ const statesData = [
 ];
 
 const PickYourStateScreen = () => {
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
   const [selectedStates, setSelectedStates] = useState([]);
+  const [allstatesDataLoading, setAllstatesDataLoading] = useState(true);
+
+  const [allstatesData, setAllstatesData] = useState([]);
 
   const handleSelectState = id => {
     if (selectedStates.includes(id)) {
@@ -43,12 +56,50 @@ const PickYourStateScreen = () => {
     const isSelected = selectedStates.includes(item.id);
     return (
       <TouchableOpacity
-        style={[styles.stateButton, isSelected && styles.selectedStateButton]}
+        style={[
+          styles.stateButton,
+          isSelected && {
+            borderColor: colors.primary,
+            backgroundColor: colors.background,
+            borderWidth: 2,
+          },
+          {backgroundColor: colors.card},
+        ]}
         onPress={() => handleSelectState(item.id)}>
-        <Text style={styles.stateText}>{item.name}</Text>
+        <Text
+          style={{
+            fontSize: sizes.subheading,
+            fontFamily: fontFamily.medium,
+            color: colors.text,
+          }}>
+          {item.name}
+        </Text>
       </TouchableOpacity>
     );
   };
+
+   const getAllState = async () => {
+    setAllstatesDataLoading(true);
+    try {
+      const response = await ApiRequest({
+        BaseUrl: ApiRoutes.newCategory,
+        method: 'GET',
+      });
+      if (response) {
+        setAllstatesDataLoading(false);
+        setAllstatesData(statesData);
+      } else {
+        setAllstatesDataLoading(false);
+      }
+    } catch (error: any) {
+      setAllstatesDataLoading(false);
+      console.error(' Error:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    getAllState();
+  }, []);
 
   return (
     <PageContainer
@@ -66,30 +117,80 @@ const PickYourStateScreen = () => {
 
           <View style={styles.content}>
             <View style={styles.header}>
-              <Text style={styles.title}>Pick your state</Text>
-              <Text style={styles.subtitle}>
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    fontSize: sizes.heading,
+                    fontFamily: fontFamily.semiBold,
+                    color: colors.text,
+                  },
+                ]}>
+                Pick your state
+              </Text>
+              <Text
+                style={[
+                  styles.subtitle,
+                  {
+                    fontSize: sizes.subheading,
+                    color: colors.text,
+                    fontFamily: fontFamily.regular,
+                  },
+                ]}>
                 We'll use this info to personalize your experience based on your
                 region.
               </Text>
             </View>
 
-            <FlatList
-              data={statesData}
-              renderItem={renderStateItem}
-              keyExtractor={item => item.id}
-              numColumns={2}
-              contentContainerStyle={styles.grid}
-              showsVerticalScrollIndicator={false}
-            />
-
-            <View style={styles.footer}>
-              <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionButtonText}>Save</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionButtonText}>Skip</Text>
-              </TouchableOpacity>
-            </View>
+            {allstatesDataLoading ? (
+              <StateLoading />
+            ) : (
+              <FlatList
+                data={allstatesData}
+                renderItem={renderStateItem}
+                keyExtractor={item => item.id}
+                numColumns={2}
+                contentContainerStyle={styles.grid}
+                showsVerticalScrollIndicator={false}
+              />
+            )}
+            {!allstatesDataLoading && (
+              <View style={styles.footer}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={[
+                    styles.actionButton,
+                    {
+                      backgroundColor: colors.primary,
+                    },
+                  ]}>
+                  <Text
+                    style={{
+                      color: color.white,
+                      fontSize: sizes.body,
+                      fontFamily: fontFamily.semiBold,
+                    }}>
+                    Save
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.actionButton,
+                    {
+                      backgroundColor: colors.primary,
+                    },
+                  ]}>
+                  <Text
+                    style={{
+                      color: color.white,
+                      fontSize: sizes.body,
+                      fontFamily: fontFamily.semiBold,
+                    }}>
+                    Skip
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
       </ImageBackground>
@@ -111,15 +212,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#111',
     marginBottom: 8,
     marginTop: 30,
   },
   subtitle: {
-    fontSize: 15,
-    color: '#666',
     lineHeight: 22,
   },
   grid: {
@@ -129,7 +225,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
     padding: 18,
     margin: 8,
     borderRadius: 12,
@@ -141,15 +236,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  selectedStateButton: {
-    borderColor: '#06113C',
-    backgroundColor: '#F0F8FF',
-  },
-  stateText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-  },
+
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -158,7 +245,6 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     flex: 1,
-    backgroundColor: color.appColor,
     paddingVertical: 10,
     borderRadius: 10,
     alignItems: 'center',
@@ -168,11 +254,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-  },
-  actionButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 

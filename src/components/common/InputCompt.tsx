@@ -23,7 +23,9 @@ interface InputComptProps extends TextInputProps {
   inputStyle?: StyleProp<TextStyle>;
   labelStyle?: StyleProp<TextStyle>;
   leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
   error?: string;
+  secureTextEntry?: boolean;
 }
 
 const InputCompt: React.FC<InputComptProps> = ({
@@ -35,9 +37,11 @@ const InputCompt: React.FC<InputComptProps> = ({
   inputStyle,
   labelStyle,
   leftIcon,
+  rightIcon,
   error,
   onFocus,
   onBlur,
+  secureTextEntry,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -93,8 +97,10 @@ const InputCompt: React.FC<InputComptProps> = ({
           placeholderTextColor={color.gray}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          secureTextEntry={secureTextEntry}
           {...rest}
         />
+        {rightIcon && <View style={styles.leftIcon}>{rightIcon}</View>}
       </View>
 
       {!!error && (
@@ -122,6 +128,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 6,
+    textTransform: 'capitalize',
   },
   inputWrapper: {
     flexDirection: 'row',

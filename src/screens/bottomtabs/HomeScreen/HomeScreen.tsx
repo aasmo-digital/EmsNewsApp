@@ -1,33 +1,55 @@
 import {
   View,
   Text,
-  Image,
   Pressable,
   Alert,
   FlatList,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import React, {useState} from 'react';
-import {PageContainer} from '../../../components/componentsIndex';
+import {
+  HorizontalNewsList,
+  Image,
+  PageContainer,
+  PollCompt,
+} from '../../../components/componentsIndex';
 import {Marquee} from '@animatereactnative/marquee';
 import color from '../../../theme/color';
 import imageIndex from '../../../assets/imageIndex';
-import {categories, newsData} from './const';
 import LinearGradient from 'react-native-linear-gradient';
 import SessionView from './SessionView';
-import {useFontSize} from '../../../context/FontSizeContext';
-import {useTheme} from '../../../context/ThemeContext';
+import {
+  CategoryLoading,
+  NewsItemLoading,
+} from '../../../components/skelotonindex';
+import HomeController from './HomeController';
+import {getTimeAgo} from '../../../utility/functions/toast';
+import LiveNewsCard from './LiveNewsCard';
+import styles from './home.style';
+import {pollData} from './const';
+import HomeHeader from './HomeHeader';
 
 const HomeScreen = ({navigation}: any) => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const {sizes, fontFamily} = useFontSize();
-  const {colors, mode} = useTheme();
+  const {
+    selectedCategory,
+    sizes,
+    fontFamily,
+    colors,
+    t,
+    filteredNews,
+    allCategory,
+    setSelectedCategory,
+    Categoryloading,
+    allNeewsLoading,
+    allHeadings,
+  } = HomeController();
 
-  const filteredNews = selectedCategory
-    ? newsData.filter(item => item.categoryId === selectedCategory)
-    : newsData;
+  // const isVideoUrl = filteredNews.filter(
+  //   item => item._id == '68aeaf4534ec0cc3f2efa232',
+  // );
 
   const headlines = () => {
     return (
@@ -43,132 +65,215 @@ const HomeScreen = ({navigation}: any) => {
             fontFamily: fontFamily.medium,
             letterSpacing: 0.5,
           }}>
-          20 साल बाद ठाकरे परिवार एक साथ: उद्धव बोले- मराठी ने दूरियां खत्म कीं
-          20 साल बाद ठाकरे परिवार एक साथ: उद्धव बोले- मराठी ने दूरियां खत्म कीं
+          {allHeadings.map(item => item?.headlineText + '   ')}
         </Text>
       </Marquee>
     );
   };
 
-  const header = () => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: 10,
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <Image
-          source={imageIndex.logo}
-          style={{height: 80, width: 50}}
-          resizeMode="contain"
-        />
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Pressable
-            style={{marginRight: 10}}
-            onPress={() => Alert.alert('dsghi')}>
-            <Text
-              style={{
-                paddingHorizontal: 10,
-                borderWidth: 1,
-                color: colors.btnbg,
-                borderColor: colors.btnbg,
-                fontFamily: fontFamily.medium,
-                fontSize: sizes.body,
-              }}>
-              e-Paper
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={() => Alert.alert('dsghi')}
-            style={{marginRight: 10}}>
-            <Image source={imageIndex.tv} style={{height: 30, width: 30}} />
-          </Pressable>
-          <Pressable
-            onPress={() => Alert.alert('dsghi')}
-            style={{marginRight: 10}}>
-            <Image
-              source={imageIndex.notification}
-              style={{height: 25, width: 25, tintColor: colors.text}}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => Alert.alert('dsghi')}
-            style={{marginRight: 10}}>
-            <Image
-              source={{
-                uri: 'https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
-              }}
-              style={{height: 35, width: 35, borderRadius: 50}}
-            />
-          </Pressable>
-        </View>
-      </View>
-    );
-  };
+  // const header = () => {
+  //   return (
+  //     <View
+  //       style={{
+  //         flexDirection: 'row',
+  //         paddingHorizontal: 10,
+  //         justifyContent: 'space-between',
+  //         alignItems: 'center',
+  //       }}>
+  //       <Image
+  //         source={imageIndex.logo}
+  //         style={{height: 80, width: 50}}
+  //         resizeMode="contain"
+  //       />
+  //       <View style={{flexDirection: 'row', alignItems: 'center'}}>
+  //         <Pressable
+  //           style={{marginRight: 10}}
+  //           onPress={() => navigation.navigate('EPaper')}>
+  //           <Text
+  //             style={{
+  //               paddingHorizontal: 10,
+  //               borderWidth: 1,
+  //               color: colors.btnbg,
+  //               borderColor: colors.btnbg,
+  //               fontFamily: fontFamily.medium,
+  //               fontSize: sizes.body,
+  //             }}>
+  //             {t('epaper_text')}
+  //           </Text>
+  //         </Pressable>
+  //         <Pressable
+  //           onPress={() => navigation.navigate('EmsTv')}
+  //           style={{marginRight: 10}}>
+  //           <Image source={imageIndex.tv} style={{height: 30, width: 30}} />
+  //         </Pressable>
+  //         <Pressable
+  //           onPress={() => navigation.navigate('Notification')}
+  //           style={{marginRight: 10}}>
+  //           <Image
+  //             source={imageIndex.notification}
+  //             style={{height: 25, width: 25, tintColor: colors.text}}
+  //           />
+  //         </Pressable>
+  //         <Pressable
+  //           onPress={() => navigation.navigate('EditProfile')}
+  //           style={{marginRight: 10}}>
+  //           <Image
+  //             source={{
+  //               uri: 'https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
+  //             }}
+  //             style={{height: 35, width: 35, borderRadius: 50}}
+  //           />
+  //         </Pressable>
+  //       </View>
+  //     </View>
+  //   );
+  // };
   return (
-    <PageContainer>
-      {header()}
+    <PageContainer style={{paddingTop: 25}}>
+      {/* {header()} */}
+      <HomeHeader />
+
+      {!Categoryloading && headlines()}
+
       {/* Category List */}
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
-          <View>
-            <FlatList
-              data={categories}
-              horizontal
-              keyExtractor={item => item.id}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.categoryList}
-              renderItem={({item}: any) => (
-                <TouchableOpacity
-                  style={[
-                    styles.categoryButton,
-                    selectedCategory === item.id && styles.selectedCategory,
-                  ]}
-                  onPress={() => setSelectedCategory(item.id)}>
-                  <Text style={styles.categoryText}>{item.name}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-          {headlines()}
+          {Categoryloading ? (
+            <CategoryLoading />
+          ) : (
+            <View>
+              <FlatList
+                data={allCategory}
+                horizontal
+                keyExtractor={item => item.id}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoryList}
+                renderItem={({item}: any) => (
+                  <TouchableOpacity
+                    style={[
+                      styles.categoryBtn,
+                      {
+                        backgroundColor: colors.background,
+                        borderWidth: 0.2,
+                        borderColor: colors.text,
+                        opacity: 0.7,
+                      },
+                      selectedCategory === item._id && {
+                        backgroundColor: colors.background,
+                        borderWidth: 1,
+                        borderColor: colors.text,
+                      },
+                    ]}
+                    onPress={() => setSelectedCategory(item._id)}>
+                    <Text
+                      style={[
+                        selectedCategory === item._id && {
+                          color: colors.background,
+                          fontFamily: fontFamily.semiBold,
+                        },
+                        {
+                          color: colors.text,
+                          fontFamily: fontFamily.medium,
+                          fontSize: sizes.body,
+                        },
+                      ]}>
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          )}
+
+          {/* {headlines()} */}
 
           {/* News Cards */}
-          <View>
-            <FlatList
-              data={filteredNews}
-              keyExtractor={item => item.id}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({item}) => (
-                <Pressable
-                  onPress={() => navigation.navigate('NewsDetail')}
-                  style={styles.card}>
-                  <Image source={{uri: item.image}} style={styles.image} />
-                  <LinearGradient
-                    colors={['transparent', 'rgba(0,0,0,0.8)']}
-                    style={styles.gradient}>
-                    <Text style={styles.meta}>
-                      By {item.author} | {item.date}
-                    </Text>
-                    <Text style={styles.title}>{item.title}</Text>
-                  </LinearGradient>
-                </Pressable>
-              )}
-              // ListEmptyComponent={() => (
-              //   <Text
-              //     style={{
-              //       color: color.black,
-              //       height: 100,
-              //     }}>
-              //     No Data Found.
-              //   </Text>
-              // )}
-            />
-          </View>
 
+          {allNeewsLoading ? (
+            <NewsItemLoading />
+          ) : (
+            <View>
+              {/* <FlatList
+                data={filteredNews}
+                keyExtractor={item => item?.id}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({item}) => (
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate('NewsDetail', {news: item})
+                    }
+                    style={[styles.card, {backgroundColor: colors.card}]}>
+                    <Image
+                      source={{uri: item?.media[0].url}}
+                      style={styles.image}
+                    />
+                    <LinearGradient
+                      colors={['transparent', 'rgba(0,0,0,0.8)']}
+                      style={styles.gradient}>
+                      <Text
+                        style={[
+                          styles.meta,
+                          {
+                            fontSize: sizes.body,
+                            color: color.white,
+                            fontFamily: fontFamily.regular,
+                            opacity: 0.8,
+                            letterSpacing: 0.5,
+                          },
+                        ]}>
+                        By {item.createdBy?.name} |{' '}
+                        {getTimeAgo(item?.createdAt)}
+                      </Text>
+                      <Text
+                        numberOfLines={2}
+                        style={[
+                          styles.title,
+                          {
+                            fontSize: sizes.subheading,
+                            color: color.white,
+                            fontFamily: fontFamily.semiBold,
+                            letterSpacing: 0.5,
+                          },
+                        ]}>
+                        {item?.title}
+                      </Text>
+                    </LinearGradient>
+                  </Pressable>
+                )}
+                ListEmptyComponent={() => (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      flex: 1,
+                      width: '100%',
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.text,
+                        fontFamily: fontFamily.semiBold,
+                        width: Dimensions.get('window').width,
+                        textAlign: 'center',
+                        marginTop: 10,
+                      }}>
+                      No News Found.
+                    </Text>
+                  </View>
+                )}
+              /> */}
+
+              <HorizontalNewsList
+                filteredNews={filteredNews}
+                // filteredNews={isVideoUrl}
+                navigation={navigation}
+                styles={styles}
+              />
+            </View>
+          )}
+          {true && <LiveNewsCard />}
+
+          <PollCompt pollData={pollData} />
           <SessionView />
         </View>
       </ScrollView>
@@ -177,57 +282,3 @@ const HomeScreen = ({navigation}: any) => {
 };
 
 export default HomeScreen;
-const styles = StyleSheet.create({
-  categoryList: {
-    paddingHorizontal: 10,
-    marginVertical: 5,
-  },
-  categoryButton: {
-    backgroundColor: '#eee',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginHorizontal: 5,
-  },
-  selectedCategory: {
-    backgroundColor: color.white,
-    borderWidth: 0.5,
-    borderColor: color.appColor,
-  },
-  categoryText: {
-    color: '#000',
-  },
-  card: {
-    width: 300,
-    height: 200,
-    margin: 10,
-    borderRadius: 15,
-    overflow: 'hidden',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-  },
-  gradient: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: 15,
-  },
-  title: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginTop: 4,
-  },
-  description: {
-    color: '#ddd',
-    fontSize: 12,
-    marginTop: 5,
-  },
-  meta: {
-    color: '#aaa',
-    fontSize: 10,
-    marginTop: 5,
-  },
-});

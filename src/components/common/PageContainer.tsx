@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   StyleSheet,
   View,
@@ -66,10 +66,11 @@ const PageContainer = ({
   );
 };
 
-export default PageContainer;
+export default memo(PageContainer);
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    // paddingTop: 25,
   },
   container: {
     flex: 1,

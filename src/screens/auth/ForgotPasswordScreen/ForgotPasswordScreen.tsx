@@ -3,29 +3,67 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ImageBackground,
+  Keyboard,
 } from 'react-native';
-import {useTranslation} from 'react-i18next';
 import {
   ButtonCompt,
   InputCompt,
   PageContainer,
 } from '../../../components/componentsIndex';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import color from '../../../theme/color';
 import imageIndex from '../../../assets/imageIndex';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
 import {useLanguage} from '../../../context/LanguageContext';
+import ApiRequest from '../../../services/api/ApiRequest';
+import ApiRoutes from '../../../services/config/ApiRoutes';
 
-const ForgotPasswordScreen = ({navigation}: any) => {
+const ForgotPasswordScreen: React.FC<{navigation: any}> = ({navigation}) => {
   const [email, setEmail] = useState('');
-
+  const [error, setError] = useState('');
   const {sizes, fontFamily} = useFontSize();
-  const {colors, mode} = useTheme();
+  const {colors} = useTheme();
   const {t} = useLanguage();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = () => {
+    if (!email || !email.includes('@')) {
+      setError(t('error_invalid_email'));
+      return;
+    }
+
+    setError('');
+    onGetOtp();
+  };
+
+  // 🔁 OTP Call
+  const onGetOtp = async () => {
+    Keyboard.dismiss();
+    setIsLoading(true);
+    try {
+      const response = await ApiRequest({
+        BaseUrl: ApiRoutes.forgotPassword,
+        method: 'POST',
+        request: {
+          email: email,
+        },
+      });
+      if (response) {
+        setIsLoading(false);
+        console.log('OTP Response:', response);
+        // Alert.alert('Success', 'OTP sent successfully!');
+        navigation.navigate('Verification');
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error: any) {
+      setIsLoading(false);
+      console.error('OTP Error:', error.message);
+      // Alert.alert('Error', error.message || 'Failed to send OTP');
+    }
+  };
 
   return (
     <PageContainer
@@ -36,7 +74,7 @@ const ForgotPasswordScreen = ({navigation}: any) => {
       }}>
       <ImageBackground
         source={imageIndex.bg}
-        style={{flex: 1}}
+        style={styles.imageBackground}
         resizeMode="stretch">
         <View style={styles.container}>
           <Text
@@ -50,6 +88,7 @@ const ForgotPasswordScreen = ({navigation}: any) => {
             ]}>
             {t('forgotPasswordTitle')}
           </Text>
+
           <Text
             style={[
               styles.subtitle,
@@ -62,25 +101,29 @@ const ForgotPasswordScreen = ({navigation}: any) => {
             ]}>
             {t('forgotPasswordSubtitle')}
           </Text>
+
           <InputCompt
-            label="Email"
+            label={t('emailPlaceholder')}
             value={email}
-            onChangeText={setEmail}
-            placeholder="Enter email"
+            onChangeText={text => {
+              setEmail(text);
+              setError('');
+            }}
+            placeholder={t('emailPlaceholder')}
             keyboardType="email-address"
-            // error={!email.includes('@') ? 'Invalid email address' : ''}
-            leftIcon={<Icon name="email" size={20} color="#888" />}
+            error={error}
+            leftIcon={<Icon name="email-outline" size={20} color="#888" />}
           />
 
           <ButtonCompt
             title={t('getOtpButton')}
-            onPress={() => navigation.navigate('Verification')}
-            isLoading={false}
-            style={{marginTop: 20}}
+            onPress={handleSubmit}
+            isLoading={isLoading}
+            style={styles.button}
           />
 
           <TouchableOpacity
-            style={{position: 'absolute', bottom: 50, left: 0, right: 0}}
+            style={styles.backLinkContainer}
             onPress={() => navigation.goBack()}>
             <Text
               style={[
@@ -99,7 +142,13 @@ const ForgotPasswordScreen = ({navigation}: any) => {
     </PageContainer>
   );
 };
+
+export default ForgotPasswordScreen;
+
 const styles = StyleSheet.create({
+  imageBackground: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -111,11 +160,16 @@ const styles = StyleSheet.create({
   subtitle: {
     marginBottom: 30,
   },
-
-  forgotLink: {color: '#007BFF', textAlign: 'right', marginBottom: 20},
-
-  orText: {textAlign: 'center', marginVertical: 20, color: 'gray'},
-
-  bottomLink: {textAlign: 'center', marginTop: 30},
+  button: {
+    marginTop: 20,
+  },
+  backLinkContainer: {
+    position: 'absolute',
+    bottom: 50,
+    left: 0,
+    right: 0,
+  },
+  bottomLink: {
+    textAlign: 'center',
+  },
 });
-export default ForgotPasswordScreen;

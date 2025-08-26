@@ -10,6 +10,7 @@
   "passwordPlaceholder": "पासवर्ड",
   "repeatPasswordPlaceholder": "पासवर्ड दोहराएं",
   "newPasswordPlaceholder": "नया पासवर्ड",
+  "old_password_text": "पुराना पासवर्ड",
 
   "chooseLanguageTitle": "भाषा चुनें",
   "languageEnglish": "English",
@@ -64,5 +65,58 @@
   "font_family": "फ़ॉन्ट स्टाइल",
   "logout": "लॉगआउट",
 
-  "id": "आईडी"
+  "id": "आईडी",
+
+  "profile_text": "प्रोफ़ाइल",
+  "home_text": "होम",
+  "explore_text": "खोजें",
+  "coverage_text": "कवरेज",
+  "saved_text": "सहेजे गए",
+  "more_text": "अधिक",
+
+  "epaper_text": "ई-पेपर",
+  "news_details_text": "समाचार विवरण",
+  "headlines_text": "मुख्य समाचार",
+  "view_all_text": "सभी देखें",
+  "live_updates_text": "लाइव अपडेट्स",
+  "related_news_text": "संबंधित समाचार",
+  "search_placeholder_text": "खोजें...",
+  "popular_tags_text": "लोकप्रिय टैग",
+  "saved_news_text": "सहेजी गई समाचार",
+  "edit_profile_text": "प्रोफ़ाइल संपादित करें",
+  "update_text": "अपडेट",
+  "select_profile_picture_text": "प्रोफ़ाइल तस्वीर चुनें",
+  "choose_an_option_text": "एक विकल्प चुनें",
+  "camera_text": "कैमरा",
+  "gallery_text": "गैलरी",
+  "cancel_text": "रद्द करें",
+
+  "error_old_password_required": "पुराना पासवर्ड आवश्यक है।",
+  "error_new_password_required": "नया पासवर्ड आवश्यक है।",
+  "error_invalid_email": "अमान्य ईमेल पता।",
+
+  "invite_friend": "मित्र को आमंत्रित करें",
+  "rate_app": "ऐप को रेटिंग दें",
+  "favorite_topics": "मेरे पसंदीदा विषय",
+  "select_state_city": "अपना राज्य और शहर चुनें",
+
+  "close": "बंद करें",
+  "select_language": "भाषा चुनें",
+  "select_text_size": "पाठ का आकार चुनें",
+  "select_font_family": "फ़ॉन्ट फ़ैमिली चुनें",
+
+  "small": "छोटा",
+  "medium": "मध्यम",
+  "large": "बड़ा",
+  "extra_large": "अत्यधिक बड़ा",
+  "body": "मुख्य भाग",
+  "heading": "शीर्षक",
+  "terms_and_conditions": "नियम और शर्तें",
+
+  "email_address": "ईमेल पता",
+  "enter_email_address": "अपना ईमेल पता दर्ज करें",
+  "password": "पासवर्ड",
+  "enter_password": "अपना पासवर्ड दर्ज करें",
+
+  "error_password_min_length": "पासवर्ड कम से कम 6 अक्षर का होना चाहिए।"
 }

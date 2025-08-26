@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   View,
   Dimensions,
@@ -10,7 +10,7 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 interface CustomSliderProps {
   images: string[];
@@ -38,8 +38,8 @@ const CustomSlider: React.FC<CustomSliderProps> = ({
 
     if (autoplay) {
       interval = setInterval(() => {
-        const nextIndex = (currentIndex + 1) % images.length;
-        flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
+        const nextIndex = (currentIndex + 1) % images?.length;
+        flatListRef.current?.scrollToIndex({index: nextIndex, animated: true});
         setCurrentIndex(nextIndex);
       }, delay);
     }
@@ -47,12 +47,12 @@ const CustomSlider: React.FC<CustomSliderProps> = ({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [currentIndex, images.length, autoplay, delay]);
+  }, [currentIndex, images?.length, autoplay, delay]);
 
-  const renderItem = ({ item }: { item: string }) => (
+  const renderItem = ({item}: {item: string}) => (
     <Image
-      source={{ uri: item }}
-      style={{ width, height: sliderHeight, resizeMode: 'cover' }}
+      source={{uri: item?.url}}
+      style={{width, height: sliderHeight, resizeMode: 'cover'}}
     />
   );
 
@@ -62,7 +62,7 @@ const CustomSlider: React.FC<CustomSliderProps> = ({
   };
 
   return (
-    <View style={{ height: sliderHeight }}>
+    <View style={{height: sliderHeight}}>
       <FlatList
         ref={flatListRef}
         data={images}
@@ -72,19 +72,20 @@ const CustomSlider: React.FC<CustomSliderProps> = ({
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false, listener: handleScroll }
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: false, listener: handleScroll},
         )}
       />
       {/* Pagination Dots */}
       <View style={styles.dotContainer}>
-        {images.map((_, i) => (
+        {images?.map((_, i) => (
           <View
             key={i}
             style={[
               styles.dot,
               {
-                backgroundColor: currentIndex === i ? dotColor : inactiveDotColor,
+                backgroundColor:
+                  currentIndex === i ? dotColor : inactiveDotColor,
               },
             ]}
           />

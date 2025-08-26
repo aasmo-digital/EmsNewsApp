@@ -54,7 +54,6 @@ const HeaderCompt: React.FC<HeaderComptProps> = ({
       )}
       <Text
         style={[
-          styles.title,
           {
             color: textColor || colors.text,
             fontSize: sizes.subheading,
@@ -79,8 +78,5 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 12,
-  },
-  title: {
-    fontWeight: 'bold',
   },
 });

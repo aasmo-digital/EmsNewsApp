@@ -1,6 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 import HomeScreen from '../screens/bottomtabs/HomeScreen/HomeScreen';
 import ProfileScreen from '../screens/bottomtabs/ProfileScreen/ProfileScreen';
 import Explore from '../screens/bottomtabs/explore/Explore';
@@ -15,14 +14,16 @@ const Tab = createBottomTabNavigator<AppTabParamList>();
 const BottomTabs = () => {
   return (
     <Tab.Navigator
-      screenOptions={{headerShown: false}}
-      tabBar={props => <CustomTabBar {...props} />} // ✅ Custom Tab Bar
-    >
+      screenOptions={{
+        headerShown: false,
+        tabBarHideOnKeyboard: true,
+      }}
+      tabBar={props => <CustomTabBar {...props} />}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Explore" component={Explore} />
       <Tab.Screen name="Coverage" component={Coverage} />
       <Tab.Screen name="Saved" component={Saved} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="More" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

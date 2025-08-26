@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   FlatList,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import {newsSections} from './const';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,8 +15,13 @@ import color from '../../../theme/color';
 import {useNavigation} from '@react-navigation/native';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
+import {NewsCard} from '../../../components/cardIndex';
+import HomeController from './HomeController';
+import {NewsCardLoading} from '../../../components/skelotonindex';
 
 export default function SessionView() {
+  const {allNeewsLoading, allNeews} = HomeController();
+
   const [selectedSection, setSelectedSection] = useState('all');
   const navigation = useNavigation();
   const {sizes, fontFamily} = useFontSize();
@@ -30,18 +36,41 @@ export default function SessionView() {
   ];
 
   // Flatten all news for "All" view
-  const allNews = newsSections.flatMap(section => section.news);
+  // const allNews = newsSections.flatMap(section => section.news);
 
   const filteredNews =
     selectedSection === 'all'
-      ? allNews
+      ? allNeews
       : newsSections.find(sec => sec.sectionKey === selectedSection)?.news ||
         [];
+
+  // ✅ Memoized keyExtractor
+  const keyExtractor = useCallback(item => item.id.toString(), []);
+
+  // ✅ Memoized renderItem
+  const renderItem = useCallback(
+    ({item}) => (
+      <NewsCard
+        item={item}
+        location={item?.state?.name}
+        onPressLocation={() =>
+          navigation.navigate('NewsByState', {state: item?.state})
+        }
+      />
+    ),
+    [navigation],
+  );
+
+  // ✅ getItemLayout (agar fixed height approx pata ho)
+  const getItemLayout = useCallback(
+    (_, index) => ({length: 120, offset: 120 * index, index}), // 120 = approx row height
+    [],
+  );
 
   return (
     <View style={styles.container}>
       {/* Top Category Selector */}
-      <View>
+      {/* <View>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -54,10 +83,13 @@ export default function SessionView() {
                 styles.categoryBtn,
                 {
                   backgroundColor: colors.background,
+                  borderWidth: 0.2,
+                  borderColor: colors.text,
+                  opacity: 0.7,
                 },
                 selectedSection === item.key && {
                   backgroundColor: colors.background,
-                  borderWidth: 0.5,
+                  borderWidth: 1,
                   borderColor: colors.text,
                 },
               ]}
@@ -79,55 +111,36 @@ export default function SessionView() {
             </TouchableOpacity>
           )}
         />
-      </View>
+      </View> */}
 
       {/* News Cards */}
       <View>
-        <FlatList
-          data={filteredNews}
-          keyExtractor={item => item.id}
-          contentContainerStyle={{paddingHorizontal: 10}}
-          renderItem={({item}) => (
-            <Pressable
-              style={[
-                styles.card,
-                {shadowColor: colors.text, backgroundColor: colors.background},
-              ]}
-              onPress={() => navigation.navigate('NewsDetail')}>
-              <View style={{flex: 1, marginRight: 8}}>
-                <Text
-                  style={[
-                    styles.title,
-                    {
-                      fontSize: sizes.subheading,
-                      color: colors.text,
-                      fontFamily: fontFamily.regular,
-                    },
-                  ]}
-                  numberOfLines={1}>
-                  {item.title}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: sizes.body,
-                    color: colors.text,
-                    fontFamily: fontFamily.regular,
-                    letterSpacing: 0.5,
-                  }}
-                  numberOfLines={2}>
-                  {item?.description}
-                </Text>
-              </View>
-
-              <Image
-                source={{
-                  uri: 'https://www.hindustantimes.com/ht-img/img/2025/07/22/550x309/Mumbai_train_blast_accused_1753162784155_1753162784325.jpg',
-                }}
-                style={styles.image}
-              />
-            </Pressable>
-          )}
-        />
+        {allNeewsLoading ? (
+          <NewsCardLoading />
+        ) : (
+          <FlatList
+            data={filteredNews}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            getItemLayout={getItemLayout} // optional but boosts perf
+            removeClippedSubviews={true}
+            initialNumToRender={5}
+            maxToRenderPerBatch={10}
+            windowSize={10}
+            contentContainerStyle={{paddingHorizontal: 10}}
+            ListEmptyComponent={() => (
+              <Text
+                style={{
+                  fontFamily: fontFamily.medium,
+                  color: colors.text,
+                  textAlign: 'center',
+                  marginVertical: 20,
+                }}>
+                No News Found.
+              </Text>
+            )}
+          />
+        )}
       </View>
     </View>
   );
@@ -135,7 +148,8 @@ export default function SessionView() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    marginTop: 8,
   },
   categoryBtn: {
     paddingHorizontal: 15,

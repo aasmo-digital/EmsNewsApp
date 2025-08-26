@@ -27,6 +27,17 @@ export type AppStackParamList = {
   AppTabs: NavigatorScreenParams<AppTabParamList>; // टैब नेविगेटर को नेस्ट करना
   NewsDetail: {articleId: string};
   Comments: {postId: string};
+  EPaper: undefined;
+  Notification: undefined;
+  EditProfile: undefined;
+  Privacy: undefined;
+  TermsConditon: undefined;
+  ChanegPassword: undefined;
+  InterestsScreen: undefined;
+  PickYourState: undefined;
+  EmsTv: undefined;
+  NewsByState: undefined;
+  NewsByDist: undefined;
 };
 
 // रूट नेविगेटर के लिए

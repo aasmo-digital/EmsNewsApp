@@ -39,7 +39,7 @@ const CustomSwitchButton = ({isOn = false, onToggle}: Props) => {
 
   const bgColor = animValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#ccc', color.appColor],
+    outputRange: ['#ccc', color.green],
   });
 
   return (

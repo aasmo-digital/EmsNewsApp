@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   View,
   Text,
@@ -12,17 +12,19 @@ import color from '../../theme/color';
 import {useTheme} from '../../context/ThemeContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ButtonCompt from './ButtonCompt';
-
-const fontOptions = [
-  {label: 'Small', size: 12},
-  {label: 'Medium', size: 14},
-  {label: 'Large', size: 16},
-  {label: 'Extra Large', size: 18},
-];
+import {useLanguage} from '../../context/LanguageContext';
 
 const FontSizeModal = ({visible, onClose}: any) => {
   const {setBaseSize, fontFamily, sizes} = useFontSize();
   const {colors} = useTheme();
+  const {t} = useLanguage();
+
+  const fontOptions = [
+    {label: t('small'), size: 12},
+    {label: t('medium'), size: 14},
+    {label: t('large'), size: 16},
+    {label: t('extra_large'), size: 18},
+  ];
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
@@ -40,7 +42,7 @@ const FontSizeModal = ({visible, onClose}: any) => {
                 color: colors.text,
                 fontSize: sizes.heading,
               }}>
-              Select Text Size
+              {t('select_text_size')}
             </Text>
             <TouchableOpacity onPress={onClose}>
               <Ionicons name="close" size={24} color={colors.text} />
@@ -58,14 +60,15 @@ const FontSizeModal = ({visible, onClose}: any) => {
                   onClose();
                 }}>
                 <Text style={[{fontSize: item.size, color: colors.text}]}>
-                  {item.label} (Body: {item.size}, Heading: {item.size * 1.5})
+                  {item.label} ({t('body')}: {item.size}, {t('heading')}:{' '}
+                  {item.size * 1.5})
                 </Text>
               </TouchableOpacity>
             )}
           />
 
           <ButtonCompt
-            title="Close"
+            title={t('close')}
             onPress={onClose}
             style={{
               paddingVertical: 8,
@@ -80,7 +83,7 @@ const FontSizeModal = ({visible, onClose}: any) => {
   );
 };
 
-export default FontSizeModal;
+export default memo(FontSizeModal);
 
 const styles = StyleSheet.create({
   overlay: {

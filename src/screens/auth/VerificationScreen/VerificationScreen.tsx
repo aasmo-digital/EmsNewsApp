@@ -25,6 +25,7 @@ import {loginSuccess} from '../../../services/redux/userReducer/reducer';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
 import {useLanguage} from '../../../context/LanguageContext';
+import ApiRoutes from '../../../services/config/ApiRoutes';
 
 const OTP_LENGTH = 4; // Define the length of the OTP
 
@@ -150,7 +151,7 @@ const VerificationScreen = ({navigation}: any) => {
     setFetchLoading(true);
     try {
       const response = await ApiRequest({
-        BaseUrl: 'https://fakestoreapi.com/products/1',
+        BaseUrl:  ApiRoutes.login,
         method: 'GET',
       });
       if (response) {

@@ -14,131 +14,105 @@ import {
   Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'; // Using Feather icons
-import { HeaderCompt } from '../../../components/componentsIndex';
-
-// --- 1. MOCK DATA (In a real app, this comes from your API) ---
-const mockCommentsData = [
-  {
-    id: '201',
-    author: 'राजेश कुमार',
-    avatarUrl: 'https://randomuser.me/api/portraits/men/65.jpg',
-    text: 'वाह! क्या शानदार कदम है। मोदी जी के नेतृत्व में देश सच में बदल रहा है। अब चीन और अमेरिका को भी टक्कर देंगे। जय हिंद! 🇮🇳',
-    timestamp: '15 मिनट पहले',
-    likes: 256,
-    replies: [],
-  },
-  {
-    id: '202',
-    author: 'अंजलि सिंह',
-    avatarUrl: 'https://randomuser.me/api/portraits/women/68.jpg',
-    text: 'कहने में तो सब अच्छा लगता है, पर क्या यह सुरक्षित है? पहले से ही इतने सारे पेमेंट ऐप्स हैं, उनमें फ्रॉड होते रहते हैं। सरकार हमारी प्राइवेसी की गारंटी लेगी क्या?',
-    timestamp: '1 घंटा पहले',
-    likes: 182,
-    replies: [
-      {
-        id: '202a',
-        author: 'विक्रम चौधरी',
-        avatarUrl: 'https://randomuser.me/api/portraits/men/71.jpg',
-        text: '@अंजलि सिंह आपकी बात सही है। जब तक डेटा प्रोटेक्शन का कोई मज़बूत कानून नहीं बनता, तब तक भरोसा करना मुश्किल है।',
-        timestamp: '45 मिनट पहले',
-        likes: 95,
-        replies: [],
-      },
-      {
-        id: '202b',
-        author: 'राष्ट्रवादी पवन',
-        avatarUrl: 'https://randomuser.me/api/portraits/men/72.jpg',
-        text: 'अरे मैडम, हर चीज़ में négativity क्यों? देश आगे बढ़ रहा है तो आपको दिक्कत हो रही है। यह ब्लॉकचेन पर आधारित है, सबसे ज़्यादा सुरक्षित है।',
-        timestamp: '30 मिनट पहले',
-        likes: 65,
-        replies: [],
-      },
-    ],
-  },
-  {
-    id: '203',
-    author: 'सुनीता देवी',
-    avatarUrl: 'https://randomuser.me/api/portraits/women/52.jpg',
-    text: 'बहुत अच्छा काम है। पर क्या कोई बताएगा कि इसको गाँव में कैसे इस्तेमाल करेंगे? वहां तो इंटरनेट भी ठीक से नहीं चलता।',
-    timestamp: '3 घंटे पहले',
-    likes: 112,
-    replies: [
-        {
-        id: '203a',
-        author: 'एक जानकार',
-        avatarUrl: 'https://randomuser.me/api/portraits/men/53.jpg',
-        text: 'जी, रिपोर्ट्स के अनुसार इसे कुछ हद तक ऑफलाइन भी इस्तेमाल किया जा सकेगा, इसी समस्या के समाधान के लिए।',
-        timestamp: '2 घंटे पहले',
-        likes: 78,
-        replies: [],
-      },
-    ]
-  },
-  {
-    id: '204',
-    author: 'रोहित (गेमर)',
-    avatarUrl: 'https://randomuser.me/api/portraits/men/88.jpg',
-    text: 'UPI के होते हुए इसकी क्या ज़रूरत थी? जब तक इसमें कोई बढ़िया कैशबैक ऑफर नहीं होगा, तब तक तो मैं Paytm और GPay ही यूज़ करूँगा।',
-    timestamp: '5 घंटे पहले',
-    likes: 205,
-    replies: [],
-  },
-  {
-    id: '205',
-    author: 'चंचल शर्मा',
-    avatarUrl: 'https://randomuser.me/api/portraits/women/90.jpg',
-    text: 'इसका लोगो तो बिलकुल कैंडी क्रश जैसा लग रहा है। 😂',
-    timestamp: '6 घंटे पहले',
-    likes: 543,
-    replies: [
-        {
-        id: '205a',
-        author: 'समीर',
-        avatarUrl: 'https://randomuser.me/api/portraits/men/91.jpg',
-        text: 'हाहाहा, सही कहा! 😂 अब तो डाउनलोड करना ही पड़ेगा।',
-        timestamp: '5 घंटे पहले',
-        likes: 120,
-        replies: [],
-      },
-    ]
-  },
-];
+import {HeaderCompt, PageContainer} from '../../../components/componentsIndex';
+import {useFontSize} from '../../../context/FontSizeContext';
+import {useTheme} from '../../../context/ThemeContext';
+import {useLanguage} from '../../../context/LanguageContext';
+import {mockCommentsData} from './const';
+import styles from './comment.style';
+import {useRoute} from '@react-navigation/native';
+import {getTimeAgo} from '../../../utility/functions/toast';
 
 // --- 2. THE REUSABLE COMMENT ITEM COMPONENT ---
 const CommentItem = ({item, isReply = false}) => {
   const [showReplies, setShowReplies] = useState(false);
 
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
+
   return (
     <View style={[styles.commentContainer, isReply && styles.replyContainer]}>
-      <Image source={{uri: item.avatarUrl}} style={styles.avatar} />
+      <Image source={{uri: item?.user?.profileImage}} style={styles.avatar} />
       <View style={styles.commentContent}>
-        <Text style={styles.author}>{item.author}</Text>
-        <Text style={styles.commentText}>{item.text}</Text>
+        <Text
+          style={{
+            color: colors.text,
+            fontFamily: fontFamily.medium,
+            fontSize: sizes.subheading,
+            textTransform: 'capitalize',
+          }}>
+          {item?.user?.name}
+        </Text>
+        <Text
+          style={[
+            styles.commentText,
+            {
+              color: colors.text,
+              fontFamily: fontFamily.regular,
+              fontSize: sizes.body,
+            },
+          ]}>
+          {item?.text}
+        </Text>
         <View style={styles.metaContainer}>
-          <Text style={styles.metaText}>{item.timestamp}</Text>
-          <TouchableOpacity style={styles.likesContainer}>
+          <Text
+            style={{
+              color: colors.text,
+              fontFamily: fontFamily.medium,
+              fontSize: sizes.body,
+              opacity: 0.8,
+            }}>
+            {getTimeAgo(item?.createdAt)}
+          </Text>
+          {/* <TouchableOpacity style={styles.likesContainer}>
             <Icon name="heart" size={14} color="#888" />
-            <Text style={styles.metaText}> {item.likes} likes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.replyText}>reply</Text>
-          </TouchableOpacity>
+            <Text
+              style={{
+                color: colors.text,
+                fontFamily: fontFamily.medium,
+                fontSize: sizes.body,
+                opacity: 0.8,
+              }}>
+              {' '}
+              {item?.likes} likes
+            </Text>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity>
+            <Text
+              style={{
+                color: colors.text,
+                fontFamily: fontFamily.medium,
+                fontSize: sizes.body,
+                opacity: 0.8,
+              }}>
+              reply
+            </Text>
+          </TouchableOpacity> */}
         </View>
 
         {/* Replies Section */}
-        {item.replies && item.replies.length > 0 && (
+        {item?.replies && item?.replies.length > 0 && (
           <TouchableOpacity onPress={() => setShowReplies(!showReplies)}>
-            <Text style={styles.seeMore}>
+            <Text
+              style={[
+                styles.seeMore,
+                {
+                  fontSize: sizes.body,
+                  color: colors.text,
+                  fontFamily: fontFamily.medium,
+                },
+              ]}>
               {showReplies
                 ? 'Hide replies'
-                : `See more (${item.replies.length})`}
+                : `See more (${item?.replies.length})`}
             </Text>
           </TouchableOpacity>
         )}
 
-        {showReplies && item.replies && (
+        {showReplies && item?.replies && (
           <View style={styles.repliesList}>
-            {item.replies.map(reply => (
+            {item?.replies.map(reply => (
               <CommentItem key={reply.id} item={reply} isReply={true} />
             ))}
           </View>
@@ -153,7 +127,14 @@ const CommentsScreen = () => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
+  const route = useRoute();
+  const allComments = route?.params?.comments;
 
+  // console.log('---------------', route?.params?.comments);
+
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
   // Fetch initial comments
   useEffect(() => {
     setTimeout(() => {
@@ -183,138 +164,70 @@ const CommentsScreen = () => {
 
   const renderItem = ({item}) => <CommentItem item={item} />;
 
-  if (loading) {
-    return <ActivityIndicator size="large" style={{flex: 1}} />;
-  }
-
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <HeaderCompt title='Comments'/>
-
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardAvoidingView}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
-        <FlatList
-          data={comments}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          style={styles.list}
-        />
-
-        {/* Comment Input Box */}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Type your comment"
-            value={newComment}
-            onChangeText={setNewComment}
+    <PageContainer style={{paddingTop: 25}}>
+      <SafeAreaView style={styles.safeArea}>
+        <HeaderCompt title="Comments" />
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            style={{flex: 1, backgroundColor: colors.background}}
           />
-          <TouchableOpacity
-            style={styles.sendButton}
-            onPress={handlePostComment}>
-            <Icon name="send" size={20} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        ) : (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.keyboardAvoidingView}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
+            <>
+              <FlatList
+                data={allComments}
+                renderItem={renderItem}
+                keyExtractor={item => item?.id}
+                style={styles.list}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={() => (
+                  <Text
+                    style={{
+                      fontSize: sizes.subheading,
+                      color: colors.text,
+                      fontFamily: fontFamily.regular,
+                      textAlign: 'center',
+                      marginTop: 200,
+                    }}>
+                    No Comments Found
+                  </Text>
+                )}
+              />
+            </>
+
+            {/* Comment Input Box */}
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: colors.card,
+                    fontSize: sizes.body,
+                    color: colors.text,
+                    fontFamily: fontFamily.regular,
+                  },
+                ]}
+                placeholder="Type your comment"
+                value={newComment}
+                onChangeText={setNewComment}
+                placeholderTextColor={colors.text}
+              />
+              <TouchableOpacity
+                style={styles.sendButton}
+                onPress={handlePostComment}>
+                <Icon name="send" size={20} color="#fff" />
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+        )}
+      </SafeAreaView>
+    </PageContainer>
   );
 };
-
-// --- 4. STYLES ---
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  
-  keyboardAvoidingView: {
-    flex: 1,
-  },
-  list: {
-    flex: 1,
-  },
-  commentContainer: {
-    flexDirection: 'row',
-    padding: 16,
-    paddingBottom: 0,
-  },
-  replyContainer: {
-    marginLeft: 20, // Indent replies
-    paddingTop: 12,
-    paddingLeft: 0,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 12,
-  },
-  commentContent: {
-    flex: 1,
-  },
-  author: {
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  commentText: {
-    fontSize: 15,
-    color: '#555',
-    lineHeight: 22,
-    marginTop: 4,
-  },
-  metaContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-    gap: 16,
-  },
-  metaText: {
-    fontSize: 12,
-    color: '#888',
-  },
-  likesContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  replyText: {
-    fontSize: 12,
-    color: '#555',
-    fontWeight: '600',
-  },
-  seeMore: {
-    fontSize: 13,
-    color: '#555',
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
-  repliesList: {
-    marginTop: 0,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 8,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    backgroundColor: '#fff',
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    marginRight: 8,
-  },
-  sendButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#007BFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default CommentsScreen;
