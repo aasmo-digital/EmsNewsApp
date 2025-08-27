@@ -4,12 +4,12 @@ import {useFontSize} from '../../context/FontSizeContext';
 import {useTheme} from '../../context/ThemeContext';
 import {useLanguage} from '../../context/LanguageContext';
 
-const ViewAllCompt = ({title, onPress,style}: any) => {
+const ViewAllCompt = ({title, onPress, style, showviewAll}: any) => {
   const {sizes, fontFamily} = useFontSize();
   const {colors, mode} = useTheme();
   const {t} = useLanguage();
   return (
-    <View style={[styles.header,style]}>
+    <View style={[styles.header, style]}>
       <Text
         numberOfLines={1}
         style={{
@@ -23,17 +23,20 @@ const ViewAllCompt = ({title, onPress,style}: any) => {
         }}>
         {title}
       </Text>
-      <TouchableOpacity onPress={onPress}>
-        <Text
-          style={{
-            fontSize: sizes.body,
-            color: colors.primary,
-            fontFamily: fontFamily.medium,
-            letterSpacing: 0.5,
-          }}>
-          {t('view_all_text')}
-        </Text>
-      </TouchableOpacity>
+
+      {showviewAll && (
+        <TouchableOpacity onPress={onPress}>
+          <Text
+            style={{
+              fontSize: sizes.body,
+              color: colors.primary,
+              fontFamily: fontFamily.medium,
+              letterSpacing: 0.5,
+            }}>
+            {t('view_all_text')}
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

@@ -115,6 +115,7 @@ const SelectCityTab: React.FC<Props> = ({stateId, onSelect}) => {
           offset: 90 * index,
           index,
         })}
+        ListFooterComponent={()=><View style={{height:150}}/>}
       />
     ),
     [cities, renderCityItem, keyExtractor],

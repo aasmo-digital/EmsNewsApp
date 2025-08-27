@@ -24,7 +24,7 @@ const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
     <Pressable
       style={[
         styles.card,
-        {shadowColor: colors.text, backgroundColor: colors.background},
+        {shadowColor: colors.text, backgroundColor: colors.card},
       ]}
       onPress={
         onPressCard

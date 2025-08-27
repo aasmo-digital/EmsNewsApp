@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import FontSizeModal from '../../../components/common/FontSizeModal';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {logoutSucces} from '../../../services/redux/userReducer/reducer';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -33,6 +33,12 @@ import LanguageSelectorPopup from '../../../components/common/LanguageSelectorPo
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const locationdata = useSelector(
+    state => state?.SelectLocationSlice?.countryName,
+  );
+
+  const userCountry = locationdata == null ? '' : '   (' + locationdata + ')';
 
   const {sizes, fontFamily, setFontName} = useFontSize();
   const {colors, toggleTheme, mode} = useTheme();
@@ -279,7 +285,7 @@ const ProfileScreen = () => {
           />
 
           <ButtonCompt
-            title={t('select_state_city')}
+            title={t('select_state_city') + userCountry}
             onPress={() => navigation.navigate('PickYourState')}
             style={{
               marginTop: 10,

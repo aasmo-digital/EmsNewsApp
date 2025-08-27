@@ -26,6 +26,8 @@ import {
 } from '../../../services/redux/slices/SelectedLocationSlice';
 
 const PickYourStateScreen = () => {
+  const locationdata = useSelector(state => state?.SelectLocationSlice);
+  console.log('========================================', locationdata);
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
   const {t} = useLanguage();
@@ -104,6 +106,7 @@ const PickYourStateScreen = () => {
                   style={{
                     color: selectedTab === tab ? colors.primary : colors.text,
                     textAlign: 'center',
+                    fontFamily: fontFamily.medium,
                   }}>
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </Text>

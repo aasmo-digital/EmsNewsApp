@@ -18,6 +18,7 @@ import {useLanguage} from '../../../context/LanguageContext';
 import {NewsCardLoading} from '../../../components/skelotonindex';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../services/redux/store';
+import {useNavigation} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 const CARD_WIDTH = width * 0.45;
@@ -27,6 +28,7 @@ const RelatedNewsSection = ({categoryId}) => {
   const {t} = useLanguage();
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
+  const navigation = useNavigation();
   const allNeewsLoading = false;
 
   // console.log(
@@ -45,13 +47,13 @@ const RelatedNewsSection = ({categoryId}) => {
     <View style={styles.container}>
       <ViewAllCompt
         title={t('related_news_text')}
-        onPress={() => Alert.alert('Working on this.')}
+        // onPress={() => navigation.navigate('RelatedNews',{categoryId:categoryId})}
       />
       {allNeewsLoading ? (
         <NewsCardLoading />
       ) : (
         <FlatList
-          data={allRelatedNews}
+          data={allRelatedNews.slice(0, 5)}
           renderItem={({item}) => <NewsCard item={item} />}
           keyExtractor={item => item?.id}
           showsHorizontalScrollIndicator={false}

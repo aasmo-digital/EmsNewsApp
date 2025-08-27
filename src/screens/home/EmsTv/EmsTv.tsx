@@ -118,7 +118,6 @@ const EmsTv = () => {
             onBuffer={e => console.log('Buffering:', e)}
             playInBackground={false}
             onLoadStart={() => <ActivityIndicator size={'large'} />}
-            
           />
         ) : (
           <View style={styles.noVideoContainer}>

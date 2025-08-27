@@ -25,7 +25,7 @@ const Coverage = () => {
 
   const {allShortsLoading, allShorts, getAllShorts, reels} = useCoverage();
 
-  console.log('--------------reels---------', reels);
+  // console.log('--------------reels---------', reels);
 
   // 🔹 Run only when screen focused
   useFocusEffect(
@@ -65,7 +65,7 @@ const Coverage = () => {
       <View style={{height: playerHeight, backgroundColor: 'black'}}>
         <StatusBar barStyle="light-content" />
         {allShortsLoading ? (
-          <ActivityIndicator size="large" />
+          <ActivityIndicator size="large" style={{flex: 1}} />
         ) : (
           <FlatList
             // data={allShorts}

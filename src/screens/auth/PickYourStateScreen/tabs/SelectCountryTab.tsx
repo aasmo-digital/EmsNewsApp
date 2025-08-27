@@ -1,11 +1,5 @@
 import React, {useEffect, useState, useCallback, useMemo} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import ApiRequest from '../../../../services/api/ApiRequest';
 import ApiRoutes from '../../../../services/config/ApiRoutes';
 import {StateLoading} from '../../../../components/skelotonindex';
@@ -39,8 +33,10 @@ const SelectCountryTab: React.FC<Props> = ({onSelect}) => {
         BaseUrl: ApiRoutes.getAllCountries,
         method: 'GET',
       });
-      if (response?.data) {
-        setCountries(response.data);
+
+      if (response?.success) {
+        setLoading(false);
+        setCountries(response?.data);
       }
     } catch (error: any) {
       console.error('Error fetching countries:', error.message);
@@ -105,7 +101,7 @@ const SelectCountryTab: React.FC<Props> = ({onSelect}) => {
         renderItem={renderCountryItem}
         keyExtractor={keyExtractor}
         numColumns={2}
-        contentContainerStyle={{padding: 20,paddingBottom:100}}
+        contentContainerStyle={{padding: 20, paddingBottom: 100}}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
@@ -115,6 +111,7 @@ const SelectCountryTab: React.FC<Props> = ({onSelect}) => {
           offset: 90 * index,
           index,
         })}
+        ListFooterComponent={() => <View style={{height: 150}} />}
       />
     ),
     [countries, renderCountryItem, keyExtractor],

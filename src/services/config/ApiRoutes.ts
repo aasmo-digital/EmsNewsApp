@@ -8,7 +8,7 @@ export default {
   getNewsById: AppContant.BaseUrl + 'api/v1/user/new/', //-----------Pending
   getAllEmsVideos: AppContant.BaseUrl + 'api/v1/user/videos', //-----------Complete
   addLikeNews: AppContant.BaseUrl + 'api/v1/user/news',
-  forgotPassword: AppContant.BaseUrl + '/products',
+  // forgotPassword: AppContant.BaseUrl + '/products',
   getAllheadlines: AppContant.BaseUrl + 'api/v1/user/headline', //-----------Complete
   getAllShorts: AppContant.BaseUrl + 'api/v1/user/shorts', //-----------Complete
   likeDislikeShorts: AppContant.BaseUrl + 'api/v1/user/shorts/{{shortId}}/like',

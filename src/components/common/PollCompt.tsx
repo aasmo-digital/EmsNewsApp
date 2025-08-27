@@ -231,6 +231,10 @@ import ApiRequest from '../../services/api/ApiRequest';
 import ApiRoutes from '../../services/config/ApiRoutes';
 import {useSelector} from 'react-redux';
 import ButtonCompt from './ButtonCompt';
+import {useFontSize} from '../../context/FontSizeContext';
+import {useTheme} from '../../context/ThemeContext';
+import {useLanguage} from '../../context/LanguageContext';
+import color from '../../theme/color';
 
 const PollCompt = ({pollData}: any) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -239,6 +243,9 @@ const PollCompt = ({pollData}: any) => {
   const [submitloading, setSubmitPollLoading] = useState(false);
   const pollId = pollData?._id;
   const token = useSelector(state => state.UserData?.token);
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
 
   useEffect(() => {
     if (pollData?.options) {
@@ -273,9 +280,23 @@ const PollCompt = ({pollData}: any) => {
         onPress={() => handleVote(index)}
         disabled={voted}>
         <View style={styles.optionRow}>
-          <Text style={styles.optionText}>{item?.text}</Text>
+          <Text
+            style={{
+              fontSize: sizes.subheading,
+              color: colors.text,
+              fontFamily: fontFamily.medium,
+            }}>
+            {item?.text}
+          </Text>
           {voted && (
-            <Text style={styles.percentageText}>{percentage.toFixed(0)}%</Text>
+            <Text
+              style={{
+                fontSize: sizes.body,
+                color: colors.text,
+                fontFamily: fontFamily.medium,
+              }}>
+              {percentage.toFixed(0)}%
+            </Text>
           )}
         </View>
 
@@ -321,8 +342,16 @@ const PollCompt = ({pollData}: any) => {
   };
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.question}>{pollData?.question}</Text>
+    <View style={[styles.card, {backgroundColor: colors.card}]}>
+      <Text
+        style={{
+          fontSize: sizes.subheading,
+          fontFamily: fontFamily.semiBold,
+          marginBottom: 14,
+          color: colors.text,
+        }}>
+        {pollData?.question}
+      </Text>
 
       <FlatList
         data={options}
@@ -341,10 +370,23 @@ const PollCompt = ({pollData}: any) => {
         title={voted ? 'Voted' : 'Vote'}
         onPress={voteOnPoll}
         isLoading={submitloading}
+        style={{
+          borderRadius: 80,
+          backgroundColor: colors.primary,
+          borderWidth: 0.5,
+          borderColor: colors.text,
+        }}
+        textStyle={{
+          color: color.white,
+        }}
       />
 
       {voted && (
-        <Text style={styles.totalVotes}>
+        <Text
+          style={[
+            styles.totalVotes,
+            {fontSize: sizes.body, color: colors.text},
+          ]}>
           {options.reduce((a, b) => a + b.votes, 0)} votes
         </Text>
       )}
@@ -354,7 +396,6 @@ const PollCompt = ({pollData}: any) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
     padding: 16,
     borderRadius: 12,
     margin: 12,
@@ -374,15 +415,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 6,
   },
-  optionText: {
-    fontSize: 15,
-    color: '#333',
-  },
-  percentageText: {
-    fontSize: 14,
-    color: '#555',
-    fontWeight: 'bold',
-  },
+  optionText: {},
+  percentageText: {},
   progressBackground: {
     height: 8,
     borderRadius: 6,
@@ -407,8 +441,7 @@ const styles = StyleSheet.create({
   },
   totalVotes: {
     marginTop: 10,
-    fontSize: 13,
-    color: '#444',
+
     textAlign: 'right',
   },
 });

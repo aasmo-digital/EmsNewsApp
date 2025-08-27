@@ -1,11 +1,5 @@
 import React, {useEffect, useState, useCallback, useMemo} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import ApiRequest from '../../../../services/api/ApiRequest';
 import ApiRoutes from '../../../../services/config/ApiRoutes';
 import {StateLoading} from '../../../../components/skelotonindex';
@@ -105,7 +99,7 @@ const SelectStateTab: React.FC<Props> = ({selectedCountry, onSelect}) => {
         renderItem={renderStateItem}
         keyExtractor={keyExtractor}
         numColumns={2}
-        contentContainerStyle={{padding: 20,paddingBottom:100}}
+        contentContainerStyle={{padding: 20, paddingBottom: 100}}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
@@ -115,6 +109,7 @@ const SelectStateTab: React.FC<Props> = ({selectedCountry, onSelect}) => {
           offset: 90 * index,
           index,
         })}
+        ListFooterComponent={() => <View style={{height: 150}} />}
       />
     ),
     [states, renderStateItem, keyExtractor],
