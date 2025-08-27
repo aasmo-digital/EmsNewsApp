@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'; // Make sure you have 
 import {Image, LikeCompt} from '../componentsIndex';
 import color from '../../theme/color';
 
-const NewsCard = ({item, location, onPressLocation}: any) => {
+const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
   const navigation = useNavigation();
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
@@ -26,7 +26,11 @@ const NewsCard = ({item, location, onPressLocation}: any) => {
         styles.card,
         {shadowColor: colors.text, backgroundColor: colors.background},
       ]}
-      onPress={() => navigation.navigate('NewsDetail', {news: item})}>
+      onPress={
+        onPressCard
+          ? onPressCard
+          : () => navigation.navigate('NewsDetail', {news: item})
+      }>
       <View style={{flex: 1, marginRight: 8}}>
         <Text
           style={[
@@ -158,7 +162,6 @@ const styles = StyleSheet.create({
     marginRight: 24,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    // backgroundColor: 'red',
   },
   interactionText: {
     marginLeft: 6,

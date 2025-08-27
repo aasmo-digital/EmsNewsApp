@@ -26,7 +26,7 @@ import {useRoute} from '@react-navigation/native';
 import HomeController from '../../bottomtabs/HomeScreen/HomeController';
 const {width} = Dimensions.get('window');
 
-const NewsDetailScreen = ({navigation}) => {
+const NewsDetailScreen = ({navigation}: any) => {
   const {sizes, fontFamily} = useFontSize();
   const {colors, mode} = useTheme();
   const {t} = useLanguage();
@@ -34,7 +34,7 @@ const NewsDetailScreen = ({navigation}) => {
   const route = useRoute();
   const newsData = route?.params?.news;
 
-  console.log('--->>>--', newsData);
+  // console.log('--->>>--', newsData);
 
   const {allHeadings} = HomeController();
 
@@ -253,7 +253,7 @@ Read more: https://yourapp.com/news/${news.id}
           {newsData?.summary}
         </Text>
         {/* <LiveUpdatesSection /> */}
-        <RelatedNewsSection categoryId={newsData?.category} />
+        <RelatedNewsSection categoryId={newsData?.category}   />
       </View>
     </PageContainer>
   );

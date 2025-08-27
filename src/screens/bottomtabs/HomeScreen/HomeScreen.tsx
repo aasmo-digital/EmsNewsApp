@@ -65,7 +65,7 @@ const HomeScreen = ({navigation}: any) => {
             fontFamily: fontFamily.medium,
             letterSpacing: 0.5,
           }}>
-          {allHeadings.map(item => item?.headlineText + '   ')}
+          {allHeadings?.map(item => item?.headlineText + '   ')}
         </Text>
       </Marquee>
     );

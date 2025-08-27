@@ -6,6 +6,7 @@ import persistStore from 'redux-persist/es/persistStore';
 import {PersistGate} from 'redux-persist/integration/react';
 import Route from './src/navigation';
 import {Store} from './src/services/redux/store';
+import Toast from 'react-native-toast-message';
 // import {InternetCheck} from './src/components/componentsIndex';
 LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -20,6 +21,7 @@ const App: React.FC = () => {
       <PersistGate loading={null} persistor={persistor}>
         <GestureHandlerRootView>
           <Route />
+          <Toast />
           {/* <InternetCheck /> */}
         </GestureHandlerRootView>
       </PersistGate>

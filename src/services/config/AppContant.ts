@@ -1,4 +1,4 @@
 export default {
-  // BaseUrl: 'https://fakestoreapi.in/api',
-  BaseUrl: 'https://newsapp.aasmo.in/',  
+  BaseUrl: 'https://117pw42t-8004.inc1.devtunnels.ms/',
+  // BaseUrl: 'https://newsapp.aasmo.in/',
 };

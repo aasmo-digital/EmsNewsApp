@@ -7,9 +7,21 @@ import {categories, newsData} from './const';
 import ApiRequest from '../../../services/api/ApiRequest';
 import ApiRoutes from '../../../services/config/ApiRoutes';
 import {useFocusEffect} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../services/redux/store';
+import {fetchNews} from '../../../services/redux/slices/NewsSlice';
 
 const HomeController = () => {
+  // const dispatch = useDispatch<AppDispatch>();
+  // const {news, loading, error} = useSelector(
+  //   (state: RootState) => state.NewsData,
+  // );
+  // useEffect(() => {
+  //   dispatch(fetchNews());
+  // }, [dispatch]);
+
+  // console.log('=======', news, loading, error);
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [Categoryloading, setCategoryLoading] = useState(false);
   const [allCategory, setAllCategory] = useState([]);

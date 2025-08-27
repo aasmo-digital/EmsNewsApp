@@ -5,6 +5,7 @@ import {useFontSize} from '../../context/FontSizeContext';
 import {useTheme} from '../../context/ThemeContext';
 import ApiRequest from '../../services/api/ApiRequest';
 import ApiRoutes from '../../services/config/ApiRoutes';
+import {useSelector} from 'react-redux';
 // 1. Aapke custom ApiRequest function ko import kiya
 
 // Ek central jagah par API ka base URL define karein (ya environment variable se lein)
@@ -19,8 +20,11 @@ interface LikeComptProps {
 }
 
 const LikeCompt = ({item}: LikeComptProps) => {
+  // console.log('========likeCompt--------', item?._id);
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
+
+  const token = useSelector(state => state?.UserData?.token);
 
   const [isLiked, setIsLiked] = useState(item?.isLiked || false);
   const [likeCount, setLikeCount] = useState(item?.likesCount || 0);
@@ -41,11 +45,12 @@ const LikeCompt = ({item}: LikeComptProps) => {
     );
 
     try {
-      // 2. YAHAN AAPKE ApiRequest FUNCTION KO CALL KIYA GAYA HAI
       await ApiRequest({
         // BaseUrl: `${ApiRoutes.getAllNews}/news/${item.id}/like`, // Poora URL banaya
-        BaseUrl: ApiRoutes.likeNews,
-        method: 'GET',
+        BaseUrl: `${ApiRoutes.addLikeNews}+/ ${item?._id}/like`,
+        method: 'POST',
+        token: token,
+
         // Agar body mein kuch bhejna hai to 'request' property use karein
         // request: { userId: 'some-user-id' }
       });

@@ -51,7 +51,7 @@ const ProfileScreen = () => {
 
   // console.log('fontFamily.bold:======================', fontFamily.bold);
 
-  console.log('colors======================', colors);
+  // console.log('colors======================', colors);
 
   const handleShareApp = async () => {
     try {

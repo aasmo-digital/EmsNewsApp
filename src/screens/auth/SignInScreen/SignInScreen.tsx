@@ -289,6 +289,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../services/redux/store';
 import ApiRoutes from '../../../services/config/ApiRoutes';
 import {loginSuccess} from '../../../services/redux/userReducer/reducer';
+import {
+  showErrorToast,
+  showSuccessToast,
+} from '../../../utility/HelperFuntions';
 
 const SignInScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -338,7 +342,6 @@ const SignInScreen = ({navigation}: any) => {
     if (!isValid()) return;
     Keyboard.dismiss();
     setIsLoading(true);
-    console.log('-----', ApiRoutes.login);
     try {
       const response = await ApiRequest({
         BaseUrl: ApiRoutes.login,
@@ -348,13 +351,11 @@ const SignInScreen = ({navigation}: any) => {
           password: password,
         },
       });
-      if (response) {
+
+      if (response?.token || response?.message) {
         setIsLoading(false);
-        console.log('Login Response:', response);
-        // Alert.alert('Success', 'Logged in successfully!');
-
+        showSuccessToast('Login Success', response.message);
         dispatch(loginSuccess({accessToken: response.token}));
-
         navigation.replace('App');
       } else {
         setIsLoading(false);
@@ -362,7 +363,7 @@ const SignInScreen = ({navigation}: any) => {
     } catch (error: any) {
       setIsLoading(false);
       console.error('Login Error:', error.message);
-      // Alert.alert('Error', error.message || 'Failed to login');
+      showErrorToast('Login Failed', error.message);
     }
   };
 

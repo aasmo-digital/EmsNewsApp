@@ -16,10 +16,12 @@ export type AuthStackParamList = {
 // Main App के टैब में मौजूद स्क्रीन
 export type AppTabParamList = {
   Home: undefined;
-  Explore: undefined;
+  // Explore: undefined;
+  EmsVideos: undefined;
   Saved: undefined;
   Coverage: undefined;
-  Profile: undefined;
+  // Profile: undefined;
+  More: undefined;
 };
 
 // Main App स्टैक, जिसमें टैब और अन्य स्क्रीन शामिल हैं

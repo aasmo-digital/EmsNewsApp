@@ -17,23 +17,22 @@ import {useTheme} from '../../../context/ThemeContext';
 import {useLanguage} from '../../../context/LanguageContext';
 import HomeController from '../../bottomtabs/HomeScreen/HomeController';
 import {NewsCardLoading} from '../../../components/skelotonindex';
-import color from '../../../theme/color';
 
 const {width} = Dimensions.get('window');
 const CARD_WIDTH = width * 0.45;
 
 const RelatedNewsSection = ({categoryId}) => {
-  console.log('-----categotyId', categoryId);
+  // console.log('-----categotyId', categoryId);
   const {t} = useLanguage();
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
 
   const {allNeewsLoading, allNeews} = HomeController();
 
-  console.log(
-    '-------------111-----',
-    allNeews.filter(item => item?.category?.id == categoryId),
-  );
+  // console.log(
+  //   '-------------111-----',
+  //   allNeews.filter(item => item?.category?.id == categoryId),
+  // );
 
   const allRelatedNews = allNeews.filter(
     item => item?.category?.id == categoryId?.id,
@@ -76,8 +75,9 @@ const styles = StyleSheet.create({
   },
 
   listContainer: {
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
     paddingVertical: 10,
+    marginHorizontal: 2,
   },
 });
 

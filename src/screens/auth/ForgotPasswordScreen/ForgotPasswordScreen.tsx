@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {
   ButtonCompt,
+  HeaderCompt,
   InputCompt,
   PageContainer,
 } from '../../../components/componentsIndex';
@@ -77,6 +78,8 @@ const ForgotPasswordScreen: React.FC<{navigation: any}> = ({navigation}) => {
         style={styles.imageBackground}
         resizeMode="stretch">
         <View style={styles.container}>
+          <HeaderCompt showBackButton={true} title={t('forgotPasswordTitle')} />
+
           <Text
             style={[
               styles.title,

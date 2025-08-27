@@ -24,6 +24,7 @@ import {useTheme} from '../../../context/ThemeContext';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ApiRequest from '../../../services/api/ApiRequest';
 import ApiRoutes from '../../../services/config/ApiRoutes';
+import styles from './style.signup';
 
 const SignUpScreen = ({navigation}: any) => {
   const {t} = useLanguage();
@@ -43,15 +44,15 @@ const SignUpScreen = ({navigation}: any) => {
     const newErrors: any = {};
     const phoneRegex = /^[6-9]\d{9}$/;
 
-    if (!phone || phone.trim() === '') {
-      newErrors.phone = t('error_phone_required');
-    } else if (!/^\d+$/.test(phone)) {
-      newErrors.phone = t('error_phone_digits_only');
-    } else if (phone.length !== 10) {
-      newErrors.phone = t('error_phone_exact_length');
-    } else if (!phoneRegex.test(phone)) {
-      newErrors.phone = t('error_phone_invalid');
-    }
+    // if (!phone || phone.trim() === '') {
+    //   newErrors.phone = t('error_phone_required');
+    // } else if (!/^\d+$/.test(phone)) {
+    //   newErrors.phone = t('error_phone_digits_only');
+    // } else if (phone.length !== 10) {
+    //   newErrors.phone = t('error_phone_exact_length');
+    // } else if (!phoneRegex.test(phone)) {
+    //   newErrors.phone = t('error_phone_invalid');
+    // }
 
     if (!username.trim()) {
       newErrors.username = t('error_username_required');
@@ -80,11 +81,11 @@ const SignUpScreen = ({navigation}: any) => {
   };
 
   const request = {
-    phone,
-    username,
-    email,
-    password,
-    image: {
+    // phone,
+    name: username,
+    email: email,
+    password: password,
+    profileImageFile: {
       uri: profileImage?.uri,
       type: 'image/jpeg',
       name: 'profile.jpg',
@@ -102,10 +103,11 @@ const SignUpScreen = ({navigation}: any) => {
         isMultipart: true,
         request,
       });
-      if (response) {
-        console.log('Response:', response);
+      console.log(' SignUp Response==========:', response);
+
+      if (response?.data) {
         setIsLoading(false);
-        navigation.navigate('Login');
+        navigation.navigate('SignIn');
         // navigation.navigate('Verification', {phone: phone});
       } else {
         setIsLoading(false);
@@ -229,7 +231,7 @@ const SignUpScreen = ({navigation}: any) => {
             </TouchableOpacity>
           </View>
 
-          <InputCompt
+          {/* <InputCompt
             label={t('phone_number')}
             value={phone}
             onChangeText={setPhone}
@@ -239,7 +241,7 @@ const SignUpScreen = ({navigation}: any) => {
             leftIcon={<Icon name="phone" size={20} color="#888" />}
             maxLength={10}
             inputStyle={{letterSpacing: 1}}
-          />
+          /> */}
           {/* --- END PROFILE IMAGE SECTION --- */}
           <InputCompt
             label={t('usernamePlaceholder')}
@@ -309,47 +311,5 @@ const SignUpScreen = ({navigation}: any) => {
     </PageContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
-  },
-  title: {
-    marginBottom: 10,
-  },
-  subtitle: {
-    marginBottom: 30,
-  },
-
-  bottomLink: {textAlign: 'center', marginTop: 30},
-  imageContainer: {
-    alignItems: 'center',
-    marginVertical: 24,
-  },
-  avatarContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-  },
-  avatar: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 60,
-  },
-  editIconContainer: {
-    position: 'absolute',
-    bottom: 0,
-    right: 5,
-
-    borderRadius: 15,
-    padding: 6,
-    borderWidth: 2,
-  },
-});
 
 export default SignUpScreen;
