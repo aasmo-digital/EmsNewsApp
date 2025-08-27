@@ -23,7 +23,9 @@ const Coverage = () => {
   const tabBarHeight = useBottomTabBarHeight();
   const playerHeight = windowHeight - tabBarHeight;
 
-  const {allShortsLoading, allShorts, getAllShorts} = useCoverage();
+  const {allShortsLoading, allShorts, getAllShorts, reels} = useCoverage();
+
+  console.log('--------------reels---------', reels);
 
   // 🔹 Run only when screen focused
   useFocusEffect(
@@ -66,7 +68,8 @@ const Coverage = () => {
           <ActivityIndicator size="large" />
         ) : (
           <FlatList
-            data={allShorts}
+            // data={allShorts}
+            data={reels}
             renderItem={renderItem}
             keyExtractor={item => item._id}
             pagingEnabled

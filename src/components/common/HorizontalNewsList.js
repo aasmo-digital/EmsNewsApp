@@ -2,12 +2,17 @@ import React, {useCallback} from 'react';
 import {FlatList, Pressable, Text, View, Image, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {getTimeAgo} from '../../utility/functions/toast';
-import HomeController from '../../screens/bottomtabs/HomeScreen/HomeController';
 import color from '../../theme/color';
 import MediaRenderer from './MediaRenderer';
+import {useFontSize} from '../../context/FontSizeContext';
+import {useTheme} from '../../context/ThemeContext';
+import {useLanguage} from '../../context/LanguageContext';
 
 const HorizontalNewsList = ({filteredNews, navigation, styles}) => {
-  const {colors, fontFamily, sizes} = HomeController();
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
+
   // ✅ Memoized keyExtractor
   const keyExtractor = useCallback(item => item?.id?.toString(), []);
 

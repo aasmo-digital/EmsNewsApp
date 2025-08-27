@@ -1,17 +1,26 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useRoute} from '@react-navigation/native';
-import HomeController from '../../bottomtabs/HomeScreen/HomeController';
 import {HeaderCompt, PageContainer} from '../../../components/componentsIndex';
 import {NewsCardLoading} from '../../../components/skelotonindex';
 import {NewsCard} from '../../../components/cardIndex';
+import {useFontSize} from '../../../context/FontSizeContext';
+import {useTheme} from '../../../context/ThemeContext';
+import {useLanguage} from '../../../context/LanguageContext';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../services/redux/store';
 
 const NewsByState = ({navigation}: any) => {
   const route = useRoute();
   const state = route?.params?.state;
 
-  const {allNeewsLoading, allNeews, colors, fontFamily, sizes} =
-    HomeController();
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
+
+  const allNeewsLoading = false;
+
+  const allNeews = useSelector((state: RootState) => state.news.news);
 
   const stateNews = allNeews.filter(item => item?.state?.id === state?.id);
 

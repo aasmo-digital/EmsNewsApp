@@ -15,8 +15,9 @@ import {ViewAllCompt} from '../../../components/componentsIndex';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
 import {useLanguage} from '../../../context/LanguageContext';
-import HomeController from '../../bottomtabs/HomeScreen/HomeController';
 import {NewsCardLoading} from '../../../components/skelotonindex';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../services/redux/store';
 
 const {width} = Dimensions.get('window');
 const CARD_WIDTH = width * 0.45;
@@ -26,17 +27,20 @@ const RelatedNewsSection = ({categoryId}) => {
   const {t} = useLanguage();
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
-
-  const {allNeewsLoading, allNeews} = HomeController();
+  const allNeewsLoading = false;
 
   // console.log(
   //   '-------------111-----',
   //   allNeews.filter(item => item?.category?.id == categoryId),
   // );
 
+  const allNeews = useSelector((state: RootState) => state.news.news);
+  // console.log('------allNeews------', allNeews?.length);
+
   const allRelatedNews = allNeews.filter(
     item => item?.category?.id == categoryId?.id,
   );
+
   return (
     <View style={styles.container}>
       <ViewAllCompt

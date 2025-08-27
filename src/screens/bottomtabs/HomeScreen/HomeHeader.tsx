@@ -1,15 +1,13 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, Linking, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import imageIndex from '../../../assets/imageIndex';
-import HomeController from './HomeController';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import Logo from '../../../assets/image/epaper.svg';
-import color from '../../../theme/color';
+import {useTheme} from '../../../context/ThemeContext';
 
 const HomeHeader = () => {
-  const {colors, fontFamily, sizes, t} = HomeController();
+  const {colors, mode} = useTheme();
   const navigation = useNavigation();
   return (
     <View
@@ -32,8 +30,9 @@ const HomeHeader = () => {
         </Pressable>
         <Pressable
           style={{marginRight: 10}}
-          onPress={() => navigation.navigate('EPaper')}>
-          {/* <Text
+          onPress={() => Linking.openURL('http://www.jabalpurexpress.com/')}>
+          {/*   onPress={() => navigation.navigate('EPaper')}>
+           <Text
             style={{
               paddingHorizontal: 10,
               borderWidth: 1,

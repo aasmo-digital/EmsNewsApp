@@ -1,10 +1,14 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useRoute} from '@react-navigation/native';
-import HomeController from '../../bottomtabs/HomeScreen/HomeController';
 import {HeaderCompt, PageContainer} from '../../../components/componentsIndex';
 import {NewsCardLoading} from '../../../components/skelotonindex';
 import {NewsCard} from '../../../components/cardIndex';
+import {useFontSize} from '../../../context/FontSizeContext';
+import {useTheme} from '../../../context/ThemeContext';
+import {useLanguage} from '../../../context/LanguageContext';
+import {RootState} from '../../../services/redux/store';
+import {useSelector} from 'react-redux';
 
 const NewsByDist = () => {
   const route = useRoute();
@@ -12,10 +16,15 @@ const NewsByDist = () => {
 
   console.log('=-------cityId', city);
 
-  const {allNeewsLoading, allNeews, colors, fontFamily, sizes} =
-    HomeController();
+  const allNeewsLoading = false;
+
+  const allNeews = useSelector((state: RootState) => state.news.news);
 
   const stateNews = allNeews.filter(item => item?.city?.id === city?.id);
+
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
 
   return (
     <PageContainer style={{paddingTop: 25}}>

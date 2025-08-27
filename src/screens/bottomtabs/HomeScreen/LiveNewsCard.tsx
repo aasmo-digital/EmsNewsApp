@@ -7,15 +7,24 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import HomeController from './HomeController';
-import color from '../../../theme/color';
 import imageIndex from '../../../assets/imageIndex';
 import {useNavigation} from '@react-navigation/native';
 import {NewsCardLoading} from '../../../components/skelotonindex';
+import {useFontSize} from '../../../context/FontSizeContext';
+import {useTheme} from '../../../context/ThemeContext';
+import {useLanguage} from '../../../context/LanguageContext';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../services/redux/store';
 
 const LiveNewsCard = () => {
-  const {t, fontFamily, sizes, colors, allNeews, allNeewsLoading} =
-    HomeController();
+  const allNeewsLoading = false;
+
+  const allNeews = useSelector((state: RootState) => state.news.news);
+
+  const {sizes, fontFamily} = useFontSize();
+  const {colors, mode} = useTheme();
+  const {t} = useLanguage();
+
   const navigation = useNavigation();
   return allNeewsLoading ? (
     <NewsCardLoading />
@@ -101,5 +110,3 @@ const LiveNewsCard = () => {
 };
 
 export default LiveNewsCard;
-
-const styles = StyleSheet.create({});

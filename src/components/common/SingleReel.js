@@ -14,13 +14,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
+import imageIndex from '../../assets/imageIndex';
 
 const {width} = Dimensions.get('window');
 
 // MODIFIED: Now it accepts playerHeight as a prop
-const SingleReel = ({item, isVisible, playerHeight,onPressComment}) => {
+const SingleReel = ({item, isVisible, playerHeight, onPressComment}) => {
+  // console.log('--Reel Item----', item);
   const videoRef = useRef(null);
-  const navigation = useNavigation();
   const isScreenFocused = useIsFocused();
   const onBuffer = buffer => console.log('buffering...', buffer);
   const onError = error => console.log('error', error);
@@ -69,6 +70,7 @@ const SingleReel = ({item, isVisible, playerHeight,onPressComment}) => {
     // MODIFIED: The style now uses the passed playerHeight
     <View style={[styles.container, {height: playerHeight}]}>
       <StatusBar translucent backgroundColor={'transparent'} />
+
       <Video
         ref={videoRef}
         onBuffer={onBuffer}
@@ -81,6 +83,18 @@ const SingleReel = ({item, isVisible, playerHeight,onPressComment}) => {
         style={styles.video}
       />
       <View style={styles.overlay}>
+        <Image
+          source={imageIndex?.logo}
+          style={{
+            height: 80,
+            width: 70,
+            position: 'absolute',
+            top: 40,
+            left: 10,
+            resizeMode: 'stretch',
+            borderRadius: 10,
+          }}
+        />
         {/* <View style={styles.bottomSection}>
           <View style={styles.bottomLeftSection}>
             <View style={styles.channelName}>
@@ -96,6 +110,12 @@ const SingleReel = ({item, isVisible, playerHeight,onPressComment}) => {
             </View>
           </View>
         </View> */}
+
+        <View style={styles.bottomSection}>
+          <View style={styles.bottomLeftSection}>
+            <Text style={styles.channelNameText}>{item?.description}</Text>
+          </View>
+        </View>
 
         <View style={styles.bottomRightSection}>
           <TouchableOpacity style={styles.actionButton} onPress={handleLike}>

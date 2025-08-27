@@ -32,6 +32,7 @@ const PageContainer = ({
   style = {},
   contentContainerStyle = {},
   statusBarProps = {},
+  
 }: PageContainerProps) => {
   const Container = scroll ? ScrollView : View;
 

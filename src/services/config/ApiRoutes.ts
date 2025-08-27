@@ -18,8 +18,7 @@ export default {
   getAllCountries: AppContant.BaseUrl + 'api/v1/user/countries', //-----------Complete
   getStatesByCountryId: AppContant.BaseUrl + 'api/v1/user/countries/', //-----------Complete
   getCitiesByStateId: AppContant.BaseUrl + 'api/v1/user/states/', //-----------Complete
-  getAllPolls: AppContant.BaseUrl + 'api/v1/user/polls',
-  voteOnPoll:
-    AppContant.BaseUrl + 'api/v1/user/polls/68a2bf10cffcc0036254304c/vote',
+  getAllPolls: AppContant.BaseUrl + 'api/v1/user/polls', //-----------Complete
+  voteOnPoll: AppContant.BaseUrl + 'api/v1/user/polls/',
   // getPollById: AppContant.BaseUrl + 'api/polls/:id',
 };

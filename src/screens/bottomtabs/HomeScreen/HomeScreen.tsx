@@ -9,6 +9,7 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -19,18 +20,14 @@ import {
 } from '../../../components/componentsIndex';
 import {Marquee} from '@animatereactnative/marquee';
 import color from '../../../theme/color';
-import imageIndex from '../../../assets/imageIndex';
-import LinearGradient from 'react-native-linear-gradient';
 import SessionView from './SessionView';
 import {
   CategoryLoading,
   NewsItemLoading,
 } from '../../../components/skelotonindex';
 import HomeController from './HomeController';
-import {getTimeAgo} from '../../../utility/functions/toast';
 import LiveNewsCard from './LiveNewsCard';
 import styles from './home.style';
-import {pollData} from './const';
 import HomeHeader from './HomeHeader';
 
 const HomeScreen = ({navigation}: any) => {
@@ -39,6 +36,7 @@ const HomeScreen = ({navigation}: any) => {
     sizes,
     fontFamily,
     colors,
+    mode,
     t,
     filteredNews,
     allCategory,
@@ -46,9 +44,12 @@ const HomeScreen = ({navigation}: any) => {
     Categoryloading,
     allNeewsLoading,
     allHeadings,
+    allHeadingsLoading,
     pollData,
     polldataloading,
   } = HomeController();
+
+  console.log('-----------mode----------', mode);
 
   // const isVideoUrl = filteredNews.filter(
   //   item => item._id == '68aeaf4534ec0cc3f2efa232',
@@ -74,72 +75,19 @@ const HomeScreen = ({navigation}: any) => {
     );
   };
 
-  // const header = () => {
-  //   return (
-  //     <View
-  //       style={{
-  //         flexDirection: 'row',
-  //         paddingHorizontal: 10,
-  //         justifyContent: 'space-between',
-  //         alignItems: 'center',
-  //       }}>
-  //       <Image
-  //         source={imageIndex.logo}
-  //         style={{height: 80, width: 50}}
-  //         resizeMode="contain"
-  //       />
-  //       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-  //         <Pressable
-  //           style={{marginRight: 10}}
-  //           onPress={() => navigation.navigate('EPaper')}>
-  //           <Text
-  //             style={{
-  //               paddingHorizontal: 10,
-  //               borderWidth: 1,
-  //               color: colors.btnbg,
-  //               borderColor: colors.btnbg,
-  //               fontFamily: fontFamily.medium,
-  //               fontSize: sizes.body,
-  //             }}>
-  //             {t('epaper_text')}
-  //           </Text>
-  //         </Pressable>
-  //         <Pressable
-  //           onPress={() => navigation.navigate('EmsTv')}
-  //           style={{marginRight: 10}}>
-  //           <Image source={imageIndex.tv} style={{height: 30, width: 30}} />
-  //         </Pressable>
-  //         <Pressable
-  //           onPress={() => navigation.navigate('Notification')}
-  //           style={{marginRight: 10}}>
-  //           <Image
-  //             source={imageIndex.notification}
-  //             style={{height: 25, width: 25, tintColor: colors.text}}
-  //           />
-  //         </Pressable>
-  //         <Pressable
-  //           onPress={() => navigation.navigate('EditProfile')}
-  //           style={{marginRight: 10}}>
-  //           <Image
-  //             source={{
-  //               uri: 'https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
-  //             }}
-  //             style={{height: 35, width: 35, borderRadius: 50}}
-  //           />
-  //         </Pressable>
-  //       </View>
-  //     </View>
-  //   );
-  // };
   return (
     <PageContainer style={{paddingTop: 25}}>
-      {/* {header()} */}
+      <StatusBar
+        barStyle={mode == 'light' ? 'dark-content' : 'light-content'}
+        backgroundColor={
+          mode == 'light' ? colors.background : colors.background
+        }
+      />
+      {/* Header  Compt */}
       <HomeHeader />
-
-      {!Categoryloading && headlines()}
-
+      {/* Heading List */}
+      {allHeadingsLoading ? <ActivityIndicator /> : headlines()}
       {/* Category List */}
-
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           {Categoryloading ? (
@@ -189,83 +137,12 @@ const HomeScreen = ({navigation}: any) => {
             </View>
           )}
 
-          {/* {headlines()} */}
-
           {/* News Cards */}
 
           {allNeewsLoading ? (
             <NewsItemLoading />
           ) : (
             <View>
-              {/* <FlatList
-                data={filteredNews}
-                keyExtractor={item => item?.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({item}) => (
-                  <Pressable
-                    onPress={() =>
-                      navigation.navigate('NewsDetail', {news: item})
-                    }
-                    style={[styles.card, {backgroundColor: colors.card}]}>
-                    <Image
-                      source={{uri: item?.media[0].url}}
-                      style={styles.image}
-                    />
-                    <LinearGradient
-                      colors={['transparent', 'rgba(0,0,0,0.8)']}
-                      style={styles.gradient}>
-                      <Text
-                        style={[
-                          styles.meta,
-                          {
-                            fontSize: sizes.body,
-                            color: color.white,
-                            fontFamily: fontFamily.regular,
-                            opacity: 0.8,
-                            letterSpacing: 0.5,
-                          },
-                        ]}>
-                        By {item.createdBy?.name} |{' '}
-                        {getTimeAgo(item?.createdAt)}
-                      </Text>
-                      <Text
-                        numberOfLines={2}
-                        style={[
-                          styles.title,
-                          {
-                            fontSize: sizes.subheading,
-                            color: color.white,
-                            fontFamily: fontFamily.semiBold,
-                            letterSpacing: 0.5,
-                          },
-                        ]}>
-                        {item?.title}
-                      </Text>
-                    </LinearGradient>
-                  </Pressable>
-                )}
-                ListEmptyComponent={() => (
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      flex: 1,
-                      width: '100%',
-                    }}>
-                    <Text
-                      style={{
-                        color: colors.text,
-                        fontFamily: fontFamily.semiBold,
-                        width: Dimensions.get('window').width,
-                        textAlign: 'center',
-                        marginTop: 10,
-                      }}>
-                      No News Found.
-                    </Text>
-                  </View>
-                )}
-              /> */}
-
               <HorizontalNewsList
                 filteredNews={filteredNews}
                 // filteredNews={isVideoUrl}
@@ -274,7 +151,8 @@ const HomeScreen = ({navigation}: any) => {
               />
             </View>
           )}
-          {true && <LiveNewsCard />}
+          {/* {true && <LiveNewsCard />} */}
+
           {polldataloading ? (
             <ActivityIndicator />
           ) : (

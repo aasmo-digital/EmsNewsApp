@@ -23,7 +23,6 @@ import {useLanguage} from '../../../context/LanguageContext';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
 import {useRoute} from '@react-navigation/native';
-import HomeController from '../../bottomtabs/HomeScreen/HomeController';
 const {width} = Dimensions.get('window');
 
 const NewsDetailScreen = ({navigation}: any) => {
@@ -36,60 +35,58 @@ const NewsDetailScreen = ({navigation}: any) => {
 
   // console.log('--->>>--', newsData);
 
-  const {allHeadings} = HomeController();
+  // const Headlines = () => {
+  //   return (
+  //     <View
+  //       style={{
+  //         flexDirection: 'row',
+  //         alignItems: 'center',
+  //         backgroundColor: color.appColor,
+  //         paddingVertical: 5,
+  //         paddingHorizontal: 10,
+  //       }}>
+  //       {/* Left: Static "Headlines" box */}
+  //       <View
+  //         style={{
+  //           backgroundColor: color.warning,
+  //           paddingHorizontal: 12,
+  //           paddingVertical: 6,
+  //           borderRadius: 5,
+  //           zIndex: 2, // ensures it stays above
+  //         }}>
+  //         <Text
+  //           style={{
+  //             color: 'white',
+  //             fontFamily: fontFamily.semiBold,
+  //             letterSpacing: 0.5,
+  //             fontSize: sizes.body,
+  //           }}>
+  //           {t('headlines_text')}
+  //         </Text>
+  //       </View>
 
-  const Headlines = () => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: color.appColor,
-          paddingVertical: 5,
-          paddingHorizontal: 10,
-        }}>
-        {/* Left: Static "Headlines" box */}
-        <View
-          style={{
-            backgroundColor: color.warning,
-            paddingHorizontal: 12,
-            paddingVertical: 6,
-            borderRadius: 5,
-            zIndex: 2, // ensures it stays above
-          }}>
-          <Text
-            style={{
-              color: 'white',
-              fontFamily: fontFamily.semiBold,
-              letterSpacing: 0.5,
-              fontSize: sizes.body,
-            }}>
-            {t('headlines_text')}
-          </Text>
-        </View>
-
-        {/* Right: Scrolling Marquee */}
-        <View
-          style={{
-            flex: 1,
-            marginLeft: 10,
-            backgroundColor: color.appColor, // ensures full solid background
-            overflow: 'hidden',
-          }}>
-          <Marquee speed={1} style={{paddingVertical: 5}}>
-            <Text
-              style={{
-                color: 'white',
-                fontFamily: fontFamily.medium,
-                fontSize: sizes.subheading,
-              }}>
-              {allHeadings.map(item => item?.headlineText + '   ')}
-            </Text>
-          </Marquee>
-        </View>
-      </View>
-    );
-  };
+  //       {/* Right: Scrolling Marquee */}
+  //       <View
+  //         style={{
+  //           flex: 1,
+  //           marginLeft: 10,
+  //           backgroundColor: color.appColor, // ensures full solid background
+  //           overflow: 'hidden',
+  //         }}>
+  //         <Marquee speed={1} style={{paddingVertical: 5}}>
+  //           <Text
+  //             style={{
+  //               color: 'white',
+  //               fontFamily: fontFamily.medium,
+  //               fontSize: sizes.subheading,
+  //             }}>
+  //             {allHeadings.map(item => item?.headlineText + '   ')}
+  //           </Text>
+  //         </Marquee>
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   const handleShareNews = async news => {
     try {
@@ -114,7 +111,7 @@ Read more: https://yourapp.com/news/${news.id}
   return (
     <PageContainer scroll style={{paddingTop: 25}}>
       <HeaderCompt title={t('news_details_text')} />
-      {Headlines()}
+      {/* {Headlines()} */}
       <View>
         <CustomSlider
           images={newsData?.media}
@@ -253,7 +250,7 @@ Read more: https://yourapp.com/news/${news.id}
           {newsData?.summary}
         </Text>
         {/* <LiveUpdatesSection /> */}
-        <RelatedNewsSection categoryId={newsData?.category}   />
+        <RelatedNewsSection categoryId={newsData?.category} />
       </View>
     </PageContainer>
   );

@@ -16,11 +16,15 @@ import {useNavigation} from '@react-navigation/native';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
 import {NewsCard} from '../../../components/cardIndex';
-import HomeController from './HomeController';
+
 import {NewsCardLoading} from '../../../components/skelotonindex';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../services/redux/store';
 
 export default function SessionView() {
-  const {allNeewsLoading, allNeews} = HomeController();
+  const allNeewsLoading = false;
+
+  const allNeews = useSelector((state: RootState) => state.news.news);
 
   const [selectedSection, setSelectedSection] = useState('all');
   const navigation = useNavigation();
@@ -52,7 +56,7 @@ export default function SessionView() {
     ({item}) => (
       <NewsCard
         item={item}
-        location={item?.state?.name }
+        location={item?.state?.name}
         onPressLocation={() =>
           navigation.navigate('NewsByState', {state: item?.state})
         }
@@ -125,9 +129,9 @@ export default function SessionView() {
             getItemLayout={getItemLayout} // optional but boosts perf
             removeClippedSubviews={true}
             initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            windowSize={10}
             contentContainerStyle={{paddingHorizontal: 10}}
+            maxToRenderPerBatch={5} // ek batch me limited items render karo
+            windowSize={7} // viewport ke aage-piche ke items render
             ListEmptyComponent={() => (
               <Text
                 style={{

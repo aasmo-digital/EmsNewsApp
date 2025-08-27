@@ -5,20 +5,29 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {HeaderCompt, PageContainer} from '../../../components/componentsIndex';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
 import {useLanguage} from '../../../context/LanguageContext';
 import {NewsCard} from '../../../components/cardIndex';
-import HomeController from '../HomeScreen/HomeController';
 import {NewsCardLoading} from '../../../components/skelotonindex';
+import {RootState} from '../../../services/redux/store';
+import {useSelector} from 'react-redux';
 
 const Saved = () => {
   const {sizes, fontFamily} = useFontSize();
   const {colors, mode} = useTheme();
   const {t} = useLanguage();
-  const {allNeewsLoading, allNeews} = HomeController();
+
+  const allNeewsLoading = false;
+
+  const allNews = useSelector((state: RootState) => state.news.news);
+  const renderItem = useCallback(({item}: {item: any}) => {
+    return <NewsCard item={item} />;
+  }, []);
+
+  const keyExtractor = useCallback((item: any) => item?._id?.toString(), []);
 
   return (
     <PageContainer style={{paddingTop: 25}}>
@@ -28,11 +37,22 @@ const Saved = () => {
           <NewsCardLoading />
         ) : (
           <FlatList
-            data={allNeews}
-            renderItem={({item}) => <NewsCard item={item} />}
-            keyExtractor={item => item?._id}
+            data={allNews}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.listContainer}
+            // ⚡ Performance props
+            initialNumToRender={6} // pehle kitne render honge
+            maxToRenderPerBatch={10} // ek batch me kitne items render honge
+            windowSize={10} // kitne screens ka data memory me rahega
+            removeClippedSubviews={true} // screen se bahar ke items remove
+            updateCellsBatchingPeriod={50} // render batch delay (ms)
+            getItemLayout={(data, index) => ({
+              length: 100, // approx item height (optimize scrolling)
+              offset: 100 * index,
+              index,
+            })}
           />
         )}
       </View>

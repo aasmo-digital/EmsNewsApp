@@ -15,6 +15,7 @@ import imageIndex from '../../../assets/imageIndex';
 import color from '../../../theme/color';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../services/redux/store';
+import Video from 'react-native-video';
 
 // Define the navigation props for this screen
 
@@ -30,17 +31,25 @@ const SplashScreen = ({navigation}: any) => {
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, [isLogin,navigation]);
+  }, [isLogin, navigation]);
 
   return (
     <PageContainer>
       <StatusBar translucent backgroundColor={color.transparent} />
 
-      <View style={{flex: 1}}>
-        <ImageBackground
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        {/* <ImageBackground
           resizeMode="cover"
           style={{flex: 1, height: '100%', width: '100%'}}
           source={imageIndex?.splash}
+        /> */}
+        <Video
+          source={require('../../../assets/videos/splashscreenvideo.mp4')} // replace with your video link or require(localVideo)
+          style={styles.video}
+          resizeMode="contain"
+          repeat
+          muted={false}
+          // controls={true} // if you want play/pause controls
         />
       </View>
     </PageContainer>
@@ -65,6 +74,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#D32F2F', // A red color matching your design
     letterSpacing: 1,
+  },
+  video: {
+    width: 300,
+    height: 200,
   },
 });
 
