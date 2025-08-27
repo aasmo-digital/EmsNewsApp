@@ -19,7 +19,7 @@ const HorizontalNewsList = ({filteredNews, navigation, styles}) => {
         style={[styles.card, {backgroundColor: colors.card}]}>
         {/* <Image source={{uri: item?.media[0]?.url}} style={styles.image} /> */}
 
-        <MediaRenderer url={item?.media[0]?.url} />
+        <MediaRenderer url={item?.media[0]?.url} style={styles.image} />
 
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.8)']}

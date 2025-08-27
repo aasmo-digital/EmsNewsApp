@@ -22,6 +22,8 @@ const HomeController = () => {
 
   // console.log('=======', news, loading, error);
 
+  const token = useSelector(state => state.UserData?.token);
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [Categoryloading, setCategoryLoading] = useState(false);
   const [allCategory, setAllCategory] = useState([]);
@@ -32,6 +34,8 @@ const HomeController = () => {
   const {colors, mode} = useTheme();
   const {t} = useLanguage();
   const userData = useSelector(state => state);
+  const [pollData, setPollData] = useState([]);
+  const [polldataloading, setPolDataLoading] = useState(true);
 
   // console.log('--------------------------', allNeews);
 
@@ -47,16 +51,12 @@ const HomeController = () => {
         BaseUrl: ApiRoutes.newCategory,
         method: 'GET',
       });
-      if (response) {
-        // console.log(
-        //   '------------getAllCategory--',
-        //   JSON.stringify(response?.data),
-        // );
-
+      if (response?.success) {
         setCategoryLoading(false);
         setAllCategory(response?.data);
       } else {
         setCategoryLoading(false);
+        setAllCategory([]);
       }
     } catch (error: any) {
       setCategoryLoading(false);
@@ -72,16 +72,12 @@ const HomeController = () => {
         BaseUrl: ApiRoutes.getAllNews,
         method: 'GET',
       });
-      if (response) {
-        // console.log(
-        //   '------------getAllNews--',
-        //   JSON.stringify(response?.data[0]),
-        // );
-
+      if (response?.success) {
         setAllNeewsLoading(false);
         setAllNeews(response?.data);
       } else {
         setAllNeewsLoading(false);
+        setAllNeews([]);
       }
     } catch (error: any) {
       setAllNeewsLoading(false);
@@ -91,23 +87,41 @@ const HomeController = () => {
 
   // 🔁 getAllCategory Call
   const getAllHeadlines = async () => {
-    // setAllNeewsLoading(true);
     try {
       const response = await ApiRequest({
         BaseUrl: ApiRoutes.getAllheadlines,
         method: 'GET',
       });
-      if (response) {
-        // console.log('------------getAllHeadlines--', response?.data);
+      if (response?.success) {
         setAllHeadings(response?.data);
-        // setAllNeewsLoading(false);
-        // setAllNeews(newsData);
       } else {
-        // setAllNeewsLoading(false);
+        setAllHeadings([]);
       }
     } catch (error: any) {
-      // setAllNeewsLoading(false);
       console.error(' Error:', error.message);
+    }
+  };
+
+  // 🔁 getAllCategory Call
+  const getAllPolls = async () => {
+    setPolDataLoading(true);
+    try {
+      const response = await ApiRequest({
+        BaseUrl: ApiRoutes.getAllPolls,
+        method: 'GET',
+        token: token,
+      });
+
+      if (response?.success) {
+        setPolDataLoading(false);
+        setPollData(response?.data);
+      } else {
+        setPolDataLoading(false);
+        setPollData([]);
+      }
+    } catch (error: any) {
+      setPolDataLoading(false);
+      console.error('getAllPolls Error:', error.message);
     }
   };
 
@@ -115,6 +129,7 @@ const HomeController = () => {
     getAllCategory();
     getAllNews();
     getAllHeadlines();
+    getAllPolls();
   }, []);
 
   // useFocusEffect(
@@ -142,6 +157,8 @@ const HomeController = () => {
     Categoryloading,
     allNeewsLoading,
     allHeadings,
+    pollData,
+    polldataloading,
   };
 };
 

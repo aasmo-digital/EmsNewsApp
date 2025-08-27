@@ -7,8 +7,7 @@ export default {
   getAllNews: AppContant.BaseUrl + 'api/v1/user/news', //-----------Complete
   getNewsById: AppContant.BaseUrl + 'api/v1/user/new/', //-----------Pending
   getAllEmsVideos: AppContant.BaseUrl + 'api/v1/user/videos', //-----------Complete
-  addLikeNews:
-    AppContant.BaseUrl + 'api/v1/user/news',
+  addLikeNews: AppContant.BaseUrl + 'api/v1/user/news',
   forgotPassword: AppContant.BaseUrl + '/products',
   getAllheadlines: AppContant.BaseUrl + 'api/v1/user/headline', //-----------Complete
   getAllShorts: AppContant.BaseUrl + 'api/v1/user/shorts', //-----------Complete
@@ -16,14 +15,11 @@ export default {
   getpostCommentByShortId:
     AppContant.BaseUrl + 'api/v1/user/shorts/:shortId/comment',
 
-  getAllCountries: AppContant.BaseUrl + 'api/v1/user/countries',
-  getStatesByCountryId:
-    AppContant.BaseUrl +
-    '/api/v1/user/countries/',
-  getCitiesByStateId:
-    AppContant.BaseUrl + '/api/v1/user/states/',
+  getAllCountries: AppContant.BaseUrl + 'api/v1/user/countries', //-----------Complete
+  getStatesByCountryId: AppContant.BaseUrl + 'api/v1/user/countries/', //-----------Complete
+  getCitiesByStateId: AppContant.BaseUrl + 'api/v1/user/states/', //-----------Complete
   getAllPolls: AppContant.BaseUrl + 'api/v1/user/polls',
   voteOnPoll:
     AppContant.BaseUrl + 'api/v1/user/polls/68a2bf10cffcc0036254304c/vote',
-  getPollById: AppContant.BaseUrl + 'api/polls/:id',
+  // getPollById: AppContant.BaseUrl + 'api/polls/:id',
 };

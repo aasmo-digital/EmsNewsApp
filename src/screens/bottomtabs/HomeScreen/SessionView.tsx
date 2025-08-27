@@ -52,7 +52,7 @@ export default function SessionView() {
     ({item}) => (
       <NewsCard
         item={item}
-        location={item?.state?.name}
+        location={item?.state?.name }
         onPressLocation={() =>
           navigation.navigate('NewsByState', {state: item?.state})
         }

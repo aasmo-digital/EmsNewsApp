@@ -15,14 +15,16 @@ const ApiRequest = async <T = any,>({
   isMultipart = false,
   token,
 }: ApiRequestProps): Promise<T> => {
+  // console.log('-----------jwt token-------------', token);
   try {
     const headers: Record<string, string> = {
       'Content-Type': isMultipart ? 'multipart/form-data' : 'application/json',
+      ...(token && {Authorization: `Bearer ${token}`}),
     };
 
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
+    // if (token) {
+    //   headers['Authorization'] = `Bearer ${token}`;
+    // }
 
     const config: AxiosRequestConfig = {
       method,

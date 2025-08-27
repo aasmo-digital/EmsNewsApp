@@ -15,6 +15,7 @@ import EmsTv from '../screens/home/EmsTv/EmsTv';
 import TermsConditon from '../screens/home/TermsCondition/TermsConditon';
 import NewsByState from '../screens/home/newsbystate/NewsByState';
 import NewsByDist from '../screens/home/newsbydist/NewsByDist';
+import Explore from '../screens/bottomtabs/explore/Explore';
 
 const Stack = createStackNavigator<AppStackParamList>();
 
@@ -30,6 +31,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Comments" component={CommentsScreen} />
       <Stack.Screen name="EPaper" component={EPaperScreen} />
       <Stack.Screen name="EmsTv" component={EmsTv} />
+      <Stack.Screen name="Explore" component={Explore} />
 
       <Stack.Screen name="Notification" component={Notification} />
       <Stack.Screen name="EditProfile" component={EditProfile} />

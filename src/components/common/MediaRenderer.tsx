@@ -10,14 +10,14 @@ const MediaRenderer = ({url, style}: any) => {
       {isVideo ? (
         <Video
           source={{uri: url}}
-          style={styles.media}
+          style={[styles.media, style]}
           resizeMode="cover"
           repeat
           muted={true} // audio off
           paused={true} // autoplay
         />
       ) : (
-        <Image source={{uri: url}} style={styles.media} />
+        <Image source={{uri: url}} style={[styles.media, style]} />
       )}
     </View>
   );

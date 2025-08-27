@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -45,6 +46,8 @@ const HomeScreen = ({navigation}: any) => {
     Categoryloading,
     allNeewsLoading,
     allHeadings,
+    pollData,
+    polldataloading,
   } = HomeController();
 
   // const isVideoUrl = filteredNews.filter(
@@ -272,8 +275,12 @@ const HomeScreen = ({navigation}: any) => {
             </View>
           )}
           {true && <LiveNewsCard />}
+          {polldataloading ? (
+            <ActivityIndicator />
+          ) : (
+            <PollCompt pollData={pollData[0]} />
+          )}
 
-          <PollCompt pollData={pollData} />
           <SessionView />
         </View>
       </ScrollView>

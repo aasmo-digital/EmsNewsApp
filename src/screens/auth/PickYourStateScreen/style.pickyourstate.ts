@@ -4,10 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
+
   header: {
     marginTop: 40,
     marginBottom: 20,
@@ -18,24 +15,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     lineHeight: 22,
-  },
-  grid: {
-    paddingBottom: 20,
-  },
-  stateButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 18,
-    margin: 8,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#EAEAEA',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 3,
   },
 
   footer: {

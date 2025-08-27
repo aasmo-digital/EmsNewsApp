@@ -40,6 +40,7 @@ export type AppStackParamList = {
   EmsTv: undefined;
   NewsByState: undefined;
   NewsByDist: undefined;
+  Explore:undefined
 };
 
 // रूट नेविगेटर के लिए

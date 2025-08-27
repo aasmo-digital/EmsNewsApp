@@ -50,7 +50,10 @@ const HomeHeader = () => {
         <Pressable
           onPress={() => navigation.navigate('EmsTv')}
           style={{marginRight: 10}}>
-          <Image source={imageIndex.tv} style={{height: 25, width: 25}} />
+          <Image
+            source={imageIndex.tv}
+            style={{height: 25, width: 25, tintColor: colors.text}}
+          />
         </Pressable>
         <Pressable
           onPress={() => navigation.navigate('Notification')}
