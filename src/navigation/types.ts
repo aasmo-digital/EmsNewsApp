@@ -18,8 +18,9 @@ export type AppTabParamList = {
   Home: undefined;
   // Explore: undefined;
   EmsVideos: undefined;
-  Saved: undefined;
-  Coverage: undefined;
+  // Saved: undefined;
+  Directory:undefined
+  Reel: undefined;
   // Profile: undefined;
   More: undefined;
 };

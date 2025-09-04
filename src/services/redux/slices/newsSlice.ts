@@ -16,7 +16,7 @@ const newsSlice = createSlice({
     setNews: (state, action: PayloadAction<any[]>) => {
       state.news = action.payload;
     },
-    clearNews: (state) => {
+    clearNews: state => {
       state.news = [];
     },
   },

@@ -74,6 +74,8 @@
   "coverage_text": "कवरेज",
   "saved_text": "सहेजे गए",
   "more_text": "अधिक",
+  "reel_text": "रील",
+  "directory_text": "डायरेक्टरी",
 
   "epaper_text": "ई-पेपर",
   "news_details_text": "समाचार विवरण",
@@ -119,5 +121,8 @@
   "password": "पासवर्ड",
   "enter_password": "अपना पासवर्ड दर्ज करें",
 
-  "error_password_min_length": "पासवर्ड कम से कम 6 अक्षर का होना चाहिए।"
+  "error_password_min_length": "पासवर्ड कम से कम 6 अक्षर का होना चाहिए।",
+
+    "ems_videos_text": "ईएमएस वीडियो"
+
 }

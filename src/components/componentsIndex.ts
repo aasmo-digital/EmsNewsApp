@@ -19,6 +19,7 @@ import Image from './common/Image';
 import PollCompt from './common/PollCompt';
 import HorizontalNewsList from './common/HorizontalNewsList';
 import MediaRenderer from './common/MediaRenderer';
+import NewsByCategory from './common/NewsByCategory';
 export {
   InternetCheck,
   TextCustom,
@@ -40,5 +41,6 @@ export {
   Image,
   PollCompt,
   HorizontalNewsList,
-  MediaRenderer
+  MediaRenderer,
+  NewsByCategory
 };

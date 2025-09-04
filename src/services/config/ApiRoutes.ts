@@ -11,7 +11,7 @@ export default {
   // forgotPassword: AppContant.BaseUrl + '/products',
   getAllheadlines: AppContant.BaseUrl + 'api/v1/user/headline', //-----------Complete
   getAllShorts: AppContant.BaseUrl + 'api/v1/user/shorts', //-----------Complete
-  likeDislikeShorts: AppContant.BaseUrl + 'api/v1/user/shorts/{{shortId}}/like',
+  likeDislikeShorts: AppContant.BaseUrl + 'api/v1/user/shorts/',
   getpostCommentByShortId:
     AppContant.BaseUrl + 'api/v1/user/shorts/:shortId/comment',
 
@@ -20,5 +20,7 @@ export default {
   getCitiesByStateId: AppContant.BaseUrl + 'api/v1/user/states/', //-----------Complete
   getAllPolls: AppContant.BaseUrl + 'api/v1/user/polls', //-----------Complete
   voteOnPoll: AppContant.BaseUrl + 'api/v1/user/polls/',
+  addNewsComment: AppContant.BaseUrl + 'api/v1/user/news/',
+  getCommentByNewsId: AppContant.BaseUrl + '',
   // getPollById: AppContant.BaseUrl + 'api/polls/:id',
 };

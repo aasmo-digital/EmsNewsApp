@@ -20,79 +20,15 @@ import {useTheme} from '../../../context/ThemeContext';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../services/redux/store';
 import {setVideos} from '../../../services/redux/slices/videosSlice';
-
-// 🔹 Extract YouTube Video ID
-const getYoutubeId = (url: string) => {
-  const regExp =
-    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-};
-
-// 🔹 Single Video Card (Memoized for Performance)
-const VideoCard = memo(({item}: {item: any}) => {
-  const videoId = getYoutubeId(item?.videoUrl);
-  const {t} = useLanguage();
-  const {sizes, fontFamily} = useFontSize();
-  const {colors} = useTheme();
-  return (
-    <View
-      style={[
-        styles.card,
-        {backgroundColor: colors.card, shadowColor: colors.text},
-      ]}>
-      {videoId ? (
-        <YoutubePlayer height={220} play={false} videoId={videoId} />
-      ) : (
-        <TouchableOpacity
-          onPress={() => Linking.openURL(item?.videoUrl)}
-          style={styles.fallbackPlayer}>
-          <Text
-            style={{
-              color: colors.primary,
-              fontSize: sizes.body,
-              fontFamily: fontFamily.medium,
-            }}>
-            Watch on YouTube
-          </Text>
-        </TouchableOpacity>
-      )}
-
-      <View style={styles.infoBox}>
-        <Text
-          style={[
-            styles.title,
-            {
-              color: colors.text,
-              fontSize: sizes.subheading,
-              fontFamily: fontFamily.semiBold,
-            },
-          ]}>
-          {item?.title}
-        </Text>
-        <Text
-          style={[
-            styles.meta,
-            {
-              fontSize: sizes.body,
-              color: colors.text,
-              fontFamily: fontFamily.medium,
-            },
-          ]}>
-          {item?.category_name} • {item?.subCategory_name}
-        </Text>
-      </View>
-    </View>
-  );
-});
+import {VideoCard} from '../../../components/cardIndex';
 
 const EmsVideos = () => {
   const [loading, setLoading] = useState(true);
   const videos = useSelector((state: RootState) => state.videos.videos);
+  const {t} = useLanguage();
 
   const [videosData, setVideosData] = useState(videos);
-  const {t} = useLanguage();
-  const {sizes, fontFamily} = useFontSize();
+
   const {colors} = useTheme();
 
   const dispatch = useDispatch();
@@ -126,7 +62,7 @@ const EmsVideos = () => {
 
   // ✅ Memoize renderItem
   const renderItem = useCallback(
-    ({item}: {item: any}) => <VideoCard item={item} />,
+    ({item}: {item: any}) => <VideoCard item={item} style={{}} />,
     [],
   );
 
@@ -136,7 +72,7 @@ const EmsVideos = () => {
   return (
     <PageContainer>
       <SafeAreaView style={styles.container}>
-        <HeaderCompt title="Ems Videos" />
+        <HeaderCompt title={t('ems_videos_text')} />
         {loading ? (
           <ActivityIndicator
             size="large"
@@ -144,18 +80,6 @@ const EmsVideos = () => {
             style={{flex: 1}}
           />
         ) : (
-          // <FlatList
-          //   data={videos}
-          //   keyExtractor={(item: any) => item?._id}
-          //   renderItem={({item}) => <VideoCard item={item} />}
-          //   showsVerticalScrollIndicator={false}
-          //   contentContainerStyle={{paddingBottom: 20}}
-          //   initialNumToRender={4} // performance tweak
-          //   maxToRenderPerBatch={5}
-          //   windowSize={7}
-          //   removeClippedSubviews={Platform.OS === 'android'}
-          // />
-
           <FlatList
             data={videosData}
             keyExtractor={keyExtractor}
@@ -193,30 +117,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
-    borderRadius: 12,
-    marginBottom: 15,
-    shadowOpacity: 0.1,
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 6,
-    elevation: 3,
-    overflow: 'hidden',
-  },
-  fallbackPlayer: {
-    height: 220,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ddd',
-  },
-  linkText: {},
-  infoBox: {
-    padding: 12,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  meta: {
-    marginTop: 4,
-  },
+  // card: {
+  //   borderRadius: 12,
+  //   marginBottom: 15,
+  //   shadowOpacity: 0.1,
+  //   shadowOffset: {width: 0, height: 2},
+  //   shadowRadius: 6,
+  //   elevation: 3,
+  //   overflow: 'hidden',
+  // },
+  // fallbackPlayer: {
+  //   height: 220,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: '#ddd',
+  // },
+  // linkText: {},
+  // infoBox: {
+  //   padding: 12,
+  // },
+  // title: {
+  //   fontSize: 16,
+  //   fontWeight: '600',
+  // },
+  // meta: {
+  //   marginTop: 4,
+  // },
 });

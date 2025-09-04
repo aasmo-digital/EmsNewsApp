@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../../services/redux/store';
 import {fetchNews} from '../../../services/redux/slices/NewsSlice';
 import {setNews} from '../../../services/redux/slices/newsSlice';
+import {setNewsCategory} from '../../../services/redux/slices/newCategorySlice';
 
 const HomeController = () => {
   // const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +25,7 @@ const HomeController = () => {
   // console.log('=======', news, loading, error);
 
   const token = useSelector(state => state.UserData?.token);
-  const userData = useSelector(state => state);
+  // const userData = useSelector(state => state);
 
   const {sizes, fontFamily} = useFontSize();
   const {colors, mode} = useTheme();
@@ -58,6 +59,7 @@ const HomeController = () => {
       });
       if (response?.success) {
         setCategoryLoading(false);
+        dispatch(setNewsCategory(response?.data));
         setAllCategory(response?.data);
       } else {
         setCategoryLoading(false);

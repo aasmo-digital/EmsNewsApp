@@ -15,34 +15,57 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import imageIndex from '../../assets/imageIndex';
+import color from '../../theme/color';
+import ApiRequest from '../../services/api/ApiRequest';
+import ApiRoutes from '../../services/config/ApiRoutes';
+import {useSelector} from 'react-redux';
 
 const {width} = Dimensions.get('window');
 
 // MODIFIED: Now it accepts playerHeight as a prop
-const SingleReel = ({item, isVisible, playerHeight, onPressComment}) => {
+const SingleReel = ({item, isVisible, playerHeight, onPressComment,style}) => {
+  const token = useSelector(state => state.UserData?.token);
+
   // console.log('--Reel Item----', item);
   const videoRef = useRef(null);
   const isScreenFocused = useIsFocused();
   const onBuffer = buffer => console.log('buffering...', buffer);
   const onError = error => console.log('error', error);
 
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(item?.likesCount);
+  const [isLiked, setIsLiked] = useState(item?.isLikedByCurrentUser || false);
+  const [likeCount, setLikeCount] = useState(item?.likesCount || 0);
+
+  const [loading, setLoading] = useState(false);
 
   // Function to handle the like action
-  const handleLike = () => {
-    // Toggle the like state
-    const newLikeState = !isLiked;
-    setIsLiked(newLikeState);
+  const handleLike = async () => {
+    if (loading) return; // ek hi request ek time pe chale
 
-    // Update the like count
-    if (newLikeState) {
-      setLikeCount(likeCount + 1);
-    } else {
-      setLikeCount(likeCount - 1);
+    setLoading(true);
+
+    try {
+      const response = await ApiRequest({
+        BaseUrl: `${ApiRoutes.likeDislikeShorts}${item?._id}/like`,
+        method: 'POST',
+        token: token,
+      });
+
+      if (response?.success) {
+        // Toggle like state
+        const newLikeState = !isLiked;
+        setIsLiked(newLikeState);
+
+        // Update like count
+        setLikeCount(prev => (newLikeState ? prev + 1 : Math.max(prev - 1, 0)));
+      } else {
+        console.warn('Like API failed:', response?.message);
+      }
+    } catch (error) {
+      console.error('handleLike Error:', error?.message || error);
+    } finally {
+      setLoading(false);
     }
   };
-
   // Function to handle the share action
   const handleShare = async () => {
     try {
@@ -80,10 +103,10 @@ const SingleReel = ({item, isVisible, playerHeight, onPressComment}) => {
         repeat={true}
         // paused={!isVisible}
         paused={!isVisible || !isScreenFocused}
-        style={styles.video}
+        style={[styles.video,style]}
       />
       <View style={styles.overlay}>
-        <Image
+        {/* <Image
           source={imageIndex?.logo}
           style={{
             height: 80,
@@ -94,7 +117,7 @@ const SingleReel = ({item, isVisible, playerHeight, onPressComment}) => {
             resizeMode: 'stretch',
             borderRadius: 10,
           }}
-        />
+        /> */}
         {/* <View style={styles.bottomSection}>
           <View style={styles.bottomLeftSection}>
             <View style={styles.channelName}>
@@ -119,7 +142,11 @@ const SingleReel = ({item, isVisible, playerHeight, onPressComment}) => {
 
         <View style={styles.bottomRightSection}>
           <TouchableOpacity style={styles.actionButton} onPress={handleLike}>
-            <AntDesign name="heart" size={30} color="white" />
+            <AntDesign
+              name="heart"
+              size={30}
+              color={isLiked ? color.warning : color.white}
+            />
             <Text style={styles.actionButtonText}>
               {' '}
               {formatCount(likeCount)}

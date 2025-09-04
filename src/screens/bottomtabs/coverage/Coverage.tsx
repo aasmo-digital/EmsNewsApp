@@ -5,12 +5,14 @@ import {
   Dimensions,
   StatusBar,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useFocusEffect} from '@react-navigation/native';
 import {CommentsSheet, SingleReel} from '../../../components/componentsIndex';
 import useCoverage from './useCoverage';
+import imageIndex from '../../../assets/imageIndex';
 
 const {width, height: windowHeight} = Dimensions.get('screen');
 
@@ -64,12 +66,13 @@ const Coverage = () => {
     <BottomSheetModalProvider>
       <View style={{height: playerHeight, backgroundColor: 'black'}}>
         <StatusBar barStyle="light-content" />
+
         {allShortsLoading ? (
           <ActivityIndicator size="large" style={{flex: 1}} />
         ) : (
           <FlatList
             // data={allShorts}
-            data={reels}
+            data={allShorts}
             renderItem={renderItem}
             keyExtractor={item => item._id}
             pagingEnabled
@@ -89,6 +92,19 @@ const Coverage = () => {
             removeClippedSubviews // unmounts offscreen reels
           />
         )}
+
+        <Image
+          source={imageIndex?.logo}
+          style={{
+            height: 80,
+            width: 70,
+            position: 'absolute',
+            top: 40,
+            left: 10,
+            resizeMode: 'stretch',
+            borderRadius: 10,
+          }}
+        />
 
         {/* Comments modal */}
         {/* <CommentsSheet ref={commentsSheetRef} /> */}

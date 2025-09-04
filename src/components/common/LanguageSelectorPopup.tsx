@@ -35,7 +35,7 @@ const LanguageSelectorPopup = ({
 
   const {sizes, fontFamily, setFontName} = useFontSize();
   const {colors} = useTheme();
-  const {t}=useLanguage()
+  const {t} = useLanguage();
 
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -57,7 +57,7 @@ const LanguageSelectorPopup = ({
                 color: colors.text,
                 fontSize: sizes.heading,
               }}>
-                {t('select_language')}
+              {t('select_language')}
             </Text>
             <TouchableOpacity onPress={onClose}>
               <Ionicons name="close" size={24} color={colors.text} />
@@ -88,17 +88,33 @@ const LanguageSelectorPopup = ({
               </TouchableOpacity>
             )}
           />
-
-          <ButtonCompt
-            title={t('close')}
-            onPress={onClose}
+          <View
             style={{
-              paddingVertical: 8,
-              marginTop: 20,
-              width: '50%',
-              alignSelf: 'center',
-            }}
-          />
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <ButtonCompt
+              title={t('skip')}
+              onPress={onClose}
+              style={{
+                paddingVertical: 8,
+                marginTop: 20,
+                width: '40%',
+                alignSelf: 'center',
+              }}
+            />
+            <ButtonCompt
+              title={t('close')}
+              onPress={onClose}
+              style={{
+                paddingVertical: 8,
+                marginTop: 20,
+                width: '40%',
+                alignSelf: 'center',
+              }}
+            />
+          </View>
         </View>
       </View>
     </Modal>

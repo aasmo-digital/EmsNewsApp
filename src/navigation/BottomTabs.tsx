@@ -9,6 +9,7 @@ import Saved from '../screens/bottomtabs/saved/Saved';
 import {AppTabParamList} from './types';
 import {CustomTabBar} from '../components/componentsIndex';
 import EmsVideos from '../screens/bottomtabs/emsvideos/EmsVideos';
+import Directory from '../screens/home/directory/Directory';
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
@@ -23,8 +24,10 @@ const BottomTabs = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       {/* <Tab.Screen name="Explore" component={Explore} /> */}
       <Tab.Screen name="EmsVideos" component={EmsVideos} />
-      <Tab.Screen name="Coverage" component={Coverage} />
-      <Tab.Screen name="Saved" component={Saved} />
+      <Tab.Screen name="Reel" component={Coverage} />
+      {/* <Tab.Screen name="Saved" component={Saved} /> */}
+      <Tab.Screen name="Directory" component={Directory} />
+
       <Tab.Screen name="More" component={ProfileScreen} />
     </Tab.Navigator>
   );

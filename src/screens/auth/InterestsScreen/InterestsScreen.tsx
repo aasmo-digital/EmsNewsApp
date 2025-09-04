@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Dimensions,
   StatusBar,
   ImageBackground,
 } from 'react-native';
-import Svg, {Path} from 'react-native-svg';
 import {PageContainer} from '../../../components/componentsIndex';
 import imageIndex from '../../../assets/imageIndex';
 import color from '../../../theme/color';
@@ -20,40 +17,36 @@ import {useLanguage} from '../../../context/LanguageContext';
 import ApiRequest from '../../../services/api/ApiRequest';
 import ApiRoutes from '../../../services/config/ApiRoutes';
 import {StateLoading} from '../../../components/skelotonindex';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../services/redux/store';
+import {toggleInterest} from '../../../services/redux/slices/interestsSlice';
 
-// --- Data for the interest categories ---
-const interestsData = [
-  {id: '1', name: 'Sports', icon: '⚽'},
-  {id: '2', name: 'Politics', icon: '🏛️'},
-  {id: '3', name: 'Life', icon: '😊'},
-  {id: '4', name: 'Gaming', icon: '🎮'},
-  {id: '5', name: 'Animals', icon: '🐻'},
-  {id: '6', name: 'Nature', icon: '🌴'},
-  {id: '7', name: 'Food', icon: '🍔'},
-  {id: '8', name: 'Art', icon: '🎨'},
-  {id: '9', name: 'History', icon: '📜'},
-  {id: '10', name: 'Fashion', icon: '👗'},
-  {id: '11', name: 'Covid-19', icon: '😷'},
-  {id: '12', name: 'Middle East', icon: '⚔️'},
-];
+// --- Local dummy data (fallback) ---
+const interestsData = [];
 
 // --- Main Screen Component ---
 const InterestsScreen = ({navigation}: any) => {
-  const [selectedInterests, setSelectedInterests] = useState([]);
+  const allNewsCategory = useSelector(
+    (state: RootState) => state.newsCategory.newsCategory,
+  );
+  const dispatch = useDispatch();
+  const selectedInterests = useSelector(
+    (state: RootState) => state.interests.selected,
+  );
+
+  const [allInterest, setAllInterest] = useState(allNewsCategory);
+  const [allInterestsDataLoading, setAllInterestsDataLoading] = useState(true);
+
   const {sizes, fontFamily} = useFontSize();
-  const {colors, mode} = useTheme();
+  const {colors} = useTheme();
   const {t} = useLanguage();
 
-  // --- Toggles the selection of an interest ---
-  const handleSelectInterest = id => {
-    if (selectedInterests.includes(id)) {
-      setSelectedInterests(selectedInterests.filter(item => item !== id));
-    } else {
-      setSelectedInterests([...selectedInterests, id]);
-    }
+  // --- Toggle handler ---
+  const handleSelectInterest = (id: string) => {
+    dispatch(toggleInterest(id));
   };
 
-  // --- Renders each interest button in the grid ---
+  // --- Render each interest card ---
   const renderInterestItem = ({item}) => {
     const isSelected = selectedInterests.includes(item.id);
     return (
@@ -62,12 +55,9 @@ const InterestsScreen = ({navigation}: any) => {
           styles.interestButton,
           isSelected && {
             borderColor: colors.primary,
-            // backgroundColor: '#F0F8FF',
             borderWidth: 2,
           },
-          {
-            backgroundColor: colors.card,
-          },
+          {backgroundColor: colors.card},
         ]}
         onPress={() => handleSelectInterest(item.id)}>
         <Text style={styles.interestIcon}>{item.icon}</Text>
@@ -83,10 +73,8 @@ const InterestsScreen = ({navigation}: any) => {
       </TouchableOpacity>
     );
   };
-  const [allInterestsDataLoading, setAllInterestsDataLoading] = useState(true);
 
-  const [allInterestsData, setAllInterestsData] = useState([]);
-
+  // --- Fetch categories from API (optional, fallback to local interestsData) ---
   const getAllState = async () => {
     setAllInterestsDataLoading(true);
     try {
@@ -96,13 +84,13 @@ const InterestsScreen = ({navigation}: any) => {
       });
       if (response) {
         setAllInterestsDataLoading(false);
-        setAllInterestsData(interestsData);
+        setAllInterest(interestsData); // fallback to dummy data for now
       } else {
         setAllInterestsDataLoading(false);
       }
     } catch (error: any) {
       setAllInterestsDataLoading(false);
-      console.error(' Error:', error.message);
+      console.error('Error:', error.message);
     }
   };
 
@@ -148,18 +136,37 @@ const InterestsScreen = ({navigation}: any) => {
               </Text>
             </View>
 
+            {/* Show loader or interest list */}
             {allInterestsDataLoading ? (
               <StateLoading />
             ) : (
-              <FlatList
-                data={allInterestsData}
-                renderItem={renderInterestItem}
-                keyExtractor={item => item.id}
-                numColumns={2}
-                contentContainerStyle={styles.grid}
-                showsVerticalScrollIndicator={false}
-              />
+              <>
+                {/* Agar koi interest selected nahi hai toh message dikhao */}
+                {selectedInterests.length === 0 && (
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: 'red',
+                      marginBottom: 10,
+                      fontSize: sizes.body,
+                      fontFamily: fontFamily.regular,
+                    }}>
+                    No interests selected yet!
+                  </Text>
+                )}
+
+                <FlatList
+                  data={allInterest}
+                  renderItem={renderInterestItem}
+                  keyExtractor={item => item.id}
+                  numColumns={2}
+                  contentContainerStyle={styles.grid}
+                  showsVerticalScrollIndicator={false}
+                />
+              </>
             )}
+
+            {/* Footer buttons */}
             {!allInterestsDataLoading && (
               <View style={styles.footer}>
                 <TouchableOpacity
@@ -169,7 +176,11 @@ const InterestsScreen = ({navigation}: any) => {
                       backgroundColor: colors.primary,
                       shadowColor: colors.text,
                     },
-                  ]}>
+                  ]}
+                  onPress={() => {
+                    console.log('Saving interests:', selectedInterests);
+                    // TODO: call API to save interests here
+                  }}>
                   <Text
                     style={{
                       color: color.white,
@@ -179,6 +190,7 @@ const InterestsScreen = ({navigation}: any) => {
                     Save
                   </Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity
                   onPress={() => navigation.navigate('PickYourState')}
                   style={[
@@ -211,18 +223,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  curveContainer: {
-    position: 'absolute',
-    zIndex: -1,
-  },
-  topLeft: {
-    top: -20,
-    left: -20,
-  },
-  bottomRight: {
-    bottom: -20,
-    right: -20,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
@@ -235,7 +235,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 30,
   },
-
   grid: {
     paddingBottom: 20,
   },
@@ -254,11 +253,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-
   interestIcon: {
     marginRight: 10,
   },
-
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

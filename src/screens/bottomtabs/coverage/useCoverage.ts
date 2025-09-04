@@ -8,9 +8,10 @@ import {setReels} from '../../../services/redux/slices/reelSlice';
 const useCoverage = () => {
   const token = useSelector((state: RootState) => state?.UserData?.token);
   const [allShortsLoading, setAllShortsLoading] = useState(false);
-  const [allShorts, setAllShorts] = useState<any[]>([]);
-  const dispatch = useDispatch();
   const reels = useSelector((state: RootState) => state.reels.reels);
+
+  const [allShorts, setAllShorts] = useState<any[]>(reels || []);
+  const dispatch = useDispatch();
 
   // 🔹 useCallback prevents unnecessary re-creation of the function
   const getAllShorts = useCallback(async () => {
@@ -41,7 +42,7 @@ const useCoverage = () => {
     allShortsLoading,
     allShorts,
     getAllShorts,
-    reels
+    reels,
   };
 };
 

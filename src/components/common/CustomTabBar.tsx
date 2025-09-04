@@ -34,8 +34,8 @@ const CustomTabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
           Home: 'home_text',
           // Explore: 'explore_text',
           EmsVideos: 'video_text',
-          Coverage: 'coverage_text',
-          Saved: 'saved_text',
+          Reel: 'reel_text',
+          Directory: 'directory_text',
           More: 'more_text',
         };
 
@@ -53,17 +53,19 @@ const CustomTabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
           case 'EmsVideos':
             iconName = isFocused ? 'videocam' : 'videocam-outline';
             break;
-          case 'Coverage':
-            iconName = isFocused ? 'map' : 'map-outline';
+          case 'Reel':
+            iconName = isFocused ? 'play-circle' : 'play-circle-outline';
             break;
-          case 'Saved':
-            iconName = isFocused ? 'bookmark' : 'bookmark-outline';
+          // case 'Saved':
+          //   iconName = isFocused ? 'bookmark' : 'bookmark-outline';
+          //   break;
+
+          case 'Directory':
+            iconName = isFocused ? 'calendar-clear' : 'calendar-clear-outline';
             break;
           case 'More':
             // iconName = isFocused ? 'person' : 'person-outline';
-            iconName = isFocused
-              ? 'ellipsis-vertical-circle-sharp'
-              : 'ellipsis-vertical-circle-outline';
+            iconName = isFocused ? 'menu' : 'menu';
             break;
           default:
             iconName = 'ellipse';
@@ -84,7 +86,7 @@ const CustomTabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
               style={[
                 styles.label,
                 {
-                  color: isFocused ? colors.text : 'gray',
+                  color: isFocused ? colors.primary : 'gray',
                   fontSize: sizes.body,
                   fontFamily: fontFamily.regular,
                 },

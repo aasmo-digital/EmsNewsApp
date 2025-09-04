@@ -16,13 +16,18 @@ import {RootState} from '../../../services/redux/store';
 import {useSelector} from 'react-redux';
 
 const Saved = () => {
-  const {sizes, fontFamily} = useFontSize();
-  const {colors, mode} = useTheme();
   const {t} = useLanguage();
 
   const allNeewsLoading = false;
 
   const allNews = useSelector((state: RootState) => state.news.news);
+
+  // console.log(
+  //   '-----------------',
+  //   allNews.map(item => item?.country?.name),
+  // );
+
+  console.log;
   const renderItem = useCallback(({item}: {item: any}) => {
     return <NewsCard item={item} />;
   }, []);

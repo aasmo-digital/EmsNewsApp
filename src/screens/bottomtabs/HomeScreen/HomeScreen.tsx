@@ -15,6 +15,7 @@ import React, {useState} from 'react';
 import {
   HorizontalNewsList,
   Image,
+  NewsByCategory,
   PageContainer,
   PollCompt,
 } from '../../../components/componentsIndex';
@@ -49,7 +50,7 @@ const HomeScreen = ({navigation}: any) => {
     polldataloading,
   } = HomeController();
 
-  console.log('-----------mode----------', mode);
+  // console.log('-----------mode----------', mode);
 
   // const isVideoUrl = filteredNews.filter(
   //   item => item._id == '68aeaf4534ec0cc3f2efa232',
@@ -156,10 +157,16 @@ const HomeScreen = ({navigation}: any) => {
           {polldataloading ? (
             <ActivityIndicator />
           ) : (
-            <PollCompt pollData={pollData[0]} />
+            <FlatList
+              data={pollData} // pass the whole array
+              keyExtractor={(item, index) => item?._id || index.toString()} // unique key
+              renderItem={({item}) => (
+                <PollCompt pollData={item} /> // pass each item to PollCompt
+              )}
+              showsVerticalScrollIndicator={false}
+            />
           )}
-
-          <SessionView />
+           <SessionView />
         </View>
       </ScrollView>
     </PageContainer>
