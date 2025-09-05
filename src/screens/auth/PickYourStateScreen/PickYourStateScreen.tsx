@@ -25,7 +25,7 @@ import {
   setState,
 } from '../../../services/redux/slices/SelectedLocationSlice';
 
-const PickYourStateScreen = () => {
+const PickYourStateScreen = ({navigation}: any) => {
   const locationdata = useSelector(state => state?.SelectLocationSlice);
   console.log('========================================', locationdata);
   const {sizes, fontFamily} = useFontSize();
@@ -163,6 +163,7 @@ const PickYourStateScreen = () => {
             {/* Agar sab select hai toh Save button dikhayenge */}
             {selectedCountryId && selectedStateId && selectedCityId ? (
               <TouchableOpacity
+                onPress={() => navigation.goBack()}
                 activeOpacity={0.7}
                 style={[
                   styles.actionButton,

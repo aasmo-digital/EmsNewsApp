@@ -166,7 +166,7 @@ const HomeScreen = ({navigation}: any) => {
               showsVerticalScrollIndicator={false}
             />
           )}
-           <SessionView />
+          <SessionView />
         </View>
       </ScrollView>
     </PageContainer>

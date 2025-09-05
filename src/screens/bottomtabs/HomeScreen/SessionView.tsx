@@ -210,6 +210,11 @@ export default function SessionView() {
   const videos = useSelector((state: RootState) => state.videos.videos);
   const reels = useSelector((state: RootState) => state.reels.reels);
 
+  
+  const interested=useSelector((state)=>state?.interests?.selected)
+
+  console.log("------------------------------dkjfbsdbdj-------",interested)
+
   // ✅ Video Item
   const renderVideoItem = useCallback(
     ({item}: {item: any}) => (

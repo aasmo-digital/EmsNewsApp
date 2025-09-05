@@ -19,7 +19,10 @@ import ApiRoutes from '../../../services/config/ApiRoutes';
 import {StateLoading} from '../../../components/skelotonindex';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../services/redux/store';
-import {toggleInterest} from '../../../services/redux/slices/interestsSlice';
+import {
+  NewsCategory,
+  toggleInterest,
+} from '../../../services/redux/slices/interestsSlice';
 
 // --- Local dummy data (fallback) ---
 const interestsData = [];
@@ -42,13 +45,53 @@ const InterestsScreen = ({navigation}: any) => {
   const {t} = useLanguage();
 
   // --- Toggle handler ---
-  const handleSelectInterest = (id: string) => {
-    dispatch(toggleInterest(id));
+  // const handleSelectInterest = (id: string) => {
+  //   dispatch(toggleInterest(id));
+  // };
+
+  // --- Toggle handler ---
+  const handleSelectInterest = (interest: NewsCategory) => {
+    // Change parameter type to NewsCategory
+    dispatch(toggleInterest(interest)); // Pass the whole interest object
   };
 
   // --- Render each interest card ---
-  const renderInterestItem = ({item}) => {
-    const isSelected = selectedInterests.includes(item.id);
+  // const renderInterestItem = ({item}) => {
+  //   const isSelected = selectedInterests.includes(item.id);
+  //   return (
+  //     <TouchableOpacity
+  //       style={[
+  //         styles.interestButton,
+  //         isSelected && {
+  //           borderColor: colors.primary,
+  //           borderWidth: 2,
+  //         },
+  //         {backgroundColor: colors.card},
+  //       ]}
+  //       onPress={() => handleSelectInterest(item.id)}>
+  //       <Text style={styles.interestIcon}>{item.icon}</Text>
+  //       <Text
+  //         style={{
+  //           fontSize: sizes.subheading,
+  //           fontFamily: fontFamily.semiBold,
+  //           color: colors.text,
+  //           letterSpacing: 0.5,
+  //         }}>
+  //         {item.name}
+  //       </Text>
+  //     </TouchableOpacity>
+  //   );
+  // };
+
+  const renderInterestItem = ({item}: {item: NewsCategory}) => {
+    // Change item type
+    // Now you check if the ID is present, assuming `selectedInterests`
+    // still holds full objects and you want to match by ID.
+    // If you plan to iterate over selectedInterests and compare full objects,
+    // you might need to adjust this.
+    const isSelected = selectedInterests.some(
+      selectedItem => selectedItem?._id === item?._id,
+    );
     return (
       <TouchableOpacity
         style={[
@@ -59,7 +102,8 @@ const InterestsScreen = ({navigation}: any) => {
           },
           {backgroundColor: colors.card},
         ]}
-        onPress={() => handleSelectInterest(item.id)}>
+        onPress={() => handleSelectInterest(item)}>
+        {/* Pass the whole item object */}
         <Text style={styles.interestIcon}>{item.icon}</Text>
         <Text
           style={{
@@ -82,9 +126,13 @@ const InterestsScreen = ({navigation}: any) => {
         BaseUrl: ApiRoutes.newCategory,
         method: 'GET',
       });
-      if (response) {
+      console.log('---------------------', response);
+
+      if (response?.success) {
         setAllInterestsDataLoading(false);
-        setAllInterest(interestsData); // fallback to dummy data for now
+
+        console.log('---------------------', response?.data);
+        setAllInterest(response?.data); // fallback to dummy data for now
       } else {
         setAllInterestsDataLoading(false);
       }
@@ -158,7 +206,7 @@ const InterestsScreen = ({navigation}: any) => {
                 <FlatList
                   data={allInterest}
                   renderItem={renderInterestItem}
-                  keyExtractor={item => item.id}
+                  keyExtractor={item => item?.id}
                   numColumns={2}
                   contentContainerStyle={styles.grid}
                   showsVerticalScrollIndicator={false}
@@ -170,6 +218,7 @@ const InterestsScreen = ({navigation}: any) => {
             {!allInterestsDataLoading && (
               <View style={styles.footer}>
                 <TouchableOpacity
+                  onP
                   style={[
                     styles.actionButton,
                     {
@@ -179,7 +228,7 @@ const InterestsScreen = ({navigation}: any) => {
                   ]}
                   onPress={() => {
                     console.log('Saving interests:', selectedInterests);
-                    // TODO: call API to save interests here
+                    navigation.goBack();
                   }}>
                   <Text
                     style={{
