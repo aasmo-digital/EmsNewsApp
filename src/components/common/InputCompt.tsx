@@ -56,10 +56,9 @@ const InputCompt: React.FC<InputComptProps> = ({
     onBlur?.(e);
   };
 
-  const borderColor = error ? '#ff4d4f' : isFocused ? '#007bff' : '#ccc';
-
   const {sizes, fontFamily} = useFontSize();
   const {colors, mode} = useTheme();
+  const borderColor = error ? '#ff4d4f' : isFocused ? colors.primary : '#ccc';
 
   return (
     <View style={[styles.container, containerStyle]}>

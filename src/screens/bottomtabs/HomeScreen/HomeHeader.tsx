@@ -46,14 +46,14 @@ const HomeHeader = () => {
 
           <Logo width={25} height={25} fill={colors.text} />
         </Pressable>
-        <Pressable
+        {/* <Pressable
           onPress={() => navigation.navigate('EmsTv')}
           style={{marginRight: 10}}>
           <Image
             source={imageIndex.tv}
             style={{height: 25, width: 25, tintColor: colors.text}}
           />
-        </Pressable>
+        </Pressable> */}
         <Pressable
           onPress={() => navigation.navigate('Notification')}
           style={{marginRight: 10}}>
