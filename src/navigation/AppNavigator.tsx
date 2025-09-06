@@ -17,6 +17,7 @@ import NewsByState from '../screens/home/newsbystate/NewsByState';
 import NewsByDist from '../screens/home/newsbydist/NewsByDist';
 import Explore from '../screens/bottomtabs/explore/Explore';
 import RelatedNews from '../screens/home/relatedNews/RelatedNews';
+import NewsByCategoryScreen from '../screens/home/newsByCategory/NewsByCategoryScreen';
 
 const Stack = createStackNavigator<AppStackParamList>();
 
@@ -44,6 +45,11 @@ const AppNavigator = () => {
 
       <Stack.Screen name="InterestsScreen" component={InterestsScreen} />
       <Stack.Screen name="PickYourState" component={PickYourStateScreen} />
+
+      <Stack.Screen
+        name="NewsByCategoryScreen"
+        component={NewsByCategoryScreen}
+      />
     </Stack.Navigator>
   );
 };

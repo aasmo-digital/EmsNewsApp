@@ -42,7 +42,8 @@ export type AppStackParamList = {
   NewsByState: undefined;
   NewsByDist: undefined;
   Explore:undefined;
-  RelatedNews:undefined
+  RelatedNews:undefined;
+  NewsByCategoryScreen:undefined
 };
 
 // रूट नेविगेटर के लिए

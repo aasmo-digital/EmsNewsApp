@@ -1,5 +1,5 @@
-import React, {useCallback, useMemo} from 'react';
-import {View, Text, SectionList, StyleSheet} from 'react-native';
+import React, {memo, useCallback, useMemo} from 'react';
+import {View, Text, SectionList, StyleSheet, Pressable} from 'react-native';
 import {NewsCard} from '../cardIndex';
 import {useNavigation} from '@react-navigation/native';
 import {useFontSize} from '../../context/FontSizeContext';
@@ -71,27 +71,55 @@ const NewsByCategory = ({allNews, allNewsCategory}: any) => {
     // />
     <SectionList
       sections={sections}
-      renderSectionHeader={({section}) => (
-        <Text
-          style={[
-            styles.category,
-            {
-              fontSize: sizes.heading,
-              color: colors.text,
-              fontFamily: fontFamily.semiBold,
+      renderSectionHeader={({section}) => {
+        console.log('--------5435365151---------', section);
+        return (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
               borderBottomWidth: 1,
               borderBottomColor: colors.primary,
-            },
-          ]}>
-          {section.title}
-        </Text>
-      )}
+              flex: 1,
+              justifyContent: 'space-between',
+            }}>
+            <Text
+              style={[
+                styles.category,
+                {
+                  fontSize: sizes.heading,
+                  color: colors.text,
+                  fontFamily: fontFamily.semiBold,
+                },
+              ]}>
+              {section.title}
+            </Text>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('NewsByCategoryScreen', {
+                  data: section?.category,
+                })
+              }>
+              <Text
+                style={{
+                  fontSize: sizes.body,
+                  color: colors.primary,
+                  fontFamily: fontFamily.medium,
+                  letterSpacing: 0.5,
+                }}>
+                {t('view_all_text')}
+              </Text>
+            </Pressable>
+          </View>
+        );
+      }}
       renderItem={renderItem}
       keyExtractor={(item, index) => item._id + index}
       initialNumToRender={5} // Only render 5 initially
       maxToRenderPerBatch={10} // Render in batches
       windowSize={5} // Reduce memory footprint
       removeClippedSubviews={true} // Unmount offscreen items
+      contentContainerStyle={{marginHorizontal: 10}}
     />
   );
 };
@@ -115,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewsByCategory;
+export default memo(NewsByCategory);

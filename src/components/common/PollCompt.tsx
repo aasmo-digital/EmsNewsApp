@@ -375,6 +375,9 @@ const PollCompt = ({pollData}: any) => {
           backgroundColor: colors.primary,
           borderWidth: 0.5,
           borderColor: colors.text,
+          paddingVertical: 0,
+          width: '25%',
+          alignSelf: 'flex-end',
         }}
         textStyle={{
           color: color.white,
