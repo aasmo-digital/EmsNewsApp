@@ -4,14 +4,16 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 import React, {memo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useFontSize} from '../../context/FontSizeContext';
 import {useTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Make sure you have this library
-import {Image, LikeCompt} from '../componentsIndex';
+import {LikeCompt} from '../componentsIndex';
 import color from '../../theme/color';
+import imageIndex from '../../assets/imageIndex';
 
 const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
   const navigation = useNavigation();
@@ -89,22 +91,32 @@ const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
         </View>
 
         {location && (
-          <Pressable onPress={onPressLocation}>
+          <Pressable
+            style={{
+              borderWidth: 1,
+              borderColor: color.lightgray,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 50,
+              flexDirection: 'row',
+              alignSelf: 'flex-start',
+            }}
+            onPress={onPressLocation}>
             <Text
               style={{
-                alignSelf: 'flex-start',
                 color: colors.text,
                 fontFamily: fontFamily.medium,
                 fontSize: sizes.body,
-                borderWidth: 1,
-                borderColor: color.lightgray,
-                paddingHorizontal: 10,
-                paddingVertical: 5,
-                borderRadius: 50,
+
                 textTransform: 'capitalize',
               }}>
               {location?.length > 25 ? location.slice(0, 25) + '...' : location}
             </Text>
+
+            <Image
+              style={{height: 15, width: 15, tintColor: colors.text,paddingLeft:30,resizeMode:'center'}}
+              source={imageIndex.rightarrow}
+            />
           </Pressable>
         )}
       </View>

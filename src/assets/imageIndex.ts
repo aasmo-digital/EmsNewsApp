@@ -9,4 +9,5 @@ export default {
   google: require('./image/google.png'),
   facebook: require('./image/facebook.png'),
   live: require('./image/live.png'),
+  rightarrow: require('./image/rightarrow.png'),
 };
