@@ -24,7 +24,7 @@ import {useLanguage} from '../../../context/LanguageContext';
 import {getTimeAgo} from '../../../utility/functions/toast';
 import ApiRequest from '../../../services/api/ApiRequest';
 import ApiRoutes from '../../../services/config/ApiRoutes';
-import styles from './comment.style';
+import styles from '../CommentsScreen/comment.style';
 import {showErrorToast} from '../../../utility/HelperFuntions';
 
 // --- TYPES ---
@@ -50,7 +50,7 @@ const CommentItem = ({
   item: Comment;
   isReply?: boolean;
 }) => {
-  const [showReplies, setShowReplies] = useState(false);
+  // const [showReplies, setShowReplies] = useState(false);
 
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
@@ -99,7 +99,7 @@ const CommentItem = ({
           </Text>
         </View>
 
-        {item.replies && item.replies.length > 0 && (
+        {/* {item.replies && item.replies.length > 0 && (
           <TouchableOpacity onPress={() => setShowReplies(!showReplies)}>
             <Text
               style={{
@@ -113,24 +113,26 @@ const CommentItem = ({
                 : `View replies (${item.replies.length})`}
             </Text>
           </TouchableOpacity>
-        )}
+        )} */}
 
-        {showReplies && item.replies && (
+        {/* {showReplies && item.replies && (
           <View style={styles.repliesList}>
             {item.replies.map(reply => (
               <CommentItem key={reply.id} item={reply} isReply={true} />
             ))}
           </View>
-        )}
+        )} */}
       </View>
     </View>
   );
 };
 
 // --- MAIN SCREEN ---
-const CommentsScreen = () => {
+const ShortsComments = () => {
   const route = useRoute<any>();
-  const newsID = route.params?.item?._id;
+  const shortsID = route.params?.item?._id;
+
+  console.log('------------------------dbwj-----------', shortsID);
 
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
@@ -151,12 +153,14 @@ const CommentsScreen = () => {
     setCommentsLoading(true);
     try {
       const response = await ApiRequest({
-        BaseUrl: ApiRoutes.getCommentByNewsId + newsID,
+        BaseUrl: ApiRoutes.getpostCommentByShortId + shortsID + '/comment',
         method: 'GET',
         token: token,
       });
+
+      // console.log('----------gfhjdsfbkefbeuf------------', response);
       if (response?.success) {
-        setComments(response.comments);
+        setComments(response.data);
       } else {
         setComments([]);
       }
@@ -189,7 +193,7 @@ const CommentsScreen = () => {
 
     try {
       const response = await ApiRequest({
-        BaseUrl: ApiRoutes.addNewsComment + newsID + '/comment',
+        BaseUrl: ApiRoutes.getpostCommentByShortId + shortsID + '/comment',
         method: 'POST',
         request: {text: newComment.trim()},
         token: token,
@@ -281,4 +285,4 @@ const CommentsScreen = () => {
   );
 };
 
-export default CommentsScreen;
+export default ShortsComments;

@@ -19,7 +19,7 @@ export type AppTabParamList = {
   // Explore: undefined;
   EmsVideos: undefined;
   // Saved: undefined;
-  Directory:undefined
+  Directory: undefined;
   Reel: undefined;
   // Profile: undefined;
   More: undefined;
@@ -41,9 +41,11 @@ export type AppStackParamList = {
   EmsTv: undefined;
   NewsByState: undefined;
   NewsByDist: undefined;
-  Explore:undefined;
-  RelatedNews:undefined;
-  NewsByCategoryScreen:undefined
+  Explore: undefined;
+  RelatedNews: undefined;
+  NewsByCategoryScreen: undefined;
+  Saved: undefined;
+  ShortsComments: undefined;
 };
 
 // रूट नेविगेटर के लिए

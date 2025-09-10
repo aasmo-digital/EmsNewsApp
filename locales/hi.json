@@ -126,5 +126,7 @@
   "ems_videos_text": "ईएमएस वीडियो",
   "comments": "कॉमेंट्स",
   "no_comments_found": "कोई कॉमेंट्स नहीं मिला",
-  "type_your_comments": "अपना कॉमेंट लिखें..."
+  "type_your_comments": "अपना कॉमेंट लिखें...",
+  "no_data_found": "कोई डेटा नहीं मिला।"
+
 }

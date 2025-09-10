@@ -23,7 +23,7 @@ import {useSelector} from 'react-redux';
 const {width} = Dimensions.get('window');
 
 // MODIFIED: Now it accepts playerHeight as a prop
-const SingleReel = ({item, isVisible, playerHeight, onPressComment,style}) => {
+const SingleReel = ({item, isVisible, playerHeight, onPressComment, style}) => {
   const token = useSelector(state => state.UserData?.token);
 
   // console.log('--Reel Item----', item);
@@ -103,7 +103,7 @@ const SingleReel = ({item, isVisible, playerHeight, onPressComment,style}) => {
         repeat={true}
         // paused={!isVisible}
         paused={!isVisible || !isScreenFocused}
-        style={[styles.video,style]}
+        style={[styles.video, style]}
       />
       <View style={styles.overlay}>
         {/* <Image

@@ -6,6 +6,7 @@ import {useTheme} from '../../context/ThemeContext';
 import ApiRequest from '../../services/api/ApiRequest';
 import ApiRoutes from '../../services/config/ApiRoutes';
 import {useSelector} from 'react-redux';
+import color from '../../theme/color';
 // 1. Aapke custom ApiRequest function ko import kiya
 
 // Ek central jagah par API ka base URL define karein (ya environment variable se lein)
@@ -20,7 +21,7 @@ interface LikeComptProps {
 }
 
 const LikeCompt = ({item}: LikeComptProps) => {
-  // console.log('========likeCompt--------', item?._id);
+  // console.log('========isLiked--------', item?.isLiked);
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
 
@@ -66,7 +67,7 @@ const LikeCompt = ({item}: LikeComptProps) => {
   };
 
   const iconName = isLiked ? 'heart' : 'heart-o';
-  const iconColor = isLiked ? colors.primary || 'red' : colors.text;
+  const iconColor = isLiked ? color.warning || 'red' : colors.text;
 
   return (
     <TouchableOpacity
@@ -82,7 +83,7 @@ const LikeCompt = ({item}: LikeComptProps) => {
           {
             fontSize: sizes.body,
             color: colors.text,
-            fontFamily: fontFamily.regular,
+            fontFamily: fontFamily.semiBold,
           },
         ]}>
         {likeCount}

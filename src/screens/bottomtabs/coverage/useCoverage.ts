@@ -22,16 +22,18 @@ const useCoverage = () => {
       const response = await ApiRequest({
         BaseUrl: ApiRoutes.getAllShorts,
         method: 'GET',
-        token,
+        token:token,
       });
 
       if (response?.status === 200 || response?.status === 201) {
         dispatch(setReels(response.data));
-        setAllShorts(response.data);
+        setAllShorts(reels);
       } else {
         console.warn('Unexpected status:', response?.status);
+        setAllShorts([]);
       }
     } catch (error: any) {
+      setAllShorts([]);
       console.error('Coverage API Error:', error?.message || error);
     } finally {
       setAllShortsLoading(false);

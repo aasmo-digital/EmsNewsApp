@@ -26,7 +26,6 @@ const HomeController = () => {
 
   const token = useSelector(state => state.UserData?.token);
   // const userData = useSelector(state => state);
- 
 
   const {sizes, fontFamily} = useFontSize();
   const {colors, mode} = useTheme();
@@ -57,6 +56,7 @@ const HomeController = () => {
       const response = await ApiRequest({
         BaseUrl: ApiRoutes.newCategory,
         method: 'GET',
+        token: token,
       });
       if (response?.success) {
         setCategoryLoading(false);
@@ -79,6 +79,7 @@ const HomeController = () => {
       const response = await ApiRequest({
         BaseUrl: ApiRoutes.getAllNews,
         method: 'GET',
+        token: token,
       });
       if (response?.success) {
         setAllNeewsLoading(false);
@@ -101,6 +102,7 @@ const HomeController = () => {
       const response = await ApiRequest({
         BaseUrl: ApiRoutes.getAllheadlines,
         method: 'GET',
+        token: token,
       });
       if (response?.success) {
         setAllHeadingsLoading(false);

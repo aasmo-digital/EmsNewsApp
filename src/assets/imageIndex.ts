@@ -10,4 +10,6 @@ export default {
   facebook: require('./image/facebook.png'),
   live: require('./image/live.png'),
   rightarrow: require('./image/rightarrow.png'),
+  removesave: require('./image/removesave.png'),
+  addsave: require('./image/addsave.png'),
 };

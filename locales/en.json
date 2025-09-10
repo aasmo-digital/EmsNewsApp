@@ -124,5 +124,6 @@
 
   "comments": "Comments",
   "no_comments_found": "No Comments Found",
-  "type_your_comments": "Type your comment..."
+  "type_your_comments": "Type your comment...",
+  "no_data_found":"No Data Found."
 }

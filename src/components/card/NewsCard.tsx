@@ -6,7 +6,7 @@ import {
   View,
   Image,
 } from 'react-native';
-import React, {memo} from 'react';
+import React, {memo, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useFontSize} from '../../context/FontSizeContext';
 import {useTheme} from '../../context/ThemeContext';
@@ -14,13 +14,32 @@ import Icon from 'react-native-vector-icons/FontAwesome'; // Make sure you have 
 import {LikeCompt} from '../componentsIndex';
 import color from '../../theme/color';
 import imageIndex from '../../assets/imageIndex';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import ApiRequest from '../../services/api/ApiRequest';
+import ApiRoutes from '../../services/config/ApiRoutes';
+import {useSelector} from 'react-redux';
 
 const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
+  const token = useSelector(state => state?.UserData?.token);
+
   const navigation = useNavigation();
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
+  const [isWishListed, setIsWishListed] = useState(item?.isSaved || false);
 
-  // console.log('------item--', item);
+  const addremoveSaved = async () => {
+    const response = await ApiRequest({
+      BaseUrl: ApiRoutes.addremoveWishList + item?._id,
+      method: 'POST',
+      token: token,
+    });
+
+    if (response?.success) {
+      setIsWishListed(!isWishListed);
+    } else {
+      setIsWishListed(isWishListed);
+    }
+  };
 
   return (
     <Pressable
@@ -68,14 +87,22 @@ const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
                 {
                   fontSize: sizes.body,
                   color: colors.text,
-                  fontFamily: fontFamily.regular,
+                  fontFamily: fontFamily.semiBold,
                 },
               ]}>
               {item?.commentsCount}
             </Text>
           </TouchableOpacity>
-          <View style={styles.interactionItem}>
-            <Icon name="bookmark-o" size={20} color={colors.text} />
+          <Pressable onPress={addremoveSaved} style={styles.interactionItem}>
+            {/* <Icon name="bookmark-o" size={20} color={color.warning}   /> */}
+            <Image
+              source={isWishListed ? imageIndex.addsave : imageIndex.removesave}
+              style={{
+                height: 18,
+                width: 18,
+                tintColor: isWishListed ? color.warning : colors.text,
+              }}
+            />
             <Text
               style={[
                 styles.interactionText,
@@ -87,7 +114,7 @@ const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
               ]}>
               {/* {item?.bookmarks} */}
             </Text>
-          </View>
+          </Pressable>
         </View>
 
         {location && (
@@ -114,7 +141,13 @@ const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
             </Text>
 
             <Image
-              style={{height: 15, width: 15, tintColor: colors.text,paddingLeft:30,resizeMode:'center'}}
+              style={{
+                height: 15,
+                width: 15,
+                tintColor: colors.text,
+                paddingLeft: 30,
+                resizeMode: 'center',
+              }}
               source={imageIndex.rightarrow}
             />
           </Pressable>

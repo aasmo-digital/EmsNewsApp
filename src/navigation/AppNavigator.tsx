@@ -18,6 +18,8 @@ import NewsByDist from '../screens/home/newsbydist/NewsByDist';
 import Explore from '../screens/bottomtabs/explore/Explore';
 import RelatedNews from '../screens/home/relatedNews/RelatedNews';
 import NewsByCategoryScreen from '../screens/home/newsByCategory/NewsByCategoryScreen';
+import Saved from '../screens/bottomtabs/saved/Saved';
+import ShortsComments from '../screens/home/shortscommments/ShortsComments';
 
 const Stack = createStackNavigator<AppStackParamList>();
 
@@ -45,7 +47,9 @@ const AppNavigator = () => {
 
       <Stack.Screen name="InterestsScreen" component={InterestsScreen} />
       <Stack.Screen name="PickYourState" component={PickYourStateScreen} />
+      <Stack.Screen name="Saved" component={Saved} />
 
+      <Stack.Screen name="ShortsComments" component={ShortsComments} />
       <Stack.Screen
         name="NewsByCategoryScreen"
         component={NewsByCategoryScreen}

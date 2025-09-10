@@ -22,6 +22,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ApiRequest from '../../../services/api/ApiRequest';
 import color from '../../../theme/color';
 import ApiRoutes from '../../../services/config/ApiRoutes';
+import {useSelector} from 'react-redux';
 
 const EditProfile = () => {
   const {colors, mode} = useTheme();
@@ -113,19 +114,24 @@ const EditProfile = () => {
     }
   };
 
+  const token = useSelector(state => state?.UserData?.token);
+
   // 🔁 getProfile Call
   const getProfile = async () => {
     setFetchLoading(true);
     try {
       const response = await ApiRequest({
-        BaseUrl: ApiRoutes.login,
+        BaseUrl: ApiRoutes.getProfileById,
         method: 'GET',
+        token: token,
       });
-      if (response) {
+
+      console.log('---------gjk fknf----------', response);
+      if (response?.success) {
         setFetchLoading(false);
-        setUsername('Kamlesh');
-        setEmail('hjfbrgokn');
-        setPhone('123456789');
+        setUsername(response?.data?.name);
+        setEmail(response?.data?.email);
+        // setPhone(response?.data?.email);
         console.log('getProfile Response:', response);
       } else {
         setFetchLoading(false);
@@ -146,47 +152,59 @@ const EditProfile = () => {
     <PageContainer style={{paddingTop: 25}}>
       <View style={{flex: 1}}>
         <HeaderCompt title={t('edit_profile_text')} />
-        <View style={{paddingHorizontal: 16}}>
-          {/* --- PROFILE IMAGE SECTION --- */}
-          <View style={dynamicStyles.imageContainer}>
-            <TouchableOpacity onPress={handleImageSelection}>
-              <View
-                style={[
-                  dynamicStyles.avatarContainer,
-                  {backgroundColor: colors.card, borderColor: colors.primary},
-                ]}>
-                {profileImage ? (
-                  <Image
-                    source={{uri: profileImage}}
-                    style={dynamicStyles.avatar}
-                  />
-                ) : (
-                  <Icon name="account-outline" size={60} color={colors.text} />
-                )}
-              </View>
-              <View
-                style={[
-                  dynamicStyles.editIconContainer,
-                  {
-                    backgroundColor: colors.primary,
-                    borderColor: colors.background,
-                  },
-                ]}>
-                <Icon name="camera-plus-outline" size={18} color={'#fff'} />
-              </View>
-            </TouchableOpacity>
-          </View>
-          {/* --- END PROFILE IMAGE SECTION --- */}
-          <InputCompt
-            label={t('usernamePlaceholder')}
-            placeholder={t('usernamePlaceholder')}
-            value={username}
-            onChangeText={setUsername}
-            leftIcon={<Icon name="account-outline" size={20} color="#888" />}
-            error={errors.username}
-          />
 
-          <InputCompt
+        {fetchloading ? (
+          <ActivityIndicator
+            color={color.appColor}
+            size={'large'}
+            style={{flex: 1}}
+          />
+        ) : (
+          <View style={{paddingHorizontal: 16}}>
+            {/* --- PROFILE IMAGE SECTION --- */}
+            <View style={dynamicStyles.imageContainer}>
+              <TouchableOpacity onPress={handleImageSelection}>
+                <View
+                  style={[
+                    dynamicStyles.avatarContainer,
+                    {backgroundColor: colors.card, borderColor: colors.primary},
+                  ]}>
+                  {profileImage ? (
+                    <Image
+                      source={{uri: profileImage}}
+                      style={dynamicStyles.avatar}
+                    />
+                  ) : (
+                    <Icon
+                      name="account-outline"
+                      size={60}
+                      color={colors.text}
+                    />
+                  )}
+                </View>
+                <View
+                  style={[
+                    dynamicStyles.editIconContainer,
+                    {
+                      backgroundColor: colors.primary,
+                      borderColor: colors.background,
+                    },
+                  ]}>
+                  <Icon name="camera-plus-outline" size={18} color={'#fff'} />
+                </View>
+              </TouchableOpacity>
+            </View>
+            {/* --- END PROFILE IMAGE SECTION --- */}
+            <InputCompt
+              label={t('usernamePlaceholder')}
+              placeholder={t('usernamePlaceholder')}
+              value={username}
+              onChangeText={setUsername}
+              leftIcon={<Icon name="account-outline" size={20} color="#888" />}
+              error={errors.username}
+            />
+
+            {/* <InputCompt
             label={t('phone_number')}
             value={phone}
             onChangeText={setPhone}
@@ -196,33 +214,27 @@ const EditProfile = () => {
             leftIcon={<Icon name="phone" size={20} color="#888" />}
             maxLength={10}
             inputStyle={{letterSpacing: 1}}
-          />
+          /> */}
 
-          <InputCompt
-            label={t('emailPlaceholder')}
-            placeholder={t('emailPlaceholder')}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            leftIcon={<Icon name="email-outline" size={20} color="#888" />}
-            error={errors.email}
-          />
+            <InputCompt
+              label={t('emailPlaceholder')}
+              placeholder={t('emailPlaceholder')}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              leftIcon={<Icon name="email-outline" size={20} color="#888" />}
+              error={errors.email}
+            />
 
-          <ButtonCompt
+            {/* <ButtonCompt
             title={t('update_text')}
             onPress={validateForm}
             isLoading={false}
             style={{marginTop: 20}}
-          />
-        </View>
+          /> */}
+          </View>
+        )}
       </View>
-      {fetchloading && (
-        <ActivityIndicator
-          color={color.appColor}
-          size={'large'}
-          style={{position: 'absolute', bottom: 30, alignSelf: 'center'}}
-        />
-      )}
     </PageContainer>
   );
 };

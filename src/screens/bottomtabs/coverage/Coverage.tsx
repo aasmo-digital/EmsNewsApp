@@ -6,6 +6,7 @@ import {
   StatusBar,
   ActivityIndicator,
   Image,
+  Text,
 } from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
@@ -13,10 +14,13 @@ import {useFocusEffect} from '@react-navigation/native';
 import {CommentsSheet, SingleReel} from '../../../components/componentsIndex';
 import useCoverage from './useCoverage';
 import imageIndex from '../../../assets/imageIndex';
+import {useTheme} from '../../../context/ThemeContext';
+import {useFontSize} from '../../../context/FontSizeContext';
+import {useLanguage} from '../../../context/LanguageContext';
 
 const {width, height: windowHeight} = Dimensions.get('screen');
 
-const Coverage = () => {
+const Coverage = ({navigation}) => {
   const commentsSheetRef = useRef(null);
   const [visibleReelId, setVisibleReelId] = useState<string | undefined>(
     undefined,
@@ -24,6 +28,10 @@ const Coverage = () => {
 
   const tabBarHeight = useBottomTabBarHeight();
   const playerHeight = windowHeight - tabBarHeight;
+  const {t} = useLanguage();
+
+  const {colors} = useTheme();
+  const {sizes, fontFamily} = useFontSize();
 
   const {allShortsLoading, allShorts, getAllShorts, reels} = useCoverage();
 
@@ -60,7 +68,9 @@ const Coverage = () => {
         item={item}
         isVisible={visibleReelId === item._id}
         playerHeight={playerHeight}
-        onPressComment={() => commentsSheetRef.current?.present()}
+        onPressComment={() =>
+          navigation.navigate('ShortsComments', {item: item})
+        }
       />
     ),
     [visibleReelId, playerHeight],
@@ -94,6 +104,18 @@ const Coverage = () => {
             maxToRenderPerBatch={2} // reduce memory
             windowSize={3} // only keep 1 prev + 1 next in memory
             removeClippedSubviews // unmounts offscreen reels
+            ListEmptyComponent={
+              <Text
+                style={{
+                  textAlign: 'center',
+                  marginTop: 50,
+                  color: colors.text,
+                  fontFamily: fontFamily?.medium,
+                  fontSize: sizes?.heading,
+                }}>
+                {t('no_data_found')}
+              </Text>
+            }
           />
         )}
 

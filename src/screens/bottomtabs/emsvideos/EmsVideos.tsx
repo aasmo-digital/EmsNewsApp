@@ -2,17 +2,14 @@ import React, {useEffect, useState, useCallback, memo} from 'react';
 import {
   StyleSheet,
   Text,
-  View,
   FlatList,
   ActivityIndicator,
-  TouchableOpacity,
-  Linking,
   Platform,
   SafeAreaView,
+  Dimensions,
 } from 'react-native';
 import ApiRequest from '../../../services/api/ApiRequest';
 import ApiRoutes from '../../../services/config/ApiRoutes';
-import YoutubePlayer from 'react-native-youtube-iframe';
 import {HeaderCompt, PageContainer} from '../../../components/componentsIndex';
 import {useLanguage} from '../../../context/LanguageContext';
 import {useFontSize} from '../../../context/FontSizeContext';
@@ -26,6 +23,7 @@ const EmsVideos = () => {
   const [loading, setLoading] = useState(true);
   const videos = useSelector((state: RootState) => state.videos.videos);
   const {t} = useLanguage();
+  const {sizes, fontFamily} = useFontSize();
 
   const [videosData, setVideosData] = useState(videos);
 
@@ -69,6 +67,9 @@ const EmsVideos = () => {
   // ✅ Memoize keyExtractor
   const keyExtractor = useCallback((item: any) => item?._id?.toString(), []);
 
+  const windowWidth = Dimensions.get('window').width;
+  const isTablet = windowWidth >= 768; // 768 ya isse zyada width ko tablet maan lete hain
+
   return (
     <PageContainer>
       <SafeAreaView style={styles.container}>
@@ -97,6 +98,19 @@ const EmsVideos = () => {
               offset: 300 * index,
               index,
             })}
+            numColumns={isTablet ? 2 : 1}
+            ListEmptyComponent={
+              <Text
+                style={{
+                  textAlign: 'center',
+                  marginTop: 50,
+                  color: colors.text,
+                  fontFamily: fontFamily?.medium,
+                  fontSize: sizes?.heading,
+                }}>
+                {t('no_data_found')}
+              </Text>
+            }
           />
         )}
       </SafeAreaView>
@@ -117,30 +131,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // card: {
-  //   borderRadius: 12,
-  //   marginBottom: 15,
-  //   shadowOpacity: 0.1,
-  //   shadowOffset: {width: 0, height: 2},
-  //   shadowRadius: 6,
-  //   elevation: 3,
-  //   overflow: 'hidden',
-  // },
-  // fallbackPlayer: {
-  //   height: 220,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: '#ddd',
-  // },
-  // linkText: {},
-  // infoBox: {
-  //   padding: 12,
-  // },
-  // title: {
-  //   fontSize: 16,
-  //   fontWeight: '600',
-  // },
-  // meta: {
-  //   marginTop: 4,
-  // },
 });

@@ -32,9 +32,9 @@ import LanguageSelectorPopup from '../../../components/common/LanguageSelectorPo
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
-  const locationdata = useSelector(
+  const locationdata = useSelector<any>(
     state => state?.SelectLocationSlice?.countryName,
   );
 
@@ -281,6 +281,19 @@ const ProfileScreen = () => {
             rightImage={
               <Ionicons name="chevron-forward" size={20} color={colors.text} />
             }
+            textStyle={{color: colors.text}}
+          />
+
+          <ButtonCompt
+            title={t('saved_news_text')}
+            onPress={() => navigation.navigate('Saved')}
+            style={{
+              marginTop: 10,
+              backgroundColor: colors.card,
+              borderWidth: 0.45,
+            }}
+            isOutline={true}
+            rightImage={<Ionicons name="saved" size={20} color={colors.text} />}
             textStyle={{color: colors.text}}
           />
 
