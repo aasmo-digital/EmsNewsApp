@@ -45,21 +45,18 @@ const LikeCompt = ({item}: LikeComptProps) => {
     );
 
     try {
-      await ApiRequest({
-        // BaseUrl: `${ApiRoutes.getAllNews}/news/${item.id}/like`, // Poora URL banaya
-        BaseUrl: `${ApiRoutes.addLikeNews}+/ ${item?._id}/like`,
+      const response = await ApiRequest({
+        BaseUrl: `${ApiRoutes.addLikeNews}/${item?._id}/like`,
         method: 'POST',
         token: token,
-
-        // Agar body mein kuch bhejna hai to 'request' property use karein
-        // request: { userId: 'some-user-id' }
       });
+
+      console.log('================', response);
 
       // Agar API call successful hui, to kuch karne ki zaroorat nahi.
     } catch (error) {
       console.error('Failed to update like status:', error);
       Alert.alert('Error', 'Could not complete the action. Please try again.');
-
       // API fail hone par UI ko wapas purani state par le aayein
       setIsLiked(originalLikedState);
       setLikeCount(originalLikeCount);

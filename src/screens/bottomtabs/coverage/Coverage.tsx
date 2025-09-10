@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useRef} from 'react';
+import React, {useState, useCallback, useRef, useEffect} from 'react';
 import {
   View,
   FlatList,
@@ -29,14 +29,18 @@ const Coverage = () => {
 
   // console.log('--------------reels---------', reels);
 
-  // 🔹 Run only when screen focused
-  useFocusEffect(
-    useCallback(() => {
-      if (!allShorts || allShorts.length === 0) {
-        getAllShorts();
-      }
-    }, [allShorts, getAllShorts]),
-  );
+  // // 🔹 Run only when screen focused
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     if (!allShorts || allShorts.length === 0) {
+  //       getAllShorts();
+  //     }
+  //   }, [allShorts, getAllShorts]),
+  // );
+
+  useEffect(() => {
+    getAllShorts();
+  }, []);
 
   // 🔹 Optimize viewability check
   const onViewableItemsChanged = useRef(({viewableItems}) => {

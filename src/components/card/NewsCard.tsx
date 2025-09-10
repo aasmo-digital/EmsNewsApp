@@ -57,9 +57,7 @@ const NewsCard = ({item, location, onPressLocation, onPressCard}: any) => {
         <View style={styles.interactionBar}>
           <LikeCompt item={item} />
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('Comments', {comments: item?.comments})
-            }
+            onPress={() => navigation.navigate('Comments', {item: item})}
             style={styles.interactionItem}>
             <Icon name="comment-o" size={20} color={colors.text} />
             <Text

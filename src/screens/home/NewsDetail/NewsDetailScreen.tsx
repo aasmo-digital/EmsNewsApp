@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Share,
+  useWindowDimensions,
 } from 'react-native';
 import React from 'react';
 import {
@@ -14,16 +15,13 @@ import {
   LikeCompt,
   PageContainer,
 } from '../../../components/componentsIndex';
-import {Marquee} from '@animatereactnative/marquee';
-import color from '../../../theme/color';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Make sure you have this library
-import LiveUpdatesSection from './LiveUpdatesSection';
 import RelatedNewsSection from './RelatedNewsSection';
 import {useLanguage} from '../../../context/LanguageContext';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
 import {useRoute} from '@react-navigation/native';
-const {width} = Dimensions.get('window');
+import RenderHtml from 'react-native-render-html';
 
 const NewsDetailScreen = ({navigation}: any) => {
   const {sizes, fontFamily} = useFontSize();
@@ -33,60 +31,15 @@ const NewsDetailScreen = ({navigation}: any) => {
   const route = useRoute();
   const newsData = route?.params?.news;
 
-  // console.log('--->>>--', newsData);
+  const {width} = useWindowDimensions();
 
-  // const Headlines = () => {
-  //   return (
-  //     <View
-  //       style={{
-  //         flexDirection: 'row',
-  //         alignItems: 'center',
-  //         backgroundColor: color.appColor,
-  //         paddingVertical: 5,
-  //         paddingHorizontal: 10,
-  //       }}>
-  //       {/* Left: Static "Headlines" box */}
-  //       <View
-  //         style={{
-  //           backgroundColor: color.warning,
-  //           paddingHorizontal: 12,
-  //           paddingVertical: 6,
-  //           borderRadius: 5,
-  //           zIndex: 2, // ensures it stays above
-  //         }}>
-  //         <Text
-  //           style={{
-  //             color: 'white',
-  //             fontFamily: fontFamily.semiBold,
-  //             letterSpacing: 0.5,
-  //             fontSize: sizes.body,
-  //           }}>
-  //           {t('headlines_text')}
-  //         </Text>
-  //       </View>
-
-  //       {/* Right: Scrolling Marquee */}
-  //       <View
-  //         style={{
-  //           flex: 1,
-  //           marginLeft: 10,
-  //           backgroundColor: color.appColor, // ensures full solid background
-  //           overflow: 'hidden',
-  //         }}>
-  //         <Marquee speed={1} style={{paddingVertical: 5}}>
-  //           <Text
-  //             style={{
-  //               color: 'white',
-  //               fontFamily: fontFamily.medium,
-  //               fontSize: sizes.subheading,
-  //             }}>
-  //             {allHeadings.map(item => item?.headlineText + '   ')}
-  //           </Text>
-  //         </Marquee>
-  //       </View>
-  //     </View>
-  //   );
-  // };
+  function isHtml(content: any) {
+    if (!content || typeof content !== 'string') {
+      return false;
+    }
+    const pattern = /<[^>]+>/g;
+    return pattern.test(content);
+  }
 
   const handleShareNews = async news => {
     try {
@@ -229,15 +182,48 @@ Read more: https://yourapp.com/news/${news.id}
         </View>
 
         {/* Article Body */}
-        <Text
-          style={{
-            fontSize: sizes.body,
-            color: colors.text,
-            fontFamily: fontFamily.regular,
-            letterSpacing: 0.5,
-          }}>
-          {newsData?.content}
-        </Text>
+
+        {isHtml(newsData.content) ? (
+          <RenderHtml
+            contentWidth={width}
+            source={{html: newsData.content}}
+            tagsStyles={{
+              body: {
+                color: colors.text, // 👈 aapke theme ka text color
+                backgroundColor: colors.background, // 👈 bg white hatao
+                fontFamily: fontFamily.regular,
+                fontSize: sizes.body,
+                lineHeight: sizes.body * 1.5,
+              },
+              p: {
+                marginBottom: 8,
+                backgroundColor: colors.background,
+              },
+              strong: {
+                fontFamily: fontFamily.regular,
+                backgroundColor: colors.background,
+              },
+              span: {
+                color: colors.text,
+                backgroundColor: colors.background,
+              },
+            }}
+            baseStyle={{
+              color: colors.text, // ✅ sab par default text color apply
+              backgroundColor: colors.background, // ✅ white background remove
+            }}
+          />
+        ) : (
+          <Text
+            style={{
+              fontSize: sizes.body,
+              color: colors.text,
+              fontFamily: fontFamily.regular,
+              letterSpacing: 0.5,
+            }}>
+            {newsData.content}
+          </Text>
+        )}
 
         <Text
           style={{

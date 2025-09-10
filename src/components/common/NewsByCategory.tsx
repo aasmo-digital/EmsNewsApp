@@ -72,7 +72,7 @@ const NewsByCategory = ({allNews, allNewsCategory}: any) => {
     <SectionList
       sections={sections}
       renderSectionHeader={({section}) => {
-        console.log('--------5435365151---------', section);
+        // console.log('--------5435365151---------', section);
         return (
           <View
             style={{

@@ -210,9 +210,15 @@ export default function SessionView() {
   const videos = useSelector((state: RootState) => state.videos.videos);
   // const reels = useSelector((state: RootState) => state.reels.reels);
 
-  const interested = useSelector(state => state?.interests?.selected);
+  const allowedIds = useSelector(state => state?.interests?.selected);
 
-  console.log('------------------------------dkjfbsdbdj-------', interested);
+  const cleanIds = allowedIds
+    .filter((id: any) => id !== undefined)
+    .map(item => item?._id);
+
+  const filteredNews = allNews.filter(item =>
+    cleanIds.includes(item.category?._id),
+  );
 
   // ✅ Video Item
   const renderVideoItem = useCallback(

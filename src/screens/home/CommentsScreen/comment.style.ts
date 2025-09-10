@@ -1,6 +1,4 @@
-import { StyleSheet } from 'react-native'
-
-
+import {StyleSheet} from 'react-native';
 
 // --- 4. STYLES ---
 const styles = StyleSheet.create({
@@ -62,7 +60,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#eee',
     paddingBottom: 40,
-  },
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+   },
   input: {
     flex: 1,
     borderRadius: 20,
@@ -79,5 +81,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
-export default styles
+export default styles;

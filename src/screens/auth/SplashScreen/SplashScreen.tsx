@@ -30,10 +30,10 @@ const SplashScreen = ({navigation}: any) => {
   const {fontName} = useFontSize();
   const {language} = useLanguage();
 
-  console.log('------isLogin', isLogin);
-  console.log('-----------mode----------', mode);
-  console.log('-----------fontName----------', fontName);
-  console.log('-----------language----------', language);
+  // console.log('------isLogin', isLogin);
+  // console.log('-----------mode----------', mode);
+  // console.log('-----------fontName----------', fontName);
+  // console.log('-----------language----------', language);
 
   useEffect(() => {
     const timer = setTimeout(() => {

@@ -123,6 +123,8 @@
 
   "error_password_min_length": "पासवर्ड कम से कम 6 अक्षर का होना चाहिए।",
 
-    "ems_videos_text": "ईएमएस वीडियो"
-
+  "ems_videos_text": "ईएमएस वीडियो",
+  "comments": "कॉमेंट्स",
+  "no_comments_found": "कोई कॉमेंट्स नहीं मिला",
+  "type_your_comments": "अपना कॉमेंट लिखें..."
 }

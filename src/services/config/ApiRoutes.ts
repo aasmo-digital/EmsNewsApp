@@ -20,7 +20,7 @@ export default {
   getCitiesByStateId: AppContant.BaseUrl + 'api/v1/user/states/', //-----------Complete
   getAllPolls: AppContant.BaseUrl + 'api/v1/user/polls', //-----------Complete
   voteOnPoll: AppContant.BaseUrl + 'api/v1/user/polls/',
-  addNewsComment: AppContant.BaseUrl + 'api/v1/user/news/',
-  getCommentByNewsId: AppContant.BaseUrl + '',
+  addNewsComment: AppContant.BaseUrl + 'api/v1/user/news/', //-----------Complete
+  getCommentByNewsId: AppContant.BaseUrl + 'api/v1/user/comment/', //-----------Complete
   // getPollById: AppContant.BaseUrl + 'api/polls/:id',
 };

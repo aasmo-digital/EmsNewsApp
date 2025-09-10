@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -13,16 +13,19 @@ import {
   Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {useRoute} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+
 import {HeaderCompt, PageContainer} from '../../../components/componentsIndex';
 import {useFontSize} from '../../../context/FontSizeContext';
 import {useTheme} from '../../../context/ThemeContext';
 import {useLanguage} from '../../../context/LanguageContext';
-import {useRoute} from '@react-navigation/native';
+
 import {getTimeAgo} from '../../../utility/functions/toast';
 import ApiRequest from '../../../services/api/ApiRequest';
 import ApiRoutes from '../../../services/config/ApiRoutes';
 import styles from './comment.style';
-import {useSelector} from 'react-redux';
+import {showErrorToast} from '../../../utility/HelperFuntions';
 
 // --- TYPES ---
 interface User {
@@ -54,7 +57,14 @@ const CommentItem = ({
 
   return (
     <View style={[styles.commentContainer, isReply && styles.replyContainer]}>
-      <Image source={{uri: item?.user?.profileImage}} style={styles.avatar} />
+      <Image
+        source={{
+          uri: item?.user?.profileImage
+            ? item.user.profileImage
+            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnSA1zygA3rubv-VK0DrVcQ02Po79kJhXo_A&s',
+        }}
+        style={styles.avatar}
+      />
 
       <View style={styles.commentContent}>
         <Text
@@ -64,7 +74,7 @@ const CommentItem = ({
             fontSize: sizes.subheading,
             textTransform: 'capitalize',
           }}>
-          {item?.user?.name}
+          {item.user.name}
         </Text>
 
         <Text
@@ -74,7 +84,7 @@ const CommentItem = ({
             fontSize: sizes.body,
             marginVertical: 2,
           }}>
-          {item?.text}
+          {item.text}
         </Text>
 
         <View style={styles.metaContainer}>
@@ -85,12 +95,11 @@ const CommentItem = ({
               fontSize: sizes.body,
               opacity: 0.6,
             }}>
-            {getTimeAgo(item?.createdAt)}
+            {getTimeAgo(item.createdAt)}
           </Text>
         </View>
 
-        {/* Replies Section */}
-        {item?.replies && item?.replies.length > 0 && (
+        {item.replies && item.replies.length > 0 && (
           <TouchableOpacity onPress={() => setShowReplies(!showReplies)}>
             <Text
               style={{
@@ -106,7 +115,7 @@ const CommentItem = ({
           </TouchableOpacity>
         )}
 
-        {showReplies && item?.replies && (
+        {showReplies && item.replies && (
           <View style={styles.repliesList}>
             {item.replies.map(reply => (
               <CommentItem key={reply.id} item={reply} isReply={true} />
@@ -121,24 +130,49 @@ const CommentItem = ({
 // --- MAIN SCREEN ---
 const CommentsScreen = () => {
   const route = useRoute<any>();
-  const initialComments: Comment[] = route?.params?.comments || [];
-
-  const [comments, setComments] = useState<Comment[]>(initialComments);
-  const [newComment, setNewComment] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const token = useSelector(state => state.UserData?.token);
+  const newsID = route.params?.item?._id;
 
   const {sizes, fontFamily} = useFontSize();
   const {colors} = useTheme();
+  const {t} = useLanguage();
+  const token = useSelector((state: any) => state.UserData?.token);
 
-  // --- HANDLE COMMENT POST ---
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [commentsLoading, setCommentsLoading] = useState(false);
+
+  // Fetch comments on component mount
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  const fetchComments = async () => {
+    setCommentsLoading(true);
+    try {
+      const response = await ApiRequest({
+        BaseUrl: ApiRoutes.getCommentByNewsId + newsID,
+        method: 'GET',
+      });
+      if (response?.success) {
+        setComments(response.comments);
+      } else {
+        setComments([]);
+      }
+    } catch (error: any) {
+      console.error('Fetch Comments Error:', error.message);
+    } finally {
+      setCommentsLoading(false);
+    }
+  };
+
   const handlePostComment = async () => {
     if (!newComment.trim()) return;
     Keyboard.dismiss();
 
     const tempComment: Comment = {
       id: Date.now().toString(),
-      text: newComment,
+      text: newComment.trim(),
       createdAt: new Date().toISOString(),
       user: {
         id: 'me',
@@ -148,20 +182,22 @@ const CommentsScreen = () => {
       replies: [],
     };
 
-    setComments([tempComment, ...comments]);
+    setComments(prev => [tempComment, ...prev]);
     setNewComment('');
     setSubmitting(true);
 
     try {
       const response = await ApiRequest({
-        BaseUrl:
-          ApiRoutes.addNewsComment + '6890ad36179f17a2040f0e94' + '/comment',
+        BaseUrl: ApiRoutes.addNewsComment + newsID + '/comment',
         method: 'POST',
-        request: {text: newComment},
+        request: {text: newComment.trim()},
         token: token,
       });
-
-      console.log('---------------', response);
+      if (response?.success) {
+        fetchComments();
+      } else {
+        showErrorToast(response?.message);
+      }
     } catch (error: any) {
       console.error('Add Comment Error:', error.message);
     } finally {
@@ -172,64 +208,74 @@ const CommentsScreen = () => {
   return (
     <PageContainer style={{paddingTop: 25}}>
       <SafeAreaView style={styles.safeArea}>
-        <HeaderCompt title="Comments" />
+        <HeaderCompt title={t('comments')} />
 
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardAvoidingView}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}>
           <>
-            <FlatList
-              data={comments}
-              renderItem={({item}) => <CommentItem item={item} />}
-              keyExtractor={item => item.id}
-              style={styles.list}
-              showsVerticalScrollIndicator={false}
-              ListEmptyComponent={() => (
-                <Text
-                  style={{
-                    fontSize: sizes.subheading,
-                    color: colors.text,
-                    fontFamily: fontFamily.regular,
-                    textAlign: 'center',
-                    marginTop: 150,
-                  }}>
-                  No Comments Found
-                </Text>
-              )}
-            />
-
-            {/* Comment Input */}
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: colors.card,
-                    fontSize: sizes.body,
-                    color: colors.text,
-                    fontFamily: fontFamily.regular,
-                  },
-                ]}
-                placeholder="Type your comment..."
-                value={newComment}
-                onChangeText={setNewComment}
-                placeholderTextColor={colors.text + '99'}
-              />
-              <TouchableOpacity
-                style={[styles.sendButton, submitting && {opacity: 0.6}]}
-                onPress={handlePostComment}
-                disabled={submitting}>
-                {submitting ? (
-                  <ActivityIndicator size="small" color="#fff" />
-                ) : (
-                  <Icon name="send" size={20} color="#fff" />
+            {commentsLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <ActivityIndicator size="large" color={colors.primary} />
+              </View>
+            ) : (
+              <FlatList
+                data={comments}
+                renderItem={({item}) => <CommentItem item={item} />}
+                keyExtractor={item => item.id}
+                style={styles.list}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={() => (
+                  <Text
+                    style={{
+                      fontSize: sizes.subheading,
+                      color: colors.text,
+                      fontFamily: fontFamily.regular,
+                      textAlign: 'center',
+                      marginTop: 150,
+                    }}>
+                    {t('no_comments_found')}
+                  </Text>
                 )}
-              </TouchableOpacity>
-            </View>
+              />
+            )}
           </>
         </KeyboardAvoidingView>
       </SafeAreaView>
+      {/* Comment Input */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={[
+            styles.input,
+            {
+              backgroundColor: colors.card,
+              fontSize: sizes.body,
+              color: colors.text,
+              fontFamily: fontFamily.regular,
+            },
+          ]}
+          placeholder={t('type_your_comments')}
+          value={newComment}
+          onChangeText={setNewComment}
+          placeholderTextColor={colors.text}
+        />
+        <TouchableOpacity
+          style={[styles.sendButton, submitting && {opacity: 0.6}]}
+          onPress={handlePostComment}
+          disabled={submitting}>
+          {submitting ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Icon name="send" size={20} color="#fff" />
+          )}
+        </TouchableOpacity>
+      </View>
     </PageContainer>
   );
 };

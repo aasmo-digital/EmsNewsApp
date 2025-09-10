@@ -75,7 +75,7 @@
   "saved_text": "Saved",
   "more_text": "More",
   "reel_text": "Reel",
-  "directory_text":"Directory",
+  "directory_text": "Directory",
 
   "epaper_text": "e-Paper",
   "news_details_text": "News Details",
@@ -120,5 +120,9 @@
   "password": "Password",
   "enter_password": "Enter your password",
   "error_password_min_length": "Password must be at least 6 characters long.",
-  "ems_videos_text":"EMS Videos"
+  "ems_videos_text": "EMS Videos",
+
+  "comments": "Comments",
+  "no_comments_found": "No Comments Found",
+  "type_your_comments": "Type your comment..."
 }
